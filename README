@@ -7,7 +7,7 @@ deplist.txt                         - Deprecated.
 package.json                        - npm package descriptor.
 npm_global_module_list              - List of globally installed node modules
                                       (on OpenShift)
-.openshift/                         - Location for openshift specific files
+.openshift/                         - Location for OpenShift specific files
 .openshift/action_hooks/pre_build   - Script that gets run every git push before
                                       the build
 .openshift/action_hooks/build       - Script that gets run every git push as
