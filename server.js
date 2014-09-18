@@ -4,7 +4,7 @@ var express = require('express');
 var fs      = require('fs');
 
 // IRC bot
-var botnick = 'Kramellnodejs';
+var botnick = 'Kramell';
 var chei = 'Cheibriados';
 var sequell = 'Sequell';
 var irc = require('irc');
@@ -12,7 +12,7 @@ var observe_channel = "##crawl";
 var announcers = ["Henzell","Sizzell","Lantell","Rotatell","Gretell",'Kramin'];
 var names = {'##crawl-sprigganrockhaulersinc': ['Kramin']};
 var channels = ['##crawl-sprigganrockhaulersinc'];
-var control_channel = "##kramellnodejs";
+var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 filters = {'##crawl-sprigganrockhaulersinc':[]};
