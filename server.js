@@ -107,6 +107,17 @@ bot.addListener('message', function(nick, chan, message) {
         bot.say(cheiquerychan, message);
     }
     
+    // commands
+    if (chan == control_channel && message[0]=='!'){
+        var arg = message.split(' ');
+        if (arg[0]=="!state"){
+            bot.say(control_channel, "announcers: "+announcers)
+            bot.say(control_channel, "channels: "+post_channels)
+            bot.say(control_channel, "names: "+filter_names)
+            bot.say(control_channel, "filters: "+filters)
+        }
+    }
+    
 });
 
 //end IRC bot
