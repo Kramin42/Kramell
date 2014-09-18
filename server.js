@@ -1,9 +1,10 @@
 #!/bin/env node
 
 // IRC bot
+var botnick = 'Kramellnodejs'
 var irc = require('irc');
-var bot = new irc.Client('chat.freenode.net', process.env.OPENSHIFT_APP_NAME || 'ircbot', {
-    channels: ['#botzoo', '#botwar'],
+var bot = new irc.Client('chat.freenode.net', process.env.OPENSHIFT_APP_NAME || botnick, {
+    channels: ['##kramell'],
     port: 8001,
     debug: true
 });
@@ -34,6 +35,7 @@ bot.addListener('message', function(from, to, message) {
     }
 });
 
+//end IRC bot
 
 //  OpenShift sample Node application
 var express = require('express');
