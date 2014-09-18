@@ -4,29 +4,66 @@ var express = require('express');
 var fs      = require('fs');
 
 // IRC bot
-var botnick = 'Kramellnodejs'
+var botnick = 'Kramellnodejs';
 var irc = require('irc');
+var observe_channel = "##crawl";
+var announcers = ["Henzell","Sizzell","Lantell","Rotatell","Gretell","Kramin"];
+var names = {'##crawl-sprigganrockhaulersinc': ['doubtofbuddha', 'miek', 'tcjsavannah', 'mopl', 'tasonir', 'Kramin']};
+var post_channels = ['##crawl-sprigganrockhaulersinc'];
+var control_channel = "##kramell";
+
+filters = {'##crawl-sprigganrockhaulersinc':[]};
+
+// dictionary of nick-aliases:
+nick_aliases = {"Kramin":"Kramin|hyperkramin"};
+
 var bot = new irc.Client('chat.freenode.net', botnick, {
     channels: ['##kramell'],
     port: 8001,
     debug: true
 });
 
-bot.addListener('message', function(from, to, message) {
+bot.addListener('message', function(nick, chan, message) {
     if(  message.indexOf('Hello '+botnick) > -1
     ) {
-        bot.say(to, 'Hello!');
-        fs.appendFile(process.env.OPENSHIFT_DATA_DIR+'/data', '-1-', function (err) {
-            if (err) throw err;
-            bot.say(to, 'It\'s saved!');
-        });
+        bot.say(chan, 'Hello!');
+//         fs.appendFile(process.env.OPENSHIFT_DATA_DIR+'/data', '-1-', function (err) {
+//             if (err) throw err;
+//             bot.say(to, 'It\'s saved!');
+//         });
     }
-    if(message.indexOf('!data') > -1){
-        fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/data', function (err, data) {
-            if (err) throw err;
-            bot.say(to, data);
-        });
+//     if(message.indexOf('!data') > -1){
+//         fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/data', function (err, data) {
+//             if (err) throw err;
+//             bot.say(to, data);
+//         });
+//     }
+    
+    // get announcements
+    if (chan == observe_channel){
+        if (announcers.indexof(nick)){
+            for (ch in post_channels){
+                for (name in names[ch]){
+                    name = nick_aliases[name] ? nick_aliases[name] : name;
+                    if (message.search(new RegExp(name, "i")){
+                        var matched = true;
+                        for (match in filters[ch]){
+                            if (!message.search(match)){
+                                matched = false;
+                                break;
+                            }
+                        }
+                        if (matched){
+                            bot.say(ch, message);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
     }
+    
+    
 });
 
 //end IRC bot
