@@ -88,15 +88,15 @@ bot.addListener('message', function(nick, chan, message) {
         msgarray = message.split(':');
         if (msgarray.length>2 && msgarray[0]=="nick-alias"){
             var NAnick = msgarray[1];
-            nick_aliases[NAnick] = msgarray[2].replace(' NAJNR','|').replace('\r\n','');
+            nick_aliases[NAnick] = msgarray[2].replace(/ NAJNR/g,'|').replace('\r\n','');
             for (i=4; i<msgarray.length; i+=2){
-                nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(' NAJNR','|').replace('NAJNR','').replace('\r\n','');
+                nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
             }
             bot.say(control_channel, "nick mapping: "+NAnick+" => "+nick_aliases[NAnick])
         } else if (message.search(/^NAJNR/)>-1){
             for (i=0; i<msgarray.length; i+=2){
-                nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(' NAJNR','|').replace('NAJNR','').replace('\r\n','');
-                bot.say(control_channel, "...|"+msgarray[i].replace(' NAJNR','|').replace('NAJNR','').replace('\r\n',''));
+                nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
+                bot.say(control_channel, "...|"+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n',''));
             }
         } else {
             bot.say(sequellquerychan, message);
@@ -167,6 +167,7 @@ bot.addListener('message', function(nick, chan, message) {
                         names[arg[1]]=[];
                         filters[arg[1]]=[];
                         bot.join(arg[1],null);
+                        bot.say(control_channel, "channels: "+post_channels.join(', '));
                     }
                 } else {
                     bot.say(control_channel, "Sorry, I don't allow that channel");
