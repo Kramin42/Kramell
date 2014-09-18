@@ -43,27 +43,27 @@ bot.addListener('message', function(nick, chan, message) {
     if (chan == observe_channel){
         if (announcers.indexOf(nick)){
             console.log("found announcement");
-            for (ch in post_channels){
+            post_channels.forEach(function(ch) {
                 console.log(ch)
-                for (name in names[ch]){
+                names[ch].forEach(function(name) {
                     name = nick_aliases[name] ? nick_aliases[name] : name;
                     console.log(name);
                     if (message.search(new RegExp(name, "i"))){
                         console.log("contains a nick");
                         var matched = true;
-                        for (match in filters[ch]){
+                        filters[ch].forEach(function(match) {
                             if (!message.search(match)){
                                 matched = false;
                                 break;
                             }
-                        }
+                        });
                         if (matched){
                             bot.say(ch, message);
                         }
                         break;
                     }
-                }
-            }
+                });
+            });
         }
     }
     
