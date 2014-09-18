@@ -77,8 +77,7 @@ bot.addListener('message', function(nick, chan, message) {
             cheiquerychan = chan;
         }
         if ('!=&.?@^'.indexOf(message[0])>-1){
-            bot.say(sequell, message.replace(/ \. | \.$/g, ' @'+nick+' '));
-            
+            bot.say(sequell, message.replace(/ \. /g, ' @'+nick+' ').replace(/ \.$/, ' @'+nick));
             sequellquerychan = chan;
         }
     }
