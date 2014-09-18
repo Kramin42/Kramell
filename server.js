@@ -131,7 +131,7 @@ bot.addListener('message', function(nick, chan, message) {
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
                     if (announcers.indexOf(arg[2])>-1){
-                        announcers.remove(arg[2]);
+                        announcers.pop(arg[2]);
                         bot.say(control_channel, "announcers: "+announcers.join(', '));
                     } else {
                         bot.say(control_channel, "No such announcer");
@@ -151,7 +151,7 @@ bot.addListener('message', function(nick, chan, message) {
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
                     if (post_channels.indexOf(arg[2])>-1){
-                        post_channels.remove(arg[1]);
+                        post_channels.pop(arg[1]);
                         delete names[arg[1]];
                         delete filters[arg[1]];
                         bot.part(arg[1],'',null)
@@ -182,7 +182,7 @@ bot.addListener('message', function(nick, chan, message) {
                 if (arg[1]=="-rm"){
                     if (post_channels.indexOf(arg[2])>-1){
                         if (names[arg[2]].indexOf(arg[3])>-1){
-                            names[arg[2]].remove(arg[3]);
+                            names[arg[2]].pop(arg[3]);
                             bot.say(control_channel, arg[2]+": "+names[arg[2]].join(", "));
                         } else {
                             bot.say(control_channel, "No such name");
@@ -211,7 +211,7 @@ bot.addListener('message', function(nick, chan, message) {
                 if (arg[1]=="-rm"){
                     if (post_channels.indexOf(arg[2])>-1){
                         if (filters[arg[2]].indexOf(arg[3])>-1){
-                            filters[arg[2]].remove(arg[3]);
+                            filters[arg[2]].pop(arg[3]);
                             bot.say(control_channel, arg[2]+": "+filters[arg[2]].join(", "));
                         } else {
                             bot.say(control_channel, "No such filter");
