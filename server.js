@@ -12,7 +12,7 @@ var observe_channel = "##crawl";
 var announcers = ["Henzell","Sizzell","Lantell","Rotatell","Gretell",'Kramin'];
 var names = {'##crawl-sprigganrockhaulersinc': ['Kramin']};
 var post_channels = ['##crawl-sprigganrockhaulersinc'];
-var control_channel = "##kramell";
+var control_channel = "##kramellnodejs";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 filters = {'##crawl-sprigganrockhaulersinc':[]};
@@ -112,19 +112,19 @@ bot.addListener('message', function(nick, chan, message) {
     if (chan == control_channel && message[0]=='!'){
         var arg = message.split(' ');
         if (arg[0]=="!state"){
-            bot.say(control_channel, "announcers: "+announcers)
-            bot.say(control_channel, "channels: "+post_channels)
-            bot.say(control_channel, "names: "+names)
-            bot.say(control_channel, "filters: "+filters)
+            bot.say(control_channel, "announcers: "+announcers);
+            bot.say(control_channel, "channels: "+post_channels);
+            bot.say(control_channel, "names: "+JSON.stringify(names));
+            bot.say(control_channel, "filters: "+JSON.stringify(filters));
         }
         
         if (arg[0]=="!help" || arg[0]=="!commands"){
-            bot.say(control_channel, "commands:")
-            bot.say(control_channel, "!state")
-            bot.say(control_channel, "!announcer [-rm] <announcer name>")
-            bot.say(control_channel, "!channel [-rm] <channel name>")
-            bot.say(control_channel, "!name [-rm] <channel name> <user name>")
-            bot.say(control_channel, "!filter [-rm] <channel name> <regex filter>")
+            bot.say(control_channel, "commands:");
+            bot.say(control_channel, "  !state");
+            bot.say(control_channel, "  !announcer [-rm] <announcer name>");
+            bot.say(control_channel, "  !channel [-rm] <channel name>");
+            bot.say(control_channel, "  !name [-rm] <channel name> <user name>");
+            bot.say(control_channel, "  !filter [-rm] <channel name> <regex filter>");
         }
         
         if (arg[0]=="!announcer"){
@@ -138,12 +138,12 @@ bot.addListener('message', function(nick, chan, message) {
                     }
                 } else {
                     if (announcers.indexOf(arg[1])==-1){
-                        announcers.append(arg[1]);
+                        announcers.push(arg[1]);
                     }
                     bot.say(control_channel, "announcers: "+announcers.join(', '));
                 }
             } else {
-                bot.say(control_channel, "!announcer [-rm] <announcer name>");
+                bot.say(control_channel, "Usage: !announcer [-rm] <announcer name>");
             }
         }
         
@@ -163,14 +163,14 @@ bot.addListener('message', function(nick, chan, message) {
                     if (post_channels.indexOf(arg[1])>-1){
                         bot.say(control_channel, "Names in "+arg[1]+": "+names[arg[1]].join(', '));
                     } else {
-                        post_channels.append(arg[1]);
+                        post_channels.push(arg[1]);
                         bot.join(arg[1],null);
                     }
                 } else {
                     bot.say(control_channel, "Sorry, I don't allow that channel");
                 }
             } else {
-                bot.say(control_channel, "!channel [-rm] <channel name>");
+                bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
             }
         }
         
@@ -190,7 +190,7 @@ bot.addListener('message', function(nick, chan, message) {
                 } else {
                     if (post_channels.indexOf(arg[1])>-1){
                         if (names[arg[1]].indexOf(arg[2])==-1){
-                            names[arg[1]].append(arg[2]);
+                            names[arg[1]].push(arg[2]);
                         }
                         bot.say(sequell, ".echo nick-alias:"+arg[2]+":$(join ' NAJNR' (split ' ' (nick-aliases "+arg[2]+")))");
                         bot.say(control_channel, arg[1]+": "+names[arg[1]].join(", "));
@@ -199,7 +199,7 @@ bot.addListener('message', function(nick, chan, message) {
                     }
                 }
             } else {
-                bot.say(control_channel, "!name [-rm] <channel name> <user name>");
+                bot.say(control_channel, "Usage: !name [-rm] <channel name> <user name>");
             }
         }
         
@@ -219,7 +219,7 @@ bot.addListener('message', function(nick, chan, message) {
                 } else {
                     if (post_channels.indexOf(arg[1])>-1){
                         if (filters[arg[1]].indexOf(arg[2])==-1){
-                            filters[arg[1]].append(arg[2]);
+                            filters[arg[1]].push(arg[2]);
                         }
                         bot.say(control_channel, arg[1]+" filters: "+filters[arg[1]].join(" , "));
                     } else {
@@ -227,7 +227,7 @@ bot.addListener('message', function(nick, chan, message) {
                     }
                 }
             } else {
-                bot.say(control_channel, "!filter [-rm] <channel name> <regex filter>");
+                bot.say(control_channel, "Usage: !filter [-rm] <channel name> <regex filter>");
             }
         }
     }
