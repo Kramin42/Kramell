@@ -164,6 +164,8 @@ bot.addListener('message', function(nick, chan, message) {
                         bot.say(control_channel, "Names in "+arg[1]+": "+names[arg[1]].join(', '));
                     } else {
                         post_channels.push(arg[1]);
+                        names[arg[1]]=[];
+                        filters[arg[1]]=[];
                         bot.join(arg[1],null);
                     }
                 } else {
