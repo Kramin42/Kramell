@@ -57,7 +57,7 @@ bot.addListener('message', function(nick, chan, message) {
                             }
                         });
                         if (matched){
-                            bot.say(ch, message);
+                            //bot.say(ch, message);
                         }
                     }
                 });
