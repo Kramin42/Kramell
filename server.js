@@ -65,6 +65,8 @@ function load_state() {
     });
 }
 
+load_state();
+
 var bot = new irc.Client('chat.freenode.net', botnick, {
     channels: [control_channel,observe_channel].concat(channels),
     port: 8001,
