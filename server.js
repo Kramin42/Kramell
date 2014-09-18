@@ -13,6 +13,7 @@ var announcers = ["Henzell","Sizzell","Lantell","Rotatell","Gretell",'Kramin'];
 var names = {'##crawl-sprigganrockhaulersinc': ['Kramin']};
 var post_channels = ['##crawl-sprigganrockhaulersinc'];
 var control_channel = "##kramell";
+var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 filters = {'##crawl-sprigganrockhaulersinc':[]};
 
@@ -113,8 +114,121 @@ bot.addListener('message', function(nick, chan, message) {
         if (arg[0]=="!state"){
             bot.say(control_channel, "announcers: "+announcers)
             bot.say(control_channel, "channels: "+post_channels)
-            bot.say(control_channel, "names: "+filter_names)
+            bot.say(control_channel, "names: "+names)
             bot.say(control_channel, "filters: "+filters)
+        }
+        
+        if (arg[0]=="!help" || arg[0]=="!commands"]){
+            bot.say(control_channel, "commands:")
+            bot.say(control_channel, "!state")
+            bot.say(control_channel, "!announcer [-rm] <announcer name>")
+            bot.say(control_channel, "!channel [-rm] <channel name>")
+            bot.say(control_channel, "!name [-rm] <channel name> <user name>")
+            bot.say(control_channel, "!filter [-rm] <channel name> <regex filter>")
+        }
+        
+        if (arg[0]=="!announcer"){
+            if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
+                if (arg[1]=="-rm"){
+                    if (announcers.indexOf(arg[2])>-1){
+                        announcers.remove(arg[2]);
+                        bot.say(control)channel, "announcers: "+announcers.join(', '));
+                    } else {
+                        bot.say(control_channel, "No such announcer");
+                    }
+                } else {
+                    if (announcers.indexOf(arg[1])==-1){
+                        announcers.append(arg[1]);
+                    }
+                    bot.say(control_channel, "announcers: "+announcers.join(', '));
+                }
+            } else {
+                bot.say(control_channel, "!announcer [-rm] <announcer name>");
+            }
+        }
+        
+        if (arg[0]=="!channel"){
+            if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
+                if (arg[1]=="-rm"){
+                    if (post_channels.indexOf(arg[2])>-1){
+                        post_channels.remove(arg[1]);
+                        delete names[arg[1]];
+                        delete filters[arg[1]];
+                        bot.part(arg[1],'',null)
+                        bot.say(control_channel, "channels: "+post_channels.join(', '));
+                    } else {
+                        bot.say(control_channel, "No such channel");
+                    }
+                } else if (forbidden.indexOf(arg[1])==-1) {
+                    if (post_channels.indexOf(arg[1])>-1){
+                        bot.say(control_channel, "Names in "+arg[1]+": "+names[arg[1]].join(', '));
+                    } else {
+                        post_channels.append(arg[1]);
+                        bot.join(arg[1],null);
+                    }
+                } else {
+                    bot.say(control_channel, "Sorry, I don't allow that channel");
+                }
+            } else {
+                bot.say(control_channel, "!channel [-rm] <channel name>");
+            }
+        }
+        
+        if (arg[0]=="!name"){
+            if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
+                if (arg[1]=="-rm"){
+                    if (post_channels.indexOf(arg[2])>-1){
+                        if (names[arg[2]].indexOf(arg[3])>-1){
+                            names[arg[2]].remove(arg[3]);
+                            bot.say(control_channel, arg[2]+": "+names[arg[2]].join(", "));
+                        } else {
+                            bot.say(control_channel, "No such name");
+                        }
+                    } else {
+                        bot.say(control_channel, "No such channel");
+                    }
+                } else {
+                    if (post_channels.indexOf(arg[1])>-1){
+                        if (names[arg[1]].indexOf(arg[2])==-1){
+                            names[arg[1]].append(arg[2]);
+                        }
+                        bot.say(sequell, ".echo nick-alias:"+arg[2]+":$(join ' NAJNR' (split ' ' (nick-aliases "+arg[2]+")))");
+                        bot.say(control_channel, arg[1]+": "+names[arg[1]].join(", "));
+                    } else {
+                        bot.say(control_channel, "No such channel");
+                    }
+                }
+            } else {
+                bot.say(control_channel, "!name [-rm] <channel name> <user name>");
+            }
+        }
+        
+        if (arg[0]=="!filter"){
+            if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
+                if (arg[1]=="-rm"){
+                    if (post_channels.indexOf(arg[2])>-1){
+                        if (filters[arg[2]].indexOf(arg[3])>-1){
+                            filters[arg[2]].remove(arg[3]);
+                            bot.say(control_channel, arg[2]+": "+filters[arg[2]].join(", "));
+                        } else {
+                            bot.say(control_channel, "No such filter");
+                        }
+                    } else {
+                        bot.say(control_channel, "No such channel");
+                    }
+                } else {
+                    if (post_channels.indexOf(arg[1])>-1){
+                        if (filters[arg[1]].indexOf(arg[2])==-1){
+                            filters[arg[1]].append(arg[2]);
+                        }
+                        bot.say(control_channel, arg[1]+" filters: "+filters[arg[1]].join(" , "));
+                    } else {
+                        bot.say(control_channel, "No such channel");
+                    }
+                }
+            } else {
+                bot.say(control_channel, "!filter [-rm] <channel name> <regex filter>");
+            }
         }
     }
     
