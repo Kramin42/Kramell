@@ -16,7 +16,7 @@ bot.addListener('message', function(from, to, message) {
     if(  message.indexOf('Hello '+botnick) > -1
     ) {
         bot.say(to, 'Hello!');
-        fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/data', '-1-', function (err) {
+        fs.appendFile(process.env.OPENSHIFT_DATA_DIR+'/data', '-1-', function (err) {
             if (err) throw err;
             bot.say(to, 'It\'s saved!');
         });
