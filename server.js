@@ -3,35 +3,16 @@
 // IRC bot
 var botnick = 'Kramellnodejs'
 var irc = require('irc');
-var bot = new irc.Client('chat.freenode.net', process.env.OPENSHIFT_APP_NAME || botnick, {
+var bot = new irc.Client('chat.freenode.net', botnick, {
     channels: ['##kramell'],
     port: 8001,
     debug: true
 });
 
 bot.addListener('message', function(from, to, message) {
-    if(  message.indexOf('Know any good jokes?') > -1
-      || message.indexOf('good joke') > -1
+    if(  message.indexOf('Hello '+botnick) > -1
     ) {
-        bot.say(to, 'Knock knock!');
-    }
-});
-bot.addListener('message', function(from, to, message) {
-    if(  message.indexOf('who is there?') > -1
-      || message.indexOf("who's there?") > -1
-      || message.indexOf("Who's there?") > -1
-      || message.indexOf("Who is there?") > -1
-      )
-    {
-        bot.say(to, 'Doris');
-    }
-});
-bot.addListener('message', function(from, to, message) {
-    if(  message.indexOf('Doris who?') > -1
-      || message.indexOf("doris who?") > -1
-     )
-    {
-        bot.say(to, "Doris locked, that's why I'm knocking!");
+        bot.say(to, 'Hello!');
     }
 });
 
