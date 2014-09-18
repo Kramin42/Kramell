@@ -42,10 +42,12 @@ bot.addListener('message', function(nick, chan, message) {
     // get announcements
     if (chan == observe_channel){
         if (announcers.indexOf(nick)){
+            console.log("found announcement");
             for (ch in post_channels){
                 for (name in names[ch]){
                     name = nick_aliases[name] ? nick_aliases[name] : name;
                     if (message.search(new RegExp(name, "i"))){
+                        console.log("contains a nick");
                         var matched = true;
                         for (match in filters[ch]){
                             if (!message.search(match)){
