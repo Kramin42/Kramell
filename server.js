@@ -53,7 +53,7 @@ bot.addListener('message', function(nick, chan, message) {
                 names[ch].forEach(function(name) {
                     name = nick_aliases[name] ? nick_aliases[name] : name;
                     //console.log(name);
-                    if (message.search(new RegExp(name, "i"))>-1){
+                    if (message.search(new RegExp("^"+name+" ", "i"))>-1){
                         //console.log(message+" contains "+name);
                         var matched = true;
                         filters[ch].forEach(function(match) {
