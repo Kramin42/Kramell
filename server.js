@@ -1,5 +1,8 @@
 #!/bin/env node
 
+var express = require('express');
+var fs      = require('fs');
+
 // IRC bot
 var botnick = 'Kramellnodejs'
 var irc = require('irc');
@@ -13,14 +16,22 @@ bot.addListener('message', function(from, to, message) {
     if(  message.indexOf('Hello '+botnick) > -1
     ) {
         bot.say(to, 'Hello!');
+        fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/data', '-1-', function (err) {
+            if (err) throw err;
+            bot.say(to, 'It\'s saved!');
+        });
+    }
+    if(message.indexOf('!data') > -1){
+        fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/data', function (err, data) {
+            if (err) throw err;
+            bot.say(to, data);
+        });
     }
 });
 
 //end IRC bot
 
 //  OpenShift sample Node application
-var express = require('express');
-var fs      = require('fs');
 
 
 /**
