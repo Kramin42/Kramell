@@ -42,7 +42,7 @@ function save_state() {
     });
 }
 
-function load_state() {
+function load_state(callback) {
     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/announcers', function (err, data) {
         if (err) throw err;
         announcers = JSON.parse(data);
@@ -50,6 +50,7 @@ function load_state() {
     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/channels', function (err, data) {
         if (err) throw err;
         channels = JSON.parse(data);
+        callback();
     });
     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/names', function (err, data) {
         if (err) throw err;
@@ -65,13 +66,17 @@ function load_state() {
     });
 }
 
-load_state();
+var bot;
 
-var bot = new irc.Client('chat.freenode.net', botnick, {
-    channels: [control_channel,observe_channel].concat(channels),
-    port: 8001,
-    debug: true
-});
+function init() {
+    bot = new irc.Client('chat.freenode.net', botnick, {
+        channels: [control_channel,observe_channel].concat(channels),
+        port: 8001,
+        debug: true
+    });
+}
+
+load_state(init);
 
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
@@ -277,7 +282,7 @@ bot.addListener('message', function(nick, chan, message) {
             save_state();
         }
         if (arg[0]=="!loadstate"){
-            load_state();
+            load_state(init);
         }
         save_state();
     }
