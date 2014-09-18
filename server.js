@@ -118,7 +118,7 @@ bot.addListener('message', function(nick, chan, message) {
             bot.say(control_channel, "filters: "+filters)
         }
         
-        if (arg[0]=="!help" || arg[0]=="!commands"]){
+        if (arg[0]=="!help" || arg[0]=="!commands"){
             bot.say(control_channel, "commands:")
             bot.say(control_channel, "!state")
             bot.say(control_channel, "!announcer [-rm] <announcer name>")
