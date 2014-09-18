@@ -277,6 +277,7 @@ bot.addListener('message', function(nick, chan, message) {
         if (arg[0]=="!loadstate"){
             load_state();
         }
+        save_state();
     }
     
 });
