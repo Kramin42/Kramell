@@ -189,7 +189,7 @@ bot.addListener('message', function(nick, chan, message) {
                         channels.pop(arg[1]);
                         delete names[arg[1]];
                         delete filters[arg[1]];
-                        bot.part(arg[1],'',null)
+                        bot.part(arg[2],'',null)
                         bot.say(control_channel, "channels: "+channels.join(', '));
                     } else {
                         bot.say(control_channel, "No such channel");
