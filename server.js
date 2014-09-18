@@ -132,7 +132,7 @@ bot.addListener('message', function(nick, chan, message) {
                 if (arg[1]=="-rm"){
                     if (announcers.indexOf(arg[2])>-1){
                         announcers.remove(arg[2]);
-                        bot.say(control)channel, "announcers: "+announcers.join(', '));
+                        bot.say(control_channel, "announcers: "+announcers.join(', '));
                     } else {
                         bot.say(control_channel, "No such announcer");
                     }
