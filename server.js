@@ -18,7 +18,7 @@ filters = {'##crawl-sprigganrockhaulersinc':[]};
 nick_aliases = {"Kramin":"Kramin|hyperkramin"};
 
 var bot = new irc.Client('chat.freenode.net', botnick, {
-    channels: ['##kramell'],
+    channels: ['##kramell','##crawl','##crawl-sprigganrockhaulersinc'],
     port: 8001,
     debug: true
 });
