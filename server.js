@@ -49,7 +49,7 @@ bot.addListener('message', function(nick, chan, message) {
                     name = nick_aliases[name] ? nick_aliases[name] : name;
                     console.log(name);
                     if (message.search(new RegExp(name, "i"))){
-                        console.log("contains a nick");
+                        console.log(message+" contains "+name);
                         var matched = true;
                         filters[ch].forEach(function(match) {
                             if (!message.search(match)){
@@ -58,6 +58,7 @@ bot.addListener('message', function(nick, chan, message) {
                         });
                         if (matched){
                             //bot.say(ch, message);
+                            console.log(ch+" :"+message);
                         }
                     }
                 });
