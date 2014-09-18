@@ -11,7 +11,7 @@ var irc = require('irc');
 var observe_channel = "##crawl";
 var announcers = ["Henzell","Sizzell","Lantell","Rotatell","Gretell",'Kramin'];
 var names = {'##crawl-sprigganrockhaulersinc': ['Kramin']};
-var post_channels = ['##crawl-sprigganrockhaulersinc'];
+var channels = ['##crawl-sprigganrockhaulersinc'];
 var control_channel = "##kramellnodejs";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
@@ -20,8 +20,53 @@ filters = {'##crawl-sprigganrockhaulersinc':[]};
 // dictionary of nick-aliases:
 nick_aliases = {"Kramin":"Kramin|hyperkramin"};
 
+function update_aliases(nick) {
+    bot.say(sequell, ".echo nick-alias:"+nick+":$(join ' NAJNR' (split ' ' (nick-aliases "+nick+")))");
+}
+
+function save_state() {
+    fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/announcers', JSON.stringify(announcers), function (err) {
+        if (err) throw err;
+    });
+    fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/channels', JSON.stringify(channels), function (err) {
+        if (err) throw err;
+    });
+    fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/names', JSON.stringify(names), function (err) {
+        if (err) throw err;
+    });
+    fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/filters', JSON.stringify(filters), function (err) {
+        if (err) throw err;
+    });
+    fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/nick_aliases', JSON.stringify(nick_aliases), function (err) {
+        if (err) throw err;
+    });
+}
+
+function load_state() {
+    fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/announcers', function (err, data) {
+        if (err) throw err;
+        announcers = JSON.parse(data);
+    });
+    fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/channels', function (err, data) {
+        if (err) throw err;
+        channels = JSON.parse(data);
+    });
+    fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/names', function (err, data) {
+        if (err) throw err;
+        names = JSON.parse(data);
+    });
+    fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/filters', function (err, data) {
+        if (err) throw err;
+        filters = JSON.parse(data);
+    });
+    fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/nick_aliases', function (err, data) {
+        if (err) throw err;
+        nick_aliases = JSON.parse(data);
+    });
+}
+
 var bot = new irc.Client('chat.freenode.net', botnick, {
-    channels: [control_channel,observe_channel].concat(post_channels),
+    channels: [control_channel,observe_channel].concat(channels),
     port: 8001,
     debug: true
 });
@@ -32,23 +77,13 @@ bot.addListener('message', function(nick, chan, message) {
     if(  message.indexOf('Hello '+botnick) > -1
     ) {
         bot.say(chan, 'Hello!');
-//         fs.appendFile(process.env.OPENSHIFT_DATA_DIR+'/data', '-1-', function (err) {
-//             if (err) throw err;
-//             bot.say(to, 'It\'s saved!');
-//         });
     }
-//     if(message.indexOf('!data') > -1){
-//         fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/data', function (err, data) {
-//             if (err) throw err;
-//             bot.say(to, data);
-//         });
-//     }
     
     // get announcements
     if (chan == observe_channel){
         if (announcers.indexOf(nick)>-1){
             //console.log("found announcement");
-            post_channels.forEach(function(ch) {
+            channels.forEach(function(ch) {
                 //console.log(ch)
                 names[ch].forEach(function(name) {
                     name = nick_aliases[name] ? nick_aliases[name] : name;
@@ -72,7 +107,7 @@ bot.addListener('message', function(nick, chan, message) {
     }
     
     // redirect sequell/chei queries
-    if (post_channels.indexOf(chan)>-1){
+    if (channels.indexOf(chan)>-1){
         if (message[0] == '%'){
             bot.say(chei, message);
             cheiquerychan = chan;
@@ -113,7 +148,7 @@ bot.addListener('message', function(nick, chan, message) {
         var arg = message.split(' ');
         if (arg[0]=="!state"){
             bot.say(control_channel, "announcers: "+announcers);
-            bot.say(control_channel, "channels: "+post_channels);
+            bot.say(control_channel, "channels: "+channels);
             bot.say(control_channel, "names: "+JSON.stringify(names));
             bot.say(control_channel, "filters: "+JSON.stringify(filters));
         }
@@ -150,24 +185,24 @@ bot.addListener('message', function(nick, chan, message) {
         if (arg[0]=="!channel"){
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
-                    if (post_channels.indexOf(arg[2])>-1){
-                        post_channels.pop(arg[1]);
+                    if (channels.indexOf(arg[2])>-1){
+                        channels.pop(arg[1]);
                         delete names[arg[1]];
                         delete filters[arg[1]];
                         bot.part(arg[1],'',null)
-                        bot.say(control_channel, "channels: "+post_channels.join(', '));
+                        bot.say(control_channel, "channels: "+channels.join(', '));
                     } else {
                         bot.say(control_channel, "No such channel");
                     }
                 } else if (forbidden.indexOf(arg[1])==-1) {
-                    if (post_channels.indexOf(arg[1])>-1){
+                    if (channels.indexOf(arg[1])>-1){
                         bot.say(control_channel, "Names in "+arg[1]+": "+names[arg[1]].join(', '));
                     } else {
-                        post_channels.push(arg[1]);
+                        channels.push(arg[1]);
                         names[arg[1]]=[];
                         filters[arg[1]]=[];
                         bot.join(arg[1],null);
-                        bot.say(control_channel, "channels: "+post_channels.join(', '));
+                        bot.say(control_channel, "channels: "+channels.join(', '));
                     }
                 } else {
                     bot.say(control_channel, "Sorry, I don't allow that channel");
@@ -180,7 +215,7 @@ bot.addListener('message', function(nick, chan, message) {
         if (arg[0]=="!name"){
             if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
-                    if (post_channels.indexOf(arg[2])>-1){
+                    if (channels.indexOf(arg[2])>-1){
                         if (names[arg[2]].indexOf(arg[3])>-1){
                             names[arg[2]].pop(arg[3]);
                             bot.say(control_channel, arg[2]+": "+names[arg[2]].join(", "));
@@ -191,11 +226,11 @@ bot.addListener('message', function(nick, chan, message) {
                         bot.say(control_channel, "No such channel");
                     }
                 } else {
-                    if (post_channels.indexOf(arg[1])>-1){
+                    if (channels.indexOf(arg[1])>-1){
                         if (names[arg[1]].indexOf(arg[2])==-1){
                             names[arg[1]].push(arg[2]);
                         }
-                        bot.say(sequell, ".echo nick-alias:"+arg[2]+":$(join ' NAJNR' (split ' ' (nick-aliases "+arg[2]+")))");
+                        update_aliases(arg[2]);
                         bot.say(control_channel, arg[1]+": "+names[arg[1]].join(", "));
                     } else {
                         bot.say(control_channel, "No such channel");
@@ -209,7 +244,7 @@ bot.addListener('message', function(nick, chan, message) {
         if (arg[0]=="!filter"){
             if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
-                    if (post_channels.indexOf(arg[2])>-1){
+                    if (channels.indexOf(arg[2])>-1){
                         arg[3] = arg.slice(4, arg.length).join(' ');
                         if (filters[arg[2]].indexOf(arg[3])>-1){
                             filters[arg[2]].pop(arg[3]);
@@ -221,7 +256,7 @@ bot.addListener('message', function(nick, chan, message) {
                         bot.say(control_channel, "No such channel");
                     }
                 } else {
-                    if (post_channels.indexOf(arg[1])>-1){
+                    if (channels.indexOf(arg[1])>-1){
                         arg[2] = arg.slice(3, arg.length).join(' ');
                         if (filters[arg[1]].indexOf(arg[2])==-1){
                             filters[arg[1]].push(arg[2]);
@@ -234,6 +269,13 @@ bot.addListener('message', function(nick, chan, message) {
             } else {
                 bot.say(control_channel, "Usage: !filter [-rm] <channel name> <regex filter>");
             }
+        }
+        
+        if (arg[0]=="!savestate"){
+            save_state();
+        }
+        if (arg[0]=="!loadstate"){
+            load_state();
         }
     }
     
