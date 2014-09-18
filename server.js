@@ -5,10 +5,12 @@ var fs      = require('fs');
 
 // IRC bot
 var botnick = 'Kramellnodejs';
+var chei = 'Cheibriados';
+var sequell = 'Sequell';
 var irc = require('irc');
 var observe_channel = "##crawl";
-var announcers = ["Henzell","Sizzell","Lantell","Rotatell","Gretell","Kramin"];
-var names = {'##crawl-sprigganrockhaulersinc': ['doubtofbuddha', 'miek', 'tcjsavannah', 'mopl', 'tasonir', 'Kramin']};
+var announcers = ["Henzell","Sizzell","Lantell","Rotatell","Gretell",'Kramin'];
+var names = {'##crawl-sprigganrockhaulersinc': ['Kramin']};
 var post_channels = ['##crawl-sprigganrockhaulersinc'];
 var control_channel = "##kramell";
 
@@ -23,6 +25,8 @@ var bot = new irc.Client('chat.freenode.net', botnick, {
     debug: true
 });
 
+var cheiquerychan = control_channel;
+var sequellquerychan = control_channel;
 bot.addListener('message', function(nick, chan, message) {
     if(  message.indexOf('Hello '+botnick) > -1
     ) {
@@ -41,15 +45,15 @@ bot.addListener('message', function(nick, chan, message) {
     
     // get announcements
     if (chan == observe_channel){
-        if (announcers.indexOf(nick)){
-            console.log("found announcement");
+        if (announcers.indexOf(nick)>-1){
+            //console.log("found announcement");
             post_channels.forEach(function(ch) {
                 //console.log(ch)
                 names[ch].forEach(function(name) {
                     name = nick_aliases[name] ? nick_aliases[name] : name;
                     //console.log(name);
                     if (message.search(new RegExp(name, "i"))>-1){
-                        console.log(message+" contains "+name);
+                        //console.log(message+" contains "+name);
                         var matched = true;
                         filters[ch].forEach(function(match) {
                             if (message.search(match)==-1){
@@ -57,8 +61,8 @@ bot.addListener('message', function(nick, chan, message) {
                             }
                         });
                         if (matched){
-                            //bot.say(ch, message);
-                            console.log(ch+" :"+message);
+                            bot.say(ch, message);
+                            //console.log(ch+" :"+message);
                         }
                     }
                 });
@@ -66,6 +70,42 @@ bot.addListener('message', function(nick, chan, message) {
         }
     }
     
+    // redirect sequell/chei queries
+    if (post_channels.indexOf(chan)>-1){
+        if (message[0] == '%'){
+            bot.say(chei, message);
+            cheiquerychan = chan;
+        }
+        if ('!=&.?@^'.indexOf(message[0])>-1){
+            bot.say(sequell, message.replace(' . ', '@'+nick));
+            sequellquerychan = chan;
+        }
+    }
+    
+    // post sequell answers
+    if (chan == botnick && nick == sequell){
+        msgarray = message.split(':');
+        if (msgarray.length>2 && msgarray[0]=="nick-alias"){
+            var NAnick = msgarray[1];
+            nick_aliases[NAnick] = msgarray[2].replace(' NAJNR','|').replace('\r\n','');
+            for (i=4; i<msgarray.length; i+=2){
+                nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(' NAJNR','|').replace('NAJNR','').replace('\r\n','');
+            }
+            bot.say(control_channel, "nick mapping: "+NAnick+" => "+nick_aliases[NAnick])
+        } else if (message.search(/^NAJNR/)>-1){
+            for (i=0; i<msgarray.length; i+=2){
+                nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(' NAJNR','|').replace('NAJNR','').replace('\r\n','');
+                bot.say(control_channel, "...|"+msgarray[i].replace(' NAJNR','|').replace('NAJNR','').replace('\r\n',''));
+            }
+        } else {
+            bot.say(sequellquerychan, message);
+        }
+    }
+    
+    //post chei answers
+    if (chan == botnick && nick == chei){
+        bot.say(cheiquerychan, message);
+    }
     
 });
 
