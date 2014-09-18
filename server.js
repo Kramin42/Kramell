@@ -5,7 +5,7 @@ var botnick = 'Kramellnodejs'
 var irc = require('irc');
 var bot = new irc.Client('chat.freenode.net', process.env.OPENSHIFT_APP_NAME || botnick, {
     channels: ['##kramell'],
-    port: 8001,
+    port: 6667,
     debug: true
 });
 
