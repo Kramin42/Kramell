@@ -54,13 +54,11 @@ bot.addListener('message', function(nick, chan, message) {
                         filters[ch].forEach(function(match) {
                             if (!message.search(match)){
                                 matched = false;
-                                break;
                             }
                         });
                         if (matched){
                             bot.say(ch, message);
                         }
-                        break;
                     }
                 });
             });
