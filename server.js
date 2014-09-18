@@ -41,7 +41,7 @@ bot.addListener('message', function(nick, chan, message) {
     
     // get announcements
     if (chan == observe_channel){
-        if (announcers.indexof(nick)){
+        if (announcers.indexOf(nick)){
             for (ch in post_channels){
                 for (name in names[ch]){
                     name = nick_aliases[name] ? nick_aliases[name] : name;
