@@ -210,9 +210,10 @@ bot.addListener('message', function(nick, chan, message) {
             if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
                     if (post_channels.indexOf(arg[2])>-1){
+                        arg[3] = arg.slice(4, arg.length).join(' ');
                         if (filters[arg[2]].indexOf(arg[3])>-1){
                             filters[arg[2]].pop(arg[3]);
-                            bot.say(control_channel, arg[2]+": "+filters[arg[2]].join(", "));
+                            bot.say(control_channel, arg[2]+" filters: "+filters[arg[2]].join(", "));
                         } else {
                             bot.say(control_channel, "No such filter");
                         }
@@ -221,6 +222,7 @@ bot.addListener('message', function(nick, chan, message) {
                     }
                 } else {
                     if (post_channels.indexOf(arg[1])>-1){
+                        arg[2] = arg.slice(3, arg.length).join(' ');
                         if (filters[arg[1]].indexOf(arg[2])==-1){
                             filters[arg[1]].push(arg[2]);
                         }
