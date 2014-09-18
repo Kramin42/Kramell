@@ -45,7 +45,7 @@ bot.addListener('message', function(nick, chan, message) {
             for (ch in post_channels){
                 for (name in names[ch]){
                     name = nick_aliases[name] ? nick_aliases[name] : name;
-                    if (message.search(new RegExp(name, "i")){
+                    if (message.search(new RegExp(name, "i"))){
                         var matched = true;
                         for (match in filters[ch]){
                             if (!message.search(match)){
