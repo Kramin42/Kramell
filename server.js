@@ -44,15 +44,15 @@ bot.addListener('message', function(nick, chan, message) {
         if (announcers.indexOf(nick)){
             console.log("found announcement");
             post_channels.forEach(function(ch) {
-                console.log(ch)
+                //console.log(ch)
                 names[ch].forEach(function(name) {
                     name = nick_aliases[name] ? nick_aliases[name] : name;
-                    console.log(name);
-                    if (message.search(new RegExp(name, "i"))){
+                    //console.log(name);
+                    if (message.search(new RegExp(name, "i"))>-1){
                         console.log(message+" contains "+name);
                         var matched = true;
                         filters[ch].forEach(function(match) {
-                            if (!message.search(match)){
+                            if (message.search(match)==-1){
                                 matched = false;
                             }
                         });
