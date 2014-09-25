@@ -73,12 +73,12 @@ function check_csdc_points(bot, name, message) {
     //5   Collect 3 or more runes in a game:
     if (message.search(/rune of Zot/)>-1){
         if (csdcdata[csdcwk][name][3]==0){
-            bot.say('##csdc', irc.colors.wrap('light_green', name+' has found a rune for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('dark_red', name+' has found a rune for 1 point!'));
         }
         csdcdata[csdcwk][name][3]+=1;
         if (csdcdata[csdcwk][name][3]>=3 && csdcdata[csdcwk][name][4]==0){
             csdcdata[csdcwk][name][4]=1;
-            bot.say('##csdc', irc.colors.wrap('light_green', name+' has found 3 runes for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('dark_red', name+' has found 3 runes for 1 point!'));
         }
     }
     
@@ -180,7 +180,7 @@ function init() {
                                 }
                             });
                             if (matched){
-                                bot.say(ch, irc.colors.wrap('light_grey', message));
+                                bot.say(ch, irc.colors.wrap('gray', message));
                                 if (ch=='##csdc' && csdcrunning) {
                                     check_csdc_points(bot, name, message);
                                 }
