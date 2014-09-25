@@ -172,6 +172,7 @@ function init() {
                         if (message.search(new RegExp("^"+name+" ", "i"))>-1){
                             name = message.match(new RegExp("^("+name+") ", "i"))[1];
                             //console.log(message+" contains "+name);
+                            console.log(message.match(new RegExp("^("+name+") ", "i")));
                             var matched = true;
                             filters[ch].forEach(function(match) {
                                 if (message.search(match)==-1){
