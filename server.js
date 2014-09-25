@@ -46,10 +46,10 @@ function check_csdc_points(bot, name, message) {
         console.log('added '+name+' to '+csdcwk);
     }
     //1   Kill a unique:
-    if (message.search(/\) killed/)>-1 && !message.search(/the ghost/)>-1 && !message.search(/with \d+ points after \d+ turns/)>-1){
+    if (message.search(/\) killed/)>-1 && !(message.search(/the ghost/)>-1) && !(message.search(/with \d+ points after \d+ turns/)>-1)){
         if (csdcdata[csdcwk][name][0]==0){
             csdcdata[csdcwk][name][0]=1;
-            bot.say('##csdc', name+' has killed a unique for 1 point!');
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed a unique for 1 point!'));
         }
     }
     
@@ -57,7 +57,7 @@ function check_csdc_points(bot, name, message) {
     if (message.search(/entered the Depths|\((Lair|Orc):/)>-1){
         if (csdcdata[csdcwk][name][1]==0){
             csdcdata[csdcwk][name][1]=1;
-            bot.say('##csdc', name+' has entered a branch for 1 point!');
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered a branch for 1 point!'));
         }
     }
     
@@ -65,7 +65,7 @@ function check_csdc_points(bot, name, message) {
     if (message.search(/reached level/)>-1){
         if (csdcdata[csdcwk][name][2]==0){
             csdcdata[csdcwk][name][2]=1;
-            bot.say('##csdc', name+' has finished a branch for 1 point!');
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished a branch for 1 point!'));
         }
     }
     
@@ -73,12 +73,12 @@ function check_csdc_points(bot, name, message) {
     //5   Collect 3 or more runes in a game:
     if (message.search(/rune of Zot/)>-1){
         if (csdcdata[csdcwk][name][3]==0){
-            bot.say('##csdc', name+' has found a rune for 1 point!');
+            bot.say('##csdc', irc.colors.wrap('light_green', name+' has found a rune for 1 point!'));
         }
         csdcdata[csdcwk][name][3]+=1;
         if (csdcdata[csdcwk][name][3]>=3 && csdcdata[csdcwk][name][4]==0){
             csdcdata[csdcwk][name][4]=1;
-            bot.say('##csdc', name+' has found 3 runes for 1 point!');
+            bot.say('##csdc', irc.colors.wrap('light_green', name+' has found 3 runes for 1 point!'));
         }
     }
     
@@ -90,10 +90,10 @@ function check_csdc_points(bot, name, message) {
         if (csdcdata[csdcwk][name][5]==0 && csdcdata[csdcwk][name][4]==0){
             if (turns<75000){
                 csdcdata[csdcwk][name][5]=1;
-                bot.say('##csdc', name+' has won in under 75,000 turns for 2 points!');
+                bot.say('##csdc', irc.colors.wrap('light_red', name+' has won in under 75,000 turns for 2 points!'));
             } else {
                 csdcdata[csdcwk][name][4]=1;
-                bot.say('##csdc', name+' has won for 1 point!');
+                bot.say('##csdc', irc.colors.wrap('light_red', name+' has won for 1 point!'));
             }
         }
     }
