@@ -180,8 +180,9 @@ function init() {
                             });
                             if (matched){
                                 bot.say(ch, message);
-                                if (ch=='##csdc' && csdcrunning):
+                                if (ch=='##csdc' && csdcrunning) {
                                     check_csdc_points(bot, name, message);
+                                }
                                 //console.log(ch+" :"+message);
                             }
                         }
