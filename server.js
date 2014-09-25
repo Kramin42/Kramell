@@ -41,15 +41,18 @@ var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 
 function check_csdc_points(bot, name, message) {
+    var save = false;
     if (!(name in csdcdata[csdcwk])){
         csdcdata[csdcwk][name]=[0,0,0,0,0,0,0,0,0];
         //console.log('added '+name+' to '+csdcwk);
+        save = true;
     }
     //1   Kill a unique:
     if (message.search(/\) killed/)>-1 && !(message.search(/the ghost/)>-1) && !(message.search(/with \d+ points after \d+ turns/)>-1)){
         if (csdcdata[csdcwk][name][0]==0){
             csdcdata[csdcwk][name][0]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed a unique for 1 point!'));
+            save = true;
         }
     }
     
@@ -58,6 +61,7 @@ function check_csdc_points(bot, name, message) {
         if (csdcdata[csdcwk][name][1]==0){
             csdcdata[csdcwk][name][1]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered a branch for 1 point!'));
+            save = true;
         }
     }
     
@@ -66,6 +70,7 @@ function check_csdc_points(bot, name, message) {
         if (csdcdata[csdcwk][name][2]==0){
             csdcdata[csdcwk][name][2]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished a branch for 1 point!'));
+            save = true;
         }
     }
     
@@ -80,6 +85,7 @@ function check_csdc_points(bot, name, message) {
             csdcdata[csdcwk][name][4]=1;
             bot.say('##csdc', irc.colors.wrap('dark_red', name+' has found 3 runes for 1 point!'));
         }
+        save = true;
     }
     
     //6   Win a game (75,000 turns or more):                       1 pt
@@ -91,11 +97,19 @@ function check_csdc_points(bot, name, message) {
             if (turns<75000){
                 csdcdata[csdcwk][name][5]=1;
                 bot.say('##csdc', irc.colors.wrap('light_red', name+' has won in under 75,000 turns for 2 points!'));
+                save = true;
             } else {
                 csdcdata[csdcwk][name][4]=1;
                 bot.say('##csdc', irc.colors.wrap('light_red', name+' has won for 1 point!'));
+                save = true;
             }
         }
+    }
+    
+    if (save) {
+        fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', JSON.stringify(csdcdata), function (err) {
+            if (err) throw err;
+        });
     }
 }
 
@@ -117,6 +131,9 @@ function save_state() {
         if (err) throw err;
     });
     fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/nick_aliases', JSON.stringify(nick_aliases), function (err) {
+        if (err) throw err;
+    });
+    fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', JSON.stringify(csdcdata), function (err) {
         if (err) throw err;
     });
 }
@@ -142,6 +159,10 @@ function load_state(callback) {
     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/nick_aliases', function (err, data) {
         if (err) throw err;
         nick_aliases = JSON.parse(data);
+    });
+    fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', function (err, data) {
+        if (err) throw err;
+        csdcdata = JSON.parse(data);
     });
 }
 
