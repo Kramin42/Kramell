@@ -170,7 +170,7 @@ function init() {
                         name = nick_aliases[name] ? nick_aliases[name] : name;
                         //console.log(name);
                         if (message.search(new RegExp("^"+name+" ", "i"))>-1){
-                            name = message.match(new RegExp("^("+name+") ", "i"))[0];
+                            name = message.match(new RegExp("^("+name+") ", "i"))[1];
                             //console.log(message+" contains "+name);
                             var matched = true;
                             filters[ch].forEach(function(match) {
