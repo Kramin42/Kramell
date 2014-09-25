@@ -160,10 +160,10 @@ function load_state(callback) {
         if (err) throw err;
         nick_aliases = JSON.parse(data);
     });
-    fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', function (err, data) {
-        if (err) throw err;
-        csdcdata = JSON.parse(data);
-    });
+    //fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', function (err, data) {
+    //    if (err) throw err;
+    //    csdcdata = JSON.parse(data);
+    //});
 }
 
 var bot;
