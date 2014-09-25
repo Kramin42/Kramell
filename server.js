@@ -280,7 +280,7 @@ function init() {
                 save_state();
             }
             if (arg[0]=="!loadstate"){
-                load_state(null);
+                load_state(nop);
             }
             save_state();
         }
@@ -291,6 +291,8 @@ function init() {
 load_state(init);
 
 //end IRC bot
+
+function nop(){}
 
 //  OpenShift sample Node application
 
