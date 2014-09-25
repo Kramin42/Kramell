@@ -43,7 +43,7 @@ var sequellquerychan = control_channel;
 function check_csdc_points(bot, name, message) {
     if (!(name in csdcdata[csdcwk])){
         csdcdata[csdcwk][name]=[0,0,0,0,0,0,0,0,0];
-        console.log('added '+name+' to '+csdcwk);
+        //console.log('added '+name+' to '+csdcwk);
     }
     //1   Kill a unique:
     if (message.search(/\) killed/)>-1 && !(message.search(/the ghost/)>-1) && !(message.search(/with \d+ points after \d+ turns/)>-1)){
@@ -180,7 +180,7 @@ function init() {
                                 }
                             });
                             if (matched){
-                                bot.say(ch, message);
+                                bot.say(ch, irc.colors.wrap('light_grey', message));
                                 if (ch=='##csdc' && csdcrunning) {
                                     check_csdc_points(bot, name, message);
                                 }
