@@ -191,9 +191,9 @@ function init() {
                 if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
                     if (arg[1]=="-rm"){
                         if (channels.indexOf(arg[2])>-1){
-                            channels.pop(arg[1]);
-                            delete names[arg[1]];
-                            delete filters[arg[1]];
+                            channels.pop(arg[2]);
+                            delete names[arg[2]];
+                            delete filters[arg[2]];
                             bot.part(arg[2],'',null)
                             bot.say(control_channel, "channels: "+channels.join(', '));
                         } else {
