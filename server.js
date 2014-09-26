@@ -17,7 +17,7 @@ var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 var csdcdata = {'csdc3wktest':{}};
 var csdcwk = 'csdc3wktest';
-var csdcrunning = false;
+var csdcrunning = true;
 
 /*
    Weekly points (can be earned once per challenge):            
@@ -190,8 +190,8 @@ function init() {
                     names[ch].forEach(function(name) {
                         name = nick_aliases[name] ? nick_aliases[name] : name;
                         //console.log(name);
-                        if (message.search(new RegExp("^"+name+" ", "i"))>-1){
-                            name = message.match(new RegExp("^("+name+") ", "i"))[1];
+                        if (message.search(new RegExp("^("+name+") ", "i"))>-1){
+                            name = message.match(new RegExp("^("+name+") ", "ig"))[0];
                             //console.log(message+" contains "+name);
                             //console.log('name match: '+message.match(new RegExp("^("+name+") ", "i")));
                             var matched = true;
