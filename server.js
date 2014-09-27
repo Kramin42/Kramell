@@ -43,7 +43,7 @@ var sequellquerychan = control_channel;
 function check_csdc_points(bot, name, message, csdcwk) {
     var lowername = name.toLowerCase();
     var save = false;
-    if (!(name in csdcdata[csdcwk]['playerdata'])){
+    if (!(lowername in csdcdata[csdcwk]['playerdata'])){
         csdcdata[csdcwk]['playerdata'][lowername]=[0,0,0,0,0,0,0,0,0];
         //console.log('added '+name+' to '+csdcwk);
         save = true;
@@ -460,6 +460,8 @@ function init() {
                     bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
                 }
             }
+            
+            
             
             
             save_state();
