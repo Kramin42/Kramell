@@ -41,16 +41,17 @@ var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 
 function check_csdc_points(bot, name, message, csdcwk) {
+    var lowername = name.toLowerCase();
     var save = false;
     if (!(name in csdcdata[csdcwk]['playerdata'])){
-        csdcdata[csdcwk]['playerdata'][name]=[0,0,0,0,0,0,0,0,0];
+        csdcdata[csdcwk]['playerdata'][lowername]=[0,0,0,0,0,0,0,0,0];
         //console.log('added '+name+' to '+csdcwk);
         save = true;
     }
     //1   Kill a unique:
     if (message.search(/\) killed/)>-1 && !(message.search(/the ghost/)>-1) && !(message.search(/with \d+ points after \d+ turns/)>-1)){
-        if (csdcdata[csdcwk]['playerdata'][name][0]==0){
-            csdcdata[csdcwk]['playerdata'][name][0]=1;
+        if (csdcdata[csdcwk]['playerdata'][lowername][0]==0){
+            csdcdata[csdcwk]['playerdata'][lowername][0]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed a unique for 1 point!'));
             save = true;
         }
@@ -58,8 +59,8 @@ function check_csdc_points(bot, name, message, csdcwk) {
     
     //2   Enter a multi-level branch of the Dungeon:
     if (message.search(/entered the Depths|\((Lair|Orc):/)>-1){
-        if (csdcdata[csdcwk]['playerdata'][name][1]==0){
-            csdcdata[csdcwk]['playerdata'][name][1]=1;
+        if (csdcdata[csdcwk]['playerdata'][lowername][1]==0){
+            csdcdata[csdcwk]['playerdata'][lowername][1]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered a branch for 1 point!'));
             save = true;
         }
@@ -67,8 +68,8 @@ function check_csdc_points(bot, name, message, csdcwk) {
     
     //3   Reach the end of any multi-level branch (includes D):
     if (message.search(/reached level/)>-1){
-        if (csdcdata[csdcwk]['playerdata'][name][2]==0){
-            csdcdata[csdcwk]['playerdata'][name][2]=1;
+        if (csdcdata[csdcwk]['playerdata'][lowername][2]==0){
+            csdcdata[csdcwk]['playerdata'][lowername][2]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished a branch for 1 point!'));
             save = true;
         }
@@ -76,8 +77,8 @@ function check_csdc_points(bot, name, message, csdcwk) {
     
     //4   Champion a listed god (from weekly list):
     if (message.search("Champion of "+csdcdata[csdcwk]['wkgods'])>-1){
-        if (csdcdata[csdcwk]['playerdata'][name][3]==0){
-            csdcdata[csdcwk]['playerdata'][name][3]=1;
+        if (csdcdata[csdcwk]['playerdata'][lowername][3]==0){
+            csdcdata[csdcwk]['playerdata'][lowername][3]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
             save=true;
         }
@@ -86,12 +87,12 @@ function check_csdc_points(bot, name, message, csdcwk) {
     //5   Collect a rune:
     //6   Collect 3 or more runes in a game:
     if (message.search(/rune of Zot/)>-1){
-        if (csdcdata[csdcwk]['playerdata'][name][4]==0){
+        if (csdcdata[csdcwk]['playerdata'][lowername][4]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found a rune for 1 point!'));
         }
-        csdcdata[csdcwk]['playerdata'][name][4]+=1;
-        if (csdcdata[csdcwk]['playerdata'][name][4]>=3 && csdcdata[csdcwk]['playerdata'][name][5]==0){
-            csdcdata[csdcwk]['playerdata'][name][5]=1;
+        csdcdata[csdcwk]['playerdata'][lowername][4]+=1;
+        if (csdcdata[csdcwk]['playerdata'][lowername][4]>=3 && csdcdata[csdcwk]['playerdata'][lowername][5]==0){
+            csdcdata[csdcwk]['playerdata'][lowername][5]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found 3 runes for 1 point!'));
         }
         save = true;
@@ -99,8 +100,8 @@ function check_csdc_points(bot, name, message, csdcwk) {
     
     //7   Win a game
     if (message.search(/escaped with the Orb/)>-1){
-        if (csdcdata[csdcwk]['playerdata'][name][6]==0){
-            csdcdata[csdcwk]['playerdata'][name][6]=1;
+        if (csdcdata[csdcwk]['playerdata'][lowername][6]==0){
+            csdcdata[csdcwk]['playerdata'][lowername][6]=1;
             bot.say('##csdc', irc.colors.wrap('light_green', name+' has won a game for 1 point!'));
             save = true;
         }
@@ -235,9 +236,9 @@ function init() {
                 var pstr = "Points for "+arg[1]+": ";
                 var first=true
                 for (var csdcwk in csdcdata) { if (csdcdata.hasOwnProperty(csdcwk)){
-                    if (arg[1] in csdcdata[csdcwk]["playerdata"]) {
+                    if (arg[1].toLowerCase() in csdcdata[csdcwk]["playerdata"]) {
                         if (!first) {pstr+=", ";}
-                        pstr+=csdcwk+" "+csdcdata[csdcwk]["playerdata"][arg[1]].reduce(function(a,b,i){return a+Math.min(1,b)+((i==8 && b>0) ? 1 : 0);},0);
+                        pstr+=csdcwk+" "+csdcdata[csdcwk]["playerdata"][arg[1].toLowerCase()].reduce(function(a,b,i){return a+Math.min(1,b)+((i==8 && b>0) ? 1 : 0);},0);
                         first=false;
                     }
                 }}
