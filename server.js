@@ -199,7 +199,7 @@ function init() {
                                 for (var csdcwk in csdcdata) {
                                     if (csdcdata.hasOwnProperty(csdcwk)){
                                         console.log("checking for char "+csdcdata[csdcwk]["wkchar"]);
-                                        console.log("active: "+csdcdata[csdcwk]["active"]+", char match: "+message.match(new RegExp("\(L\d+ "+csdcdata[csdcwk]["wkchar"]+"\)")));
+                                        console.log("char match: "+message.match(new RegExp("\(L\d+ "+csdcdata[csdcwk]["wkchar"]+"\)")));
                                         if (csdcdata[csdcwk]["active"] && message.search("\(L\d+ "+csdcdata[csdcwk]["wkchar"]+"\)")>-1){
                                             console.log("checking points for "+name);
                                             check_csdc_points(bot, name, message, csdcwk);
