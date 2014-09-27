@@ -19,19 +19,6 @@ var csdcdata = {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","pl
 //var csdcwk = 'csdc3wktest';
 var csdcrunning = true;
 
-/*
-   Weekly points (can be earned once per challenge):            
-1   Kill a unique:                                           +1 pt
-2   Enter a multi-level branch of the Dungeon:               +1 pt
-3   Reach the end of any multi-level branch (includes D):    +1 pt
-4   Champion a listed god (from weekly list):                +1 pt
-5   Collect a rune:                                          +1 pt
-6   Collect 3 or more runes in a game:                       +1 pt
-7   Win a game                                               +1 pt
-8   Complete a Tier I bonus:                                 +1 pt
-9   Complete a Tier II bonus*:                               +2 pts
-  * can have 6 or 7 and 8 or 9 only */
-
 filters = {'##crawl-sprigganrockhaulersinc':[]};
 colourmap = {'##crawl-sprigganrockhaulersinc':{}}
 
