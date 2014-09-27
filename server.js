@@ -33,6 +33,7 @@ var csdcrunning = true;
   * can have 6 or 7 and 8 or 9 only */
 
 filters = {'##crawl-sprigganrockhaulersinc':[]};
+colourmap = {'##crawl-sprigganrockhaulersinc':{}}
 
 // dictionary of nick-aliases:
 nick_aliases = {"Kramin":"Kramin|hyperkramin"};
@@ -137,6 +138,9 @@ function save_state() {
     fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', JSON.stringify(csdcdata), function (err) {
         if (err) throw err;
     });
+    fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/colourmap', JSON.stringify(colourmap), function (err) {
+        if (err) throw err;
+    });
 }
 
 function load_state(callback) {
@@ -164,6 +168,10 @@ function load_state(callback) {
     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', function (err, data) {
         if (err) throw err;
         csdcdata = JSON.parse(data);
+    });
+    fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/colourmap', function (err, data) {
+        if (err) throw err;
+        colourmap = JSON.parse(data);
     });
 }
 
@@ -300,6 +308,7 @@ function init() {
                 bot.say(control_channel, "  !channel [-rm] <channel name>");
                 bot.say(control_channel, "  !name [-rm] <channel name> <user name>");
                 bot.say(control_channel, "  !filter [-rm] <channel name> <regex filter>");
+                bot.say(control_channel, "  !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
             }
         
             if (arg[0]=="!announcer"){
@@ -329,6 +338,7 @@ function init() {
                             channels.pop(arg[2]);
                             delete names[arg[2]];
                             delete filters[arg[2]];
+                            delete colourmap[arg[2]];
                             bot.part(arg[2],'',null)
                             bot.say(control_channel, "channels: "+channels.join(', '));
                         } else {
@@ -341,6 +351,7 @@ function init() {
                             channels.push(arg[1]);
                             names[arg[1]]=[];
                             filters[arg[1]]=[];
+                            colourmap[arg[1]]={};
                             bot.join(arg[1],null);
                             bot.say(control_channel, "channels: "+channels.join(', '));
                         }
@@ -410,6 +421,42 @@ function init() {
                     bot.say(control_channel, "Usage: !filter [-rm] <channel name> <regex filter>");
                 }
             }
+            
+            if (arg[0]=="!colour" || arg[0]=="!color"){
+                if (arg.length>3){
+                    if (arg[1]=="-rm"){
+                        if (channels.indexOf(arg[2])>-1){
+                            arg[3] = arg.slice(3, arg.length).join(' ');
+                            if (arg[3] in colourmap[arg[2]]){
+                                delete colourmap[arg[2]][arg[3]];
+                                bot.say(control_channel, arg[2]+" colouring filters: "+JSON.stringify(colourmap[arg[2]]));
+                            } else {
+                                bot.say(control_channel, "No such colouring filter");
+                            }
+                        } else {
+                            bot.say(control_channel, "No such channel");
+                        }
+                    } else {
+                        if (channels.indexOf(arg[1])>-1){
+                            arg[3] = arg.slice(3, arg.length).join(' ');
+                            if (!(arg[3] in colourmap[arg[1]])){
+                                colourmap[arg[1]][arg[3]]==arg[2];
+                            }
+                            bot.say(control_channel, arg[1]+" colouring filters: "+JSON.stringify(colourmap[arg[1]]));
+                        } else {
+                            bot.say(control_channel, "No such channel");
+                        }
+                    }
+                } else if (channels.indexOf(arg[1])>-1) {
+                    bot.say(control_channel, arg[1]+" colouring filters: "+JSON.stringify(colourmap[arg[1]]));
+                } else {
+                    bot.say(control_channel, "Usage: !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
+                }
+            }
+            
+            if (arg[0]=="!colours") {
+                bot.say(control_channel, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
+            }
         
             if (arg[0]=="!savestate"){
                 save_state();
@@ -417,6 +464,7 @@ function init() {
             if (arg[0]=="!loadstate"){
                 load_state(nop);
             }
+            
             if (arg[0]=="!csdc"){
                 csdcrunning = !csdcrunning;
                 if (csdcrunning){
