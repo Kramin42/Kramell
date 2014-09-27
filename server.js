@@ -196,11 +196,13 @@ function init() {
                             //console.log('name match: '+message.match(new RegExp("^("+name+") ", "i")));
                             
                             if (ch=='##csdc' && csdcrunning) {
-                                csdcdata.forEach(function(csdcwk) {
-                                    if (csdcdata[csdcwk]["active"] && message.search("\(L\d+ "+csdcdata[csdcwk]["wkchar"]+"\)")>-1){
-                                        check_csdc_points(bot, name, message, csdcwk);
+                                for (var csdcwk in csdcdata) {
+                                    if (csdcdata.hasOwnProperty(csdcwk)){
+                                        if (csdcdata[csdcwk]["active"] && message.search("\(L\d+ "+csdcdata[csdcwk]["wkchar"]+"\)")>-1){
+                                            check_csdc_points(bot, name, message, csdcwk);
+                                        }
                                     }
-                                });
+                                }
                             }
                             
                             var matched = true;
