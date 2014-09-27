@@ -237,7 +237,7 @@ function init() {
                 for (var csdcwk in csdcdata) { if (csdcdata.hasOwnProperty(csdcwk)){
                     if (arg[1] in csdcdata[csdcwk]["playerdata"]) {
                         if (!first) {pstr+=", ";}
-                        pstr+=csdcwk+" "+csdcdata[csdcwk]["playerdata"][arg[1]].reduce(function(a,b,i){return a+Math.min(1,b)+(i==8 ? 1 : 0);},0);
+                        pstr+=csdcwk+" "+csdcdata[csdcwk]["playerdata"][arg[1]].reduce(function(a,b,i){return a+Math.min(1,b)+((i==8 && b>0) ? 1 : 0);},0);
                         first=false;
                     }
                 }}
