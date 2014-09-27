@@ -201,7 +201,7 @@ function init() {
                                         //console.log("checking for char:"+new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"]));
                                         //console.log("char match: "+message.search(new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"])));
                                         if (csdcdata[csdcwk]["active"] && message.search("\\(L\\d+ "+csdcdata[csdcwk]["wkchar"]+"\\)")>-1){
-                                            console.log("checking points for "+name);
+                                            //console.log("checking points for "+name);
                                             check_csdc_points(bot, name, message, csdcwk);
                                         }
                                     }
@@ -241,6 +241,7 @@ function init() {
                         first=false;
                     }
                 }}
+                bot.say(chan, pstr);
             }
         }
     
