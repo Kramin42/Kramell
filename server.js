@@ -15,21 +15,21 @@ var channels = ['##crawl-sprigganrockhaulersinc','##csdc'];
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
-var csdcdata = {'csdc3wktest':{}};
-var csdcwk = 'csdc3wktest';
+var csdcdata = {"csdc3wktest":{"wkchar":"....","wkgods":"\w*","playerdata":{}}};
+//var csdcwk = 'csdc3wktest';
 var csdcrunning = true;
 
 /*
    Weekly points (can be earned once per challenge):            
-1   Kill a unique:                                           1 pt
-2   Enter a multi-level branch of the Dungeon:               1 pt
-3   Reach the end of any multi-level branch (includes D):    1 pt
-4   Collect a rune:                                          1 pt
-5   Collect 3 or more runes in a game:                       1 pt
-6   Win a game (75,000 turns or more):                       1 pt
-7   Win a game (less than 75,000 turns)*:                    2 pts
-8   Complete a Tier I bonus:                                 1 pt
-9   Complete a Tier II bonus*:                               3 pts
+1   Kill a unique:                                           +1 pt
+2   Enter a multi-level branch of the Dungeon:               +1 pt
+3   Reach the end of any multi-level branch (includes D):    +1 pt
+4   Champion a listed god (from weekly list):                +1 pt
+5   Collect a rune:                                          +1 pt
+6   Collect 3 or more runes in a game:                       +1 pt
+7   Win a game                                               +1 pt
+8   Complete a Tier I bonus:                                 +1 pt
+9   Complete a Tier II bonus*:                               +2 pts
   * can have 6 or 7 and 8 or 9 only */
 
 filters = {'##crawl-sprigganrockhaulersinc':[]};
@@ -40,17 +40,17 @@ nick_aliases = {"Kramin":"Kramin|hyperkramin"};
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 
-function check_csdc_points(bot, name, message) {
+function check_csdc_points(bot, name, message, csdcwk) {
     var save = false;
-    if (!(name in csdcdata[csdcwk])){
-        csdcdata[csdcwk][name]=[0,0,0,0,0,0,0,0,0];
+    if (!(name in csdcdata[csdcwk]['playerdata'])){
+        csdcdata[csdcwk]['playerdata'][name]=[0,0,0,0,0,0,0,0,0];
         //console.log('added '+name+' to '+csdcwk);
         save = true;
     }
     //1   Kill a unique:
     if (message.search(/\) killed/)>-1 && !(message.search(/the ghost/)>-1) && !(message.search(/with \d+ points after \d+ turns/)>-1)){
-        if (csdcdata[csdcwk][name][0]==0){
-            csdcdata[csdcwk][name][0]=1;
+        if (csdcdata[csdcwk]['playerdata'][name][0]==0){
+            csdcdata[csdcwk]['playerdata'][name][0]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed a unique for 1 point!'));
             save = true;
         }
@@ -58,8 +58,8 @@ function check_csdc_points(bot, name, message) {
     
     //2   Enter a multi-level branch of the Dungeon:
     if (message.search(/entered the Depths|\((Lair|Orc):/)>-1){
-        if (csdcdata[csdcwk][name][1]==0){
-            csdcdata[csdcwk][name][1]=1;
+        if (csdcdata[csdcwk]['playerdata'][name][1]==0){
+            csdcdata[csdcwk]['playerdata'][name][1]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered a branch for 1 point!'));
             save = true;
         }
@@ -67,42 +67,42 @@ function check_csdc_points(bot, name, message) {
     
     //3   Reach the end of any multi-level branch (includes D):
     if (message.search(/reached level/)>-1){
-        if (csdcdata[csdcwk][name][2]==0){
-            csdcdata[csdcwk][name][2]=1;
+        if (csdcdata[csdcwk]['playerdata'][name][2]==0){
+            csdcdata[csdcwk]['playerdata'][name][2]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished a branch for 1 point!'));
             save = true;
         }
     }
     
-    //4   Collect a rune:
-    //5   Collect 3 or more runes in a game:
+    //4   Champion a listed god (from weekly list):
+    if (message.search("Champion of "+csdcdata[csdcwk]['wkgods'])>-1){
+        if (csdcdata[csdcwk]['playerdata'][name][3]==0){
+            csdcdata[csdcwk]['playerdata'][name][3]=1;
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
+            save=true;
+        }
+    }
+    
+    //5   Collect a rune:
+    //6   Collect 3 or more runes in a game:
     if (message.search(/rune of Zot/)>-1){
-        if (csdcdata[csdcwk][name][3]==0){
+        if (csdcdata[csdcwk]['playerdata'][name][4]==0){
             bot.say('##csdc', irc.colors.wrap('dark_red', name+' has found a rune for 1 point!'));
         }
-        csdcdata[csdcwk][name][3]+=1;
-        if (csdcdata[csdcwk][name][3]>=3 && csdcdata[csdcwk][name][4]==0){
-            csdcdata[csdcwk][name][4]=1;
+        csdcdata[csdcwk][name][4]+=1;
+        if (csdcdata[csdcwk]['playerdata'][name][4]>=3 && csdcdata[csdcwk]['playerdata'][name][5]==0){
+            csdcdata[csdcwk]['playerdata'][name][5]=1;
             bot.say('##csdc', irc.colors.wrap('dark_red', name+' has found 3 runes for 1 point!'));
         }
         save = true;
     }
     
-    //6   Win a game (75,000 turns or more):                       1 pt
-    //7   Win a game (less than 75,000 turns)*:                    2 pts
+    //7   Win a game
     if (message.search(/escaped with the Orb/)>-1){
-        var match = message.match(/after (\d+) turns/);
-        var turns = parseInt(match[0]);
-        if (csdcdata[csdcwk][name][5]==0 && csdcdata[csdcwk][name][4]==0){
-            if (turns<75000){
-                csdcdata[csdcwk][name][5]=1;
-                bot.say('##csdc', irc.colors.wrap('light_red', name+' has won in under 75,000 turns for 2 points!'));
-                save = true;
-            } else {
-                csdcdata[csdcwk][name][4]=1;
-                bot.say('##csdc', irc.colors.wrap('light_red', name+' has won for 1 point!'));
-                save = true;
-            }
+        if (csdcdata[csdcwk]['playerdata'][name][6]==0){
+            csdcdata[csdcwk]['playerdata'][name][6]=1;
+            bot.say('##csdc', irc.colors.wrap('light_red', name+' has won a game for 1 point!'));
+            save = true;
         }
     }
     
@@ -203,7 +203,7 @@ function init() {
                             if (matched){
                                 bot.say(ch, irc.colors.wrap('gray', message));
                                 if (ch=='##csdc' && csdcrunning) {
-                                    check_csdc_points(bot, name, message);
+                                    check_csdc_points(bot, name, message, 'csdc3wktest');
                                 }
                                 //console.log(ch+" :"+message);
                             }
