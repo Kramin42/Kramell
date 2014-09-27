@@ -223,6 +223,26 @@ function init() {
                 });
             }
         }
+        
+        //kramell queries
+        //csdcdata format: {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","playerdata":{}}}
+        if (message[0] == '#') {
+            var arg = message.replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
+            if (arg.length==1){
+                arg[1]=nick;
+            }
+            if (arg[0]=="#points") {
+                var pstr = "Points for "+arg[1]+": ";
+                var first=true
+                for (var csdcwk in csdcdata) { if (csdcdata.hasOwnProperty(csdcwk)){
+                    if (arg[1] in csdcdata[csdcwk]["playerdata"]) {
+                        if (!first) {pstr+=", ";}
+                        pstr+=csdcwk+" "+csdcdata[csdcwk]["playerdata"][arg[1]].reduce(function(a,b){return a+b;},0);
+                        first=false;
+                    }
+                }}
+            }
+        }
     
         // redirect sequell/chei queries
         if (channels.indexOf(chan)>-1){
@@ -415,6 +435,31 @@ function init() {
                     bot.say(control_channel, arg[1]+' off');
                 }
             }
+            if (arg[0]=="!csdcwk") {
+                if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
+                    if (arg[1]=="-rm"){
+                        if (arg[2] in csdcdata){
+                            delete csdcdata[arg[2]];
+                            bot.say(control_channel, "csdc weeks: "+Object.keys(csdcdata));
+                        } else {
+                            bot.say(control_channel, "No such week");
+                        }
+                    } else {
+                        if (arg[1] in csdcdata){
+                            bot.say(control_channel, "Week "+arg[1]+" active: "+csdcdata[arg[1]]["active"]);
+                            bot.say(control_channel, "Week "+arg[1]+" char: "+csdcdata[arg[1]]["wkchar"]);
+                            bot.say(control_channel, "Week "+arg[1]+" gods: "+csdcdata[arg[1]]["wkgods"]);
+                        } else {
+                            csdcdata[arg[1]]={"active":false,"wkchar":"....","wkgods":"\\w*","playerdata":{}};
+                            bot.say(control_channel, "csdc weeks: "+Object.keys(csdcdata));
+                        }
+                    }
+                } else {
+                    bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
+                }
+            }
+            
+            
             save_state();
         }
     
