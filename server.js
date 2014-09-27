@@ -440,7 +440,7 @@ function init() {
                         if (channels.indexOf(arg[1])>-1){
                             arg[3] = arg.slice(3, arg.length).join(' ');
                             if (!(arg[3] in colourmap[arg[1]])){
-                                colourmap[arg[1]][arg[3]]==arg[2];
+                                colourmap[arg[1]][arg[3]]=arg[2];
                             }
                             bot.say(control_channel, arg[1]+" colouring filters: "+JSON.stringify(colourmap[arg[1]]));
                         } else {
