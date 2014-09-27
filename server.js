@@ -197,9 +197,9 @@ function init() {
                             
                             if (ch=='##csdc' && csdcrunning) {
                                 for (var csdcwk in csdcdata) {
-                                    console.log("key: "+csdcwk);
                                     if (csdcdata.hasOwnProperty(csdcwk)){
                                         console.log("checking for week "+csdcwk);
+                                        console.log("active: "+csdcdata[csdcwk]["active"]+", char match: "+message.match("\(L\d+ "+csdcdata[csdcwk]["wkchar"]+"\)"));
                                         if (csdcdata[csdcwk]["active"] && message.search("\(L\d+ "+csdcdata[csdcwk]["wkchar"]+"\)")>-1){
                                             console.log("checking points for "+name);
                                             check_csdc_points(bot, name, message, csdcwk);
