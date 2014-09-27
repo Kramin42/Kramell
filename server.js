@@ -15,7 +15,7 @@ var channels = ['##crawl-sprigganrockhaulersinc','##csdc'];
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
-var csdcdata = {"csdc3wktest":{"wkchar":"....","wkgods":"\\w*","playerdata":{}}};
+var csdcdata = {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","playerdata":{}}};
 //var csdcwk = 'csdc3wktest';
 var csdcrunning = true;
 
@@ -197,8 +197,9 @@ function init() {
                             
                             if (ch=='##csdc' && csdcrunning) {
                                 csdcdata.forEach(function(csdcwk) {
-                                    if (message.search("\(L\d+ "+csdcdata[csdcwk]["wkchar"]+"\)")>-1){
+                                    if (csdcdata[csdcwk]["active"] && message.search("\(L\d+ "+csdcdata[csdcwk]["wkchar"]+"\)")>-1){
                                         check_csdc_points(bot, name, message, csdcwk);
+                                    }
                                 });
                             }
                             
@@ -396,6 +397,9 @@ function init() {
                 } else {
                     bot.say(control_channel, 'csdc off');
                 }
+            }
+            if (arg[0]=="!csdcwkon") {
+                
             }
             save_state();
         }
