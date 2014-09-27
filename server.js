@@ -198,9 +198,9 @@ function init() {
                             if (ch=='##csdc' && csdcrunning) {
                                 for (var csdcwk in csdcdata) {
                                     if (csdcdata.hasOwnProperty(csdcwk)){
-                                        console.log("checking for char:"+new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"]));
-                                        console.log("char match: "+message.search(new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"])));
-                                        if (csdcdata[csdcwk]["active"] && message.search("L\d+ "+csdcdata[csdcwk]["wkchar"])>-1){
+                                        //console.log("checking for char:"+new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"]));
+                                        //console.log("char match: "+message.search(new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"])));
+                                        if (csdcdata[csdcwk]["active"] && message.search("\\(L\\d+ "+csdcdata[csdcwk]["wkchar"]+"\\)")>-1){
                                             console.log("checking points for "+name);
                                             check_csdc_points(bot, name, message, csdcwk);
                                         }
