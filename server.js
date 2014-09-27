@@ -87,12 +87,12 @@ function check_csdc_points(bot, name, message, csdcwk) {
     //6   Collect 3 or more runes in a game:
     if (message.search(/rune of Zot/)>-1){
         if (csdcdata[csdcwk]['playerdata'][name][4]==0){
-            bot.say('##csdc', irc.colors.wrap('dark_red', name+' has found a rune for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found a rune for 1 point!'));
         }
-        csdcdata[csdcwk][name][4]+=1;
+        csdcdata[csdcwk][name]['playerdata'][4]+=1;
         if (csdcdata[csdcwk]['playerdata'][name][4]>=3 && csdcdata[csdcwk]['playerdata'][name][5]==0){
             csdcdata[csdcwk]['playerdata'][name][5]=1;
-            bot.say('##csdc', irc.colors.wrap('dark_red', name+' has found 3 runes for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found 3 runes for 1 point!'));
         }
         save = true;
     }
@@ -101,7 +101,7 @@ function check_csdc_points(bot, name, message, csdcwk) {
     if (message.search(/escaped with the Orb/)>-1){
         if (csdcdata[csdcwk]['playerdata'][name][6]==0){
             csdcdata[csdcwk]['playerdata'][name][6]=1;
-            bot.say('##csdc', irc.colors.wrap('light_red', name+' has won a game for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('light_green', name+' has won a game for 1 point!'));
             save = true;
         }
     }
