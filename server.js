@@ -224,7 +224,13 @@ function init() {
                                 }
                             });
                             if (matched){
-                                bot.say(ch, irc.colors.wrap('gray', message));
+                                var colour = 'gray';
+                                for (match in colourmap[ch]) {if (colourmap[ch].hasOwnProperty(match)){
+                                    if (message.search(match)>-1) {
+                                        colour = colourmap[ch][match];
+                                    }
+                                }}
+                                bot.say(ch, irc.colors.wrap(colour, message));
                                 //console.log(ch+" :"+message);
                             }
                         }
