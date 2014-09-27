@@ -15,7 +15,7 @@ var channels = ['##crawl-sprigganrockhaulersinc','##csdc'];
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
-var csdcdata = {"csdc3wktest":{"wkchar":"....","wkgods":"\w*","playerdata":{}}};
+var csdcdata = {"csdc3wktest":{"wkchar":"....","wkgods":"\\w*","playerdata":{}}};
 //var csdcwk = 'csdc3wktest';
 var csdcrunning = true;
 
@@ -194,6 +194,14 @@ function init() {
                             name = message.match(new RegExp("^("+name+") ", "i"))[1];
                             //console.log(message+" contains "+name);
                             //console.log('name match: '+message.match(new RegExp("^("+name+") ", "i")));
+                            
+                            if (ch=='##csdc' && csdcrunning) {
+                                csdcdata.forEach(function(csdcwk) {
+                                    if (message.search("\(L\d+ "+csdcdata[csdcwk]["wkchar"]+"\)")>-1){
+                                        check_csdc_points(bot, name, message, csdcwk);
+                                });
+                            }
+                            
                             var matched = true;
                             filters[ch].forEach(function(match) {
                                 if (message.search(match)==-1){
@@ -202,9 +210,6 @@ function init() {
                             });
                             if (matched){
                                 bot.say(ch, irc.colors.wrap('gray', message));
-                                if (ch=='##csdc' && csdcrunning) {
-                                    check_csdc_points(bot, name, message, 'csdc3wktest');
-                                }
                                 //console.log(ch+" :"+message);
                             }
                         }
