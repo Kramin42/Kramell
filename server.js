@@ -89,7 +89,7 @@ function check_csdc_points(bot, name, message, csdcwk) {
         if (csdcdata[csdcwk]['playerdata'][name][4]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found a rune for 1 point!'));
         }
-        csdcdata[csdcwk][name]['playerdata'][4]+=1;
+        csdcdata[csdcwk]['playerdata'][name][4]+=1;
         if (csdcdata[csdcwk]['playerdata'][name][4]>=3 && csdcdata[csdcwk]['playerdata'][name][5]==0){
             csdcdata[csdcwk]['playerdata'][name][5]=1;
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found 3 runes for 1 point!'));
@@ -404,7 +404,16 @@ function init() {
                 }
             }
             if (arg[0]=="!csdcwkon") {
-                
+                if (arg[1] in csdcdata){
+                    csdcdata[arg[1]]["active"] = true;
+                    bot.say(control_channel, arg[1]+' on');
+                }
+            }
+            if (arg[0]=="!csdcwkoff") {
+                if (arg[1] in csdcdata){
+                    csdcdata[arg[1]]["active"] = false;
+                    bot.say(control_channel, arg[1]+' off');
+                }
             }
             save_state();
         }
