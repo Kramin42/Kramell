@@ -197,7 +197,7 @@ function handle_message(nick, chan, message) {
     }
 
     // get announcements
-    if (chan == observe_channel){
+    if (chan == observe_channel || chan == control_channel){//remove control_channel when all working
         //check if from announcer
         db.announcers.count({"name":nick},function(err, count){ if (count) {
             //console.log("found announcement");
@@ -216,6 +216,19 @@ function handle_message(nick, chan, message) {
             });});
         }});
     }
+    
+    // redirect sequell/chei queries
+    // if in a post channel
+    db.channels.count({"name":chan},function(err, count){ if (count) {
+        if (message[0] == '%'){
+            bot.say(chei, message);
+            cheiquerychan = chan;
+        }
+        if ('!=&.?@^'.indexOf(message[0])>-1){
+            bot.say(sequell, message.replace(/ \. /g, ' @'+nick+' ').replace(/ \.$/, ' @'+nick));
+            sequellquerychan = chan;
+        }
+    }});
     
 //     //kramell queries
 //     //csdcdata format: {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","playerdata":{}}}
@@ -238,17 +251,6 @@ function handle_message(nick, chan, message) {
 //         }
 //     }
 // 
-//     // redirect sequell/chei queries
-//     if (channels.indexOf(chan)>-1){
-//         if (message[0] == '%'){
-//             bot.say(chei, message);
-//             cheiquerychan = chan;
-//         }
-//         if ('!=&.?@^'.indexOf(message[0])>-1){
-//             bot.say(sequell, message.replace(/ \. /g, ' @'+nick+' ').replace(/ \.$/, ' @'+nick));
-//             sequellquerychan = chan;
-//         }
-//     }
 // 
 //     // post sequell answers
 //     if (chan == botnick && nick == sequell){
