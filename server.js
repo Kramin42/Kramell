@@ -244,6 +244,7 @@ function handle_message(nick, chan, message) {
 
     // get announcements
     if (chan == observe_channel){
+        //check if from announcer
         db.announcers.find({"name":nick},function(err, docs){ if (docs!=null) {
             console.log("found announcement");
             // go through all names in all channels
@@ -599,7 +600,7 @@ bot = new irc.Client('chat.freenode.net', botnick, {
 
 db.channels.distinct('channel').forEach(function(err, chan) {
     bot.join(chan,null);
-}
+});
 
 bot.addListener('message', handle_message);
 
