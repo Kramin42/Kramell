@@ -30,6 +30,7 @@ var announcers = db.collection('announcers');
 var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
+console.log(channels);
 // similar syntax as the Mongo command-line interface
 // log each of the first ten docs in the collection
 //db.books.find({}).limit(10).forEach(function(err, doc) {
@@ -573,6 +574,10 @@ function handle_message(nick, chan, message) {
     }
 
 }
+
+console.log("channels:");
+console.log(db.channels.distinct('channel'));
+console.log("end channels");
 
 bot = new irc.Client('chat.freenode.net', botnick, {
     channels: [control_channel,observe_channel].concat(db.channels.distinct('channel')),
