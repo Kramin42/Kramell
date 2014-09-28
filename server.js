@@ -24,8 +24,9 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
   process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
   process.env.OPENSHIFT_APP_NAME;
 }
+console.log("connection_string: "+connection_string);
 var mongojs = require('mongojs');
-var db = mongojs(connection_string, ['announcers','channels','csdc','nick_aliases']);
+var db = mongojs(connection_string);
 var announcers = db.collection('announcers');
 var channels = db.collection('channels');
 var csdc = db.collection('csdc');
