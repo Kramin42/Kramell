@@ -199,7 +199,7 @@ function handle_message(nick, chan, message) {
     // get announcements
     if (chan == observe_channel){
         //check if from announcer
-        db.announcers.find({"name":nick},function(err, docs){ if (docs!=null) {
+        db.announcers.count({"name":nick},function(err, count){ if (count) {
             //console.log("found announcement");
             // go through all names in all channels
             db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
