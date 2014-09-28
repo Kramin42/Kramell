@@ -580,7 +580,7 @@ bot = new irc.Client('chat.freenode.net', botnick, {
     debug: true
 });
 
-bot.addListener('message', handle_message(nick, chan, message));
+bot.addListener('message', handle_message);
 
 //load_state(init);
 
