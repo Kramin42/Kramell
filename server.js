@@ -230,6 +230,39 @@ function handle_message(nick, chan, message) {
         }
     }});
     
+    // post sequell answers
+    if (chan == botnick && nick == sequell){
+        msgarray = message.split(':');
+        var updateNA = false;
+        if (msgarray.length>2 && msgarray[0]=="nick-alias"){
+            var NAnick = msgarray[1];
+            var NAaliases = msgarray[2].replace(/ NAJNR/g,'|').replace('\r\n','');
+            for (i=4; i<msgarray.length; i+=2){
+                NAaliases = NAaliases+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
+            }
+            bot.say(control_channel, "nick mapping: "+NAnick+" => "+nick_aliases[NAnick])
+            updateNA=true;
+        } else if (message.search(/^NAJNR/)>-1){
+            //get existing first (don't need to actually, it will still be stored in NAaliases)
+            //db.nick_aliases.findOne({"name":NAnick}, function(err, nickmap) {
+                //NAaliases=nickmap["aliases"];
+                for (i=0; i<msgarray.length; i+=2){
+                    NAaliases = NAaliases +'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
+                    bot.say(control_channel, "...|"+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n',''));
+                }
+                updateNA=true;
+            //});
+        } else {
+            bot.say(sequellquerychan, message);
+        }
+        if (updateNA) {
+            //add new after clearing
+            db.nick_aliases.remove({"name":NAnick},function(err) {
+                db.nick_aliases.insert({"name":NAnick, "aliases":NAaliases});
+            });
+        }
+    }
+    
 //     //kramell queries
 //     //csdcdata format: {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","playerdata":{}}}
 //     if (message[0] == '#') {
@@ -252,25 +285,6 @@ function handle_message(nick, chan, message) {
 //     }
 // 
 // 
-//     // post sequell answers
-//     if (chan == botnick && nick == sequell){
-//         msgarray = message.split(':');
-//         if (msgarray.length>2 && msgarray[0]=="nick-alias"){
-//             var NAnick = msgarray[1];
-//             nick_aliases[NAnick] = msgarray[2].replace(/ NAJNR/g,'|').replace('\r\n','');
-//             for (i=4; i<msgarray.length; i+=2){
-//                 nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
-//             }
-//             bot.say(control_channel, "nick mapping: "+NAnick+" => "+nick_aliases[NAnick])
-//         } else if (message.search(/^NAJNR/)>-1){
-//             for (i=0; i<msgarray.length; i+=2){
-//                 nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
-//                 bot.say(control_channel, "...|"+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n',''));
-//             }
-//         } else {
-//             bot.say(sequellquerychan, message);
-//         }
-//     }
 // 
 //     //post chei answers
 //     if (chan == botnick && nick == chei){
