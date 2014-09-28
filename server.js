@@ -31,12 +31,12 @@ var announcers = db.collection('announcers');
 var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
-console.log(channels);
-console.log("channels:");
-db.channels.find(function(err, docs) {
-    console.log(docs);
-});
-console.log("end channels");
+// console.log(channels);
+// console.log("channels:");
+// db.channels.find(function(err, docs) {
+//     console.log(docs);
+// });
+// console.log("end channels");
 // similar syntax as the Mongo command-line interface
 // log each of the first ten docs in the collection
 //db.books.find({}).limit(10).forEach(function(err, doc) {
@@ -196,8 +196,44 @@ function load_state(callback) {
 }
 
 function nick_aliases(nick) {
-    aliases = db.nick_aliases.distinct('aliases',{name:"Kramin"})[0];
+    aliases = db.nick_aliases.distinct('aliases',{name:"Kramin"});
     return aliases ? aliases : nick;
+}
+
+function announce(name, alias, message) {
+    //go through the channels with the name
+    db.channels.distinct('channel',{names:{$in: [name]}}).forEach(function(ch) {
+        if (ch=='##csdc' && csdcrunning) {
+    //                             for (var csdcwk in csdcdata) {
+    //                                 if (csdcdata.hasOwnProperty(csdcwk)){
+    //                                     //console.log("checking for char:"+new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"]));
+    //                                     //console.log("char match: "+message.search(new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"])));
+    //                                     if (csdcdata[csdcwk]["active"] && message.search("\\(L\\d+ "+csdcdata[csdcwk]["wkchar"]+"\\)")>-1){
+    //                                         //console.log("checking points for "+name);
+    //                                         check_csdc_points(bot, alias, message, csdcwk);
+    //                                     }
+    //                                 }
+    //                             }
+        }
+    
+        var matched = true;
+        //db.channels.distinct('filters',{channel:ch}).forEach(function(match) {
+        //    if (message.search(match)==-1){
+        //        matched = false;
+        //    }
+        //});
+        if (matched){
+            var colour = 'gray';
+            //var colourmap = db.channels.distinct('colourmap',{channel:ch})[0]
+            //for (match in colourmap) {
+            //    if (message.search(match)>-1) {
+            //        colour = colourmap[match];
+            //    }
+            //}
+            bot.say(ch, irc.colors.wrap(colour, message));
+            //console.log(ch+" :"+message);
+        }
+    });
 }
 
 function handle_message(nick, chan, message) {
@@ -208,48 +244,22 @@ function handle_message(nick, chan, message) {
 
     // get announcements
     if (chan == observe_channel){
-        if (db.announcers.find({"name":nick})){
+        db.announcers.find({"name":nick},function(err, docs){ if (docs!=null) {
             console.log("found announcement");
             // go through all names in all channels
             db.channels.distinct('names').forEach(function(name) {
-                var alias = nick_aliases(name);
-                if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
-                    alias = message.match(new RegExp("^("+alias+") ", "i"))[1];
-                    //go through the channels with the name
-                    db.channels.distinct('channel',{names:{$in: [name]}}).forEach(function(ch) {
-                        if (ch=='##csdc' && csdcrunning) {
-//                             for (var csdcwk in csdcdata) {
-//                                 if (csdcdata.hasOwnProperty(csdcwk)){
-//                                     //console.log("checking for char:"+new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"]));
-//                                     //console.log("char match: "+message.search(new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"])));
-//                                     if (csdcdata[csdcwk]["active"] && message.search("\\(L\\d+ "+csdcdata[csdcwk]["wkchar"]+"\\)")>-1){
-//                                         //console.log("checking points for "+name);
-//                                         check_csdc_points(bot, name, message, csdcwk);
-//                                     }
-//                                 }
-//                             }
-                        }
-                        
-                        var matched = true;
-                        db.channels.distinct('filters',{channel:ch}).forEach(function(match) {
-                            if (message.search(match)==-1){
-                                matched = false;
-                            }
-                        });
-                        if (matched){
-                            var colour = 'gray';
-                            var colourmap = db.channels.distinct('colourmap',{channel:ch})[0]
-                            for (match in colourmap) {
-                                if (message.search(match)>-1) {
-                                    colour = colourmap[match];
-                                }
-                            }
-                            bot.say(ch, irc.colors.wrap(colour, message));
-                            //console.log(ch+" :"+message);
-                        }
-                    });
-                }
+                //get aliases
+                db.nick_aliases.distinct('aliases',{"name":name},function(err, alias){
+                    //get the actual alias in use and announce
+                    if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
+                        alias = message.match(new RegExp("^("+alias+") ", "i"))[1];
+                        console.log("announcement for "+alias);
+                        announce(name, alias, message);
+                    }
+                });
             });
+        }});
+    }
             
             // console.log("found announcement");
 //             channels.forEach(function(ch) {
@@ -294,8 +304,8 @@ function handle_message(nick, chan, message) {
 //                     }
 //                 });
 //             });
-        }
-    }
+//        }
+//    }
     
     //kramell queries
     //csdcdata format: {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","playerdata":{}}}
@@ -582,10 +592,14 @@ function handle_message(nick, chan, message) {
 }
 
 bot = new irc.Client('chat.freenode.net', botnick, {
-    channels: [control_channel,observe_channel].concat(db.channels.distinct('channel')),
+    channels: [control_channel,observe_channel],
     port: 8001,
     debug: true
 });
+
+db.channels.distinct('channel').forEach(function(err, chan) {
+    bot.join(chan,null);
+}
 
 bot.addListener('message', handle_message);
 
