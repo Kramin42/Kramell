@@ -309,287 +309,287 @@ function handle_message(nick, chan, message) {
 //        }
 //    }
     
-    //kramell queries
-    //csdcdata format: {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","playerdata":{}}}
-    if (message[0] == '#') {
-        var arg = message.replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
-        if (arg.length==1){
-            arg[1]=nick;
-        }
-        if (arg[0]=="#points") {
-            var pstr = "Points for "+arg[1]+": ";
-            var first=true
-            for (var csdcwk in csdcdata) { if (csdcdata.hasOwnProperty(csdcwk)){
-                if (arg[1].toLowerCase() in csdcdata[csdcwk]["playerdata"]) {
-                    if (!first) {pstr+=", ";}
-                    pstr+=csdcwk+" "+csdcdata[csdcwk]["playerdata"][arg[1].toLowerCase()].reduce(function(a,b,i){return a+Math.min(1,b)+((i==8 && b>0) ? 1 : 0);},0);
-                    first=false;
-                }
-            }}
-            bot.say(chan, pstr);
-        }
-    }
-
-    // redirect sequell/chei queries
-    if (channels.indexOf(chan)>-1){
-        if (message[0] == '%'){
-            bot.say(chei, message);
-            cheiquerychan = chan;
-        }
-        if ('!=&.?@^'.indexOf(message[0])>-1){
-            bot.say(sequell, message.replace(/ \. /g, ' @'+nick+' ').replace(/ \.$/, ' @'+nick));
-            sequellquerychan = chan;
-        }
-    }
-
-    // post sequell answers
-    if (chan == botnick && nick == sequell){
-        msgarray = message.split(':');
-        if (msgarray.length>2 && msgarray[0]=="nick-alias"){
-            var NAnick = msgarray[1];
-            nick_aliases[NAnick] = msgarray[2].replace(/ NAJNR/g,'|').replace('\r\n','');
-            for (i=4; i<msgarray.length; i+=2){
-                nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
-            }
-            bot.say(control_channel, "nick mapping: "+NAnick+" => "+nick_aliases[NAnick])
-        } else if (message.search(/^NAJNR/)>-1){
-            for (i=0; i<msgarray.length; i+=2){
-                nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
-                bot.say(control_channel, "...|"+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n',''));
-            }
-        } else {
-            bot.say(sequellquerychan, message);
-        }
-    }
-
-    //post chei answers
-    if (chan == botnick && nick == chei){
-        bot.say(cheiquerychan, message);
-    }
-
-    // commands
-    if (chan == control_channel && message[0]=='!'){
-        var arg = message.split(' ');
-        if (arg[0]=="!state"){
-            bot.say(control_channel, "announcers: "+announcers);
-            bot.say(control_channel, "channels: "+channels);
-            bot.say(control_channel, "names: "+JSON.stringify(names));
-            bot.say(control_channel, "filters: "+JSON.stringify(filters));
-        }
-    
-        if (arg[0]=="!help" || arg[0]=="!commands"){
-            bot.say(control_channel, "commands:");
-            bot.say(control_channel, "  !state");
-            bot.say(control_channel, "  !announcer [-rm] <announcer name>");
-            bot.say(control_channel, "  !channel [-rm] <channel name>");
-            bot.say(control_channel, "  !name [-rm] <channel name> <user name>");
-            bot.say(control_channel, "  !filter [-rm] <channel name> <regex filter>");
-            bot.say(control_channel, "  !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
-        }
-    
-        if (arg[0]=="!announcer"){
-            if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
-                if (arg[1]=="-rm"){
-                    if (announcers.indexOf(arg[2])>-1){
-                        announcers.pop(arg[2]);
-                        bot.say(control_channel, "announcers: "+announcers.join(', '));
-                    } else {
-                        bot.say(control_channel, "No such announcer");
-                    }
-                } else {
-                    if (announcers.indexOf(arg[1])==-1){
-                        announcers.push(arg[1]);
-                    }
-                    bot.say(control_channel, "announcers: "+announcers.join(', '));
-                }
-            } else {
-                bot.say(control_channel, "Usage: !announcer [-rm] <announcer name>");
-            }
-        }
-    
-        if (arg[0]=="!channel"){
-            if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
-                if (arg[1]=="-rm"){
-                    if (channels.indexOf(arg[2])>-1){
-                        channels.pop(arg[2]);
-                        delete names[arg[2]];
-                        delete filters[arg[2]];
-                        delete colourmap[arg[2]];
-                        bot.part(arg[2],'',null)
-                        bot.say(control_channel, "channels: "+channels.join(', '));
-                    } else {
-                        bot.say(control_channel, "No such channel");
-                    }
-                } else if (forbidden.indexOf(arg[1])==-1) {
-                    if (channels.indexOf(arg[1])>-1){
-                        bot.say(control_channel, "Names in "+arg[1]+": "+names[arg[1]].join(', '));
-                    } else {
-                        channels.push(arg[1]);
-                        names[arg[1]]=[];
-                        filters[arg[1]]=[];
-                        colourmap[arg[1]]={};
-                        bot.join(arg[1],null);
-                        bot.say(control_channel, "channels: "+channels.join(', '));
-                    }
-                } else {
-                    bot.say(control_channel, "Sorry, I don't allow that channel");
-                }
-            } else {
-                bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
-            }
-        }
-    
-        if (arg[0]=="!name"){
-            if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
-                if (arg[1]=="-rm"){
-                    if (channels.indexOf(arg[2])>-1){
-                        if (names[arg[2]].indexOf(arg[3])>-1){
-                            names[arg[2]].pop(arg[3]);
-                            bot.say(control_channel, arg[2]+": "+names[arg[2]].join(", "));
-                        } else {
-                            bot.say(control_channel, "No such name");
-                        }
-                    } else {
-                        bot.say(control_channel, "No such channel");
-                    }
-                } else {
-                    if (channels.indexOf(arg[1])>-1){
-                        if (names[arg[1]].indexOf(arg[2])==-1){
-                            names[arg[1]].push(arg[2]);
-                        }
-                        update_aliases(arg[2]);
-                        bot.say(control_channel, arg[1]+": "+names[arg[1]].join(", "));
-                    } else {
-                        bot.say(control_channel, "No such channel");
-                    }
-                }
-            } else {
-                bot.say(control_channel, "Usage: !name [-rm] <channel name> <user name>");
-            }
-        }
-    
-        if (arg[0]=="!filter"){
-            if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
-                if (arg[1]=="-rm"){
-                    if (channels.indexOf(arg[2])>-1){
-                        arg[3] = arg.slice(3, arg.length).join(' ');
-                        if (filters[arg[2]].indexOf(arg[3])>-1){
-                            filters[arg[2]].pop(arg[3]);
-                            bot.say(control_channel, arg[2]+" filters: "+filters[arg[2]].join(", "));
-                        } else {
-                            bot.say(control_channel, "No such filter");
-                        }
-                    } else {
-                        bot.say(control_channel, "No such channel");
-                    }
-                } else {
-                    if (channels.indexOf(arg[1])>-1){
-                        arg[2] = arg.slice(2, arg.length).join(' ');
-                        if (filters[arg[1]].indexOf(arg[2])==-1){
-                            filters[arg[1]].push(arg[2]);
-                        }
-                        bot.say(control_channel, arg[1]+" filters: "+filters[arg[1]].join(" , "));
-                    } else {
-                        bot.say(control_channel, "No such channel");
-                    }
-                }
-            } else {
-                bot.say(control_channel, "Usage: !filter [-rm] <channel name> <regex filter>");
-            }
-        }
-        
-        if (arg[0]=="!colour" || arg[0]=="!color"){
-            if (arg.length>3){
-                if (arg[1]=="-rm"){
-                    if (channels.indexOf(arg[2])>-1){
-                        arg[3] = arg.slice(3, arg.length).join(' ');
-                        if (arg[3] in colourmap[arg[2]]){
-                            delete colourmap[arg[2]][arg[3]];
-                            bot.say(control_channel, arg[2]+" colouring filters: "+JSON.stringify(colourmap[arg[2]]));
-                        } else {
-                            bot.say(control_channel, "No such colouring filter");
-                        }
-                    } else {
-                        bot.say(control_channel, "No such channel");
-                    }
-                } else {
-                    if (channels.indexOf(arg[1])>-1){
-                        arg[3] = arg.slice(3, arg.length).join(' ');
-                        if (!(arg[3] in colourmap[arg[1]])){
-                            colourmap[arg[1]][arg[3]]=arg[2];
-                        }
-                        bot.say(control_channel, arg[1]+" colouring filters: "+JSON.stringify(colourmap[arg[1]]));
-                    } else {
-                        bot.say(control_channel, "No such channel");
-                    }
-                }
-            } else if (channels.indexOf(arg[1])>-1) {
-                bot.say(control_channel, arg[1]+" colouring filters: "+JSON.stringify(colourmap[arg[1]]));
-            } else {
-                bot.say(control_channel, "Usage: !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
-            }
-        }
-        
-        if (arg[0]=="!colours") {
-            bot.say(control_channel, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
-        }
-    
-        if (arg[0]=="!savestate"){
-            save_state();
-        }
-        if (arg[0]=="!loadstate"){
-            load_state(nop);
-        }
-        
-        if (arg[0]=="!csdc"){
-            csdcrunning = !csdcrunning;
-            if (csdcrunning){
-                bot.say(control_channel, 'csdc on');
-            } else {
-                bot.say(control_channel, 'csdc off');
-            }
-        }
-        if (arg[0]=="!csdcwkon") {
-            if (arg[1] in csdcdata){
-                csdcdata[arg[1]]["active"] = true;
-                bot.say(control_channel, arg[1]+' on');
-            }
-        }
-        if (arg[0]=="!csdcwkoff") {
-            if (arg[1] in csdcdata){
-                csdcdata[arg[1]]["active"] = false;
-                bot.say(control_channel, arg[1]+' off');
-            }
-        }
-        if (arg[0]=="!csdcwk") {
-            if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
-                if (arg[1]=="-rm"){
-                    if (arg[2] in csdcdata){
-                        delete csdcdata[arg[2]];
-                        bot.say(control_channel, "csdc weeks: "+Object.keys(csdcdata));
-                    } else {
-                        bot.say(control_channel, "No such week");
-                    }
-                } else {
-                    if (arg[1] in csdcdata){
-                        bot.say(control_channel, "Week "+arg[1]+" active: "+csdcdata[arg[1]]["active"]);
-                        bot.say(control_channel, "Week "+arg[1]+" char: "+csdcdata[arg[1]]["wkchar"]);
-                        bot.say(control_channel, "Week "+arg[1]+" gods: "+csdcdata[arg[1]]["wkgods"]);
-                    } else {
-                        csdcdata[arg[1]]={"active":false,"wkchar":"....","wkgods":"\\w*","playerdata":{}};
-                        bot.say(control_channel, "csdc weeks: "+Object.keys(csdcdata));
-                    }
-                }
-            } else {
-                bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
-            }
-        }
-        
-        
-        
-        
-        save_state();
-    }
+//     //kramell queries
+//     //csdcdata format: {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","playerdata":{}}}
+//     if (message[0] == '#') {
+//         var arg = message.replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
+//         if (arg.length==1){
+//             arg[1]=nick;
+//         }
+//         if (arg[0]=="#points") {
+//             var pstr = "Points for "+arg[1]+": ";
+//             var first=true
+//             for (var csdcwk in csdcdata) { if (csdcdata.hasOwnProperty(csdcwk)){
+//                 if (arg[1].toLowerCase() in csdcdata[csdcwk]["playerdata"]) {
+//                     if (!first) {pstr+=", ";}
+//                     pstr+=csdcwk+" "+csdcdata[csdcwk]["playerdata"][arg[1].toLowerCase()].reduce(function(a,b,i){return a+Math.min(1,b)+((i==8 && b>0) ? 1 : 0);},0);
+//                     first=false;
+//                 }
+//             }}
+//             bot.say(chan, pstr);
+//         }
+//     }
+// 
+//     // redirect sequell/chei queries
+//     if (channels.indexOf(chan)>-1){
+//         if (message[0] == '%'){
+//             bot.say(chei, message);
+//             cheiquerychan = chan;
+//         }
+//         if ('!=&.?@^'.indexOf(message[0])>-1){
+//             bot.say(sequell, message.replace(/ \. /g, ' @'+nick+' ').replace(/ \.$/, ' @'+nick));
+//             sequellquerychan = chan;
+//         }
+//     }
+// 
+//     // post sequell answers
+//     if (chan == botnick && nick == sequell){
+//         msgarray = message.split(':');
+//         if (msgarray.length>2 && msgarray[0]=="nick-alias"){
+//             var NAnick = msgarray[1];
+//             nick_aliases[NAnick] = msgarray[2].replace(/ NAJNR/g,'|').replace('\r\n','');
+//             for (i=4; i<msgarray.length; i+=2){
+//                 nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
+//             }
+//             bot.say(control_channel, "nick mapping: "+NAnick+" => "+nick_aliases[NAnick])
+//         } else if (message.search(/^NAJNR/)>-1){
+//             for (i=0; i<msgarray.length; i+=2){
+//                 nick_aliases[NAnick] = nick_aliases[NAnick]+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
+//                 bot.say(control_channel, "...|"+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n',''));
+//             }
+//         } else {
+//             bot.say(sequellquerychan, message);
+//         }
+//     }
+// 
+//     //post chei answers
+//     if (chan == botnick && nick == chei){
+//         bot.say(cheiquerychan, message);
+//     }
+// 
+//     // commands
+//     if (chan == control_channel && message[0]=='!'){
+//         var arg = message.split(' ');
+//         if (arg[0]=="!state"){
+//             bot.say(control_channel, "announcers: "+announcers);
+//             bot.say(control_channel, "channels: "+channels);
+//             bot.say(control_channel, "names: "+JSON.stringify(names));
+//             bot.say(control_channel, "filters: "+JSON.stringify(filters));
+//         }
+//     
+//         if (arg[0]=="!help" || arg[0]=="!commands"){
+//             bot.say(control_channel, "commands:");
+//             bot.say(control_channel, "  !state");
+//             bot.say(control_channel, "  !announcer [-rm] <announcer name>");
+//             bot.say(control_channel, "  !channel [-rm] <channel name>");
+//             bot.say(control_channel, "  !name [-rm] <channel name> <user name>");
+//             bot.say(control_channel, "  !filter [-rm] <channel name> <regex filter>");
+//             bot.say(control_channel, "  !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
+//         }
+//     
+//         if (arg[0]=="!announcer"){
+//             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
+//                 if (arg[1]=="-rm"){
+//                     if (announcers.indexOf(arg[2])>-1){
+//                         announcers.pop(arg[2]);
+//                         bot.say(control_channel, "announcers: "+announcers.join(', '));
+//                     } else {
+//                         bot.say(control_channel, "No such announcer");
+//                     }
+//                 } else {
+//                     if (announcers.indexOf(arg[1])==-1){
+//                         announcers.push(arg[1]);
+//                     }
+//                     bot.say(control_channel, "announcers: "+announcers.join(', '));
+//                 }
+//             } else {
+//                 bot.say(control_channel, "Usage: !announcer [-rm] <announcer name>");
+//             }
+//         }
+//     
+//         if (arg[0]=="!channel"){
+//             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
+//                 if (arg[1]=="-rm"){
+//                     if (channels.indexOf(arg[2])>-1){
+//                         channels.pop(arg[2]);
+//                         delete names[arg[2]];
+//                         delete filters[arg[2]];
+//                         delete colourmap[arg[2]];
+//                         bot.part(arg[2],'',null)
+//                         bot.say(control_channel, "channels: "+channels.join(', '));
+//                     } else {
+//                         bot.say(control_channel, "No such channel");
+//                     }
+//                 } else if (forbidden.indexOf(arg[1])==-1) {
+//                     if (channels.indexOf(arg[1])>-1){
+//                         bot.say(control_channel, "Names in "+arg[1]+": "+names[arg[1]].join(', '));
+//                     } else {
+//                         channels.push(arg[1]);
+//                         names[arg[1]]=[];
+//                         filters[arg[1]]=[];
+//                         colourmap[arg[1]]={};
+//                         bot.join(arg[1],null);
+//                         bot.say(control_channel, "channels: "+channels.join(', '));
+//                     }
+//                 } else {
+//                     bot.say(control_channel, "Sorry, I don't allow that channel");
+//                 }
+//             } else {
+//                 bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
+//             }
+//         }
+//     
+//         if (arg[0]=="!name"){
+//             if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
+//                 if (arg[1]=="-rm"){
+//                     if (channels.indexOf(arg[2])>-1){
+//                         if (names[arg[2]].indexOf(arg[3])>-1){
+//                             names[arg[2]].pop(arg[3]);
+//                             bot.say(control_channel, arg[2]+": "+names[arg[2]].join(", "));
+//                         } else {
+//                             bot.say(control_channel, "No such name");
+//                         }
+//                     } else {
+//                         bot.say(control_channel, "No such channel");
+//                     }
+//                 } else {
+//                     if (channels.indexOf(arg[1])>-1){
+//                         if (names[arg[1]].indexOf(arg[2])==-1){
+//                             names[arg[1]].push(arg[2]);
+//                         }
+//                         update_aliases(arg[2]);
+//                         bot.say(control_channel, arg[1]+": "+names[arg[1]].join(", "));
+//                     } else {
+//                         bot.say(control_channel, "No such channel");
+//                     }
+//                 }
+//             } else {
+//                 bot.say(control_channel, "Usage: !name [-rm] <channel name> <user name>");
+//             }
+//         }
+//     
+//         if (arg[0]=="!filter"){
+//             if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
+//                 if (arg[1]=="-rm"){
+//                     if (channels.indexOf(arg[2])>-1){
+//                         arg[3] = arg.slice(3, arg.length).join(' ');
+//                         if (filters[arg[2]].indexOf(arg[3])>-1){
+//                             filters[arg[2]].pop(arg[3]);
+//                             bot.say(control_channel, arg[2]+" filters: "+filters[arg[2]].join(", "));
+//                         } else {
+//                             bot.say(control_channel, "No such filter");
+//                         }
+//                     } else {
+//                         bot.say(control_channel, "No such channel");
+//                     }
+//                 } else {
+//                     if (channels.indexOf(arg[1])>-1){
+//                         arg[2] = arg.slice(2, arg.length).join(' ');
+//                         if (filters[arg[1]].indexOf(arg[2])==-1){
+//                             filters[arg[1]].push(arg[2]);
+//                         }
+//                         bot.say(control_channel, arg[1]+" filters: "+filters[arg[1]].join(" , "));
+//                     } else {
+//                         bot.say(control_channel, "No such channel");
+//                     }
+//                 }
+//             } else {
+//                 bot.say(control_channel, "Usage: !filter [-rm] <channel name> <regex filter>");
+//             }
+//         }
+//         
+//         if (arg[0]=="!colour" || arg[0]=="!color"){
+//             if (arg.length>3){
+//                 if (arg[1]=="-rm"){
+//                     if (channels.indexOf(arg[2])>-1){
+//                         arg[3] = arg.slice(3, arg.length).join(' ');
+//                         if (arg[3] in colourmap[arg[2]]){
+//                             delete colourmap[arg[2]][arg[3]];
+//                             bot.say(control_channel, arg[2]+" colouring filters: "+JSON.stringify(colourmap[arg[2]]));
+//                         } else {
+//                             bot.say(control_channel, "No such colouring filter");
+//                         }
+//                     } else {
+//                         bot.say(control_channel, "No such channel");
+//                     }
+//                 } else {
+//                     if (channels.indexOf(arg[1])>-1){
+//                         arg[3] = arg.slice(3, arg.length).join(' ');
+//                         if (!(arg[3] in colourmap[arg[1]])){
+//                             colourmap[arg[1]][arg[3]]=arg[2];
+//                         }
+//                         bot.say(control_channel, arg[1]+" colouring filters: "+JSON.stringify(colourmap[arg[1]]));
+//                     } else {
+//                         bot.say(control_channel, "No such channel");
+//                     }
+//                 }
+//             } else if (channels.indexOf(arg[1])>-1) {
+//                 bot.say(control_channel, arg[1]+" colouring filters: "+JSON.stringify(colourmap[arg[1]]));
+//             } else {
+//                 bot.say(control_channel, "Usage: !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
+//             }
+//         }
+//         
+//         if (arg[0]=="!colours") {
+//             bot.say(control_channel, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
+//         }
+//     
+//         if (arg[0]=="!savestate"){
+//             save_state();
+//         }
+//         if (arg[0]=="!loadstate"){
+//             load_state(nop);
+//         }
+//         
+//         if (arg[0]=="!csdc"){
+//             csdcrunning = !csdcrunning;
+//             if (csdcrunning){
+//                 bot.say(control_channel, 'csdc on');
+//             } else {
+//                 bot.say(control_channel, 'csdc off');
+//             }
+//         }
+//         if (arg[0]=="!csdcwkon") {
+//             if (arg[1] in csdcdata){
+//                 csdcdata[arg[1]]["active"] = true;
+//                 bot.say(control_channel, arg[1]+' on');
+//             }
+//         }
+//         if (arg[0]=="!csdcwkoff") {
+//             if (arg[1] in csdcdata){
+//                 csdcdata[arg[1]]["active"] = false;
+//                 bot.say(control_channel, arg[1]+' off');
+//             }
+//         }
+//         if (arg[0]=="!csdcwk") {
+//             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
+//                 if (arg[1]=="-rm"){
+//                     if (arg[2] in csdcdata){
+//                         delete csdcdata[arg[2]];
+//                         bot.say(control_channel, "csdc weeks: "+Object.keys(csdcdata));
+//                     } else {
+//                         bot.say(control_channel, "No such week");
+//                     }
+//                 } else {
+//                     if (arg[1] in csdcdata){
+//                         bot.say(control_channel, "Week "+arg[1]+" active: "+csdcdata[arg[1]]["active"]);
+//                         bot.say(control_channel, "Week "+arg[1]+" char: "+csdcdata[arg[1]]["wkchar"]);
+//                         bot.say(control_channel, "Week "+arg[1]+" gods: "+csdcdata[arg[1]]["wkgods"]);
+//                     } else {
+//                         csdcdata[arg[1]]={"active":false,"wkchar":"....","wkgods":"\\w*","playerdata":{}};
+//                         bot.say(control_channel, "csdc weeks: "+Object.keys(csdcdata));
+//                     }
+//                 }
+//             } else {
+//                 bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
+//             }
+//         }
+//         
+//         
+//         
+//         
+//         save_state();
+//     }
 
 }
 
