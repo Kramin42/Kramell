@@ -140,59 +140,9 @@ function update_aliases(nick) {
 }
 
 function save_state() {
-//     fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/announcers', JSON.stringify(announcers), function (err) {
-//         if (err) throw err;
-//     });
-//     fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/channels', JSON.stringify(channels), function (err) {
-//         if (err) throw err;
-//     });
-//     fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/names', JSON.stringify(names), function (err) {
-//         if (err) throw err;
-//     });
-//     fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/filters', JSON.stringify(filters), function (err) {
-//         if (err) throw err;
-//     });
-//     fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/nick_aliases', JSON.stringify(nick_aliases), function (err) {
-//         if (err) throw err;
-//     });
-//     fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', JSON.stringify(csdcdata), function (err) {
-//         if (err) throw err;
-//     });
-//     fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/colourmap', JSON.stringify(colourmap), function (err) {
-//         if (err) throw err;
-//     });
 }
 
 function load_state(callback) {
-//     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/announcers', function (err, data) {
-//         if (err) throw err;
-//         announcers = JSON.parse(data);
-//     });
-//     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/channels', function (err, data) {
-//         if (err) throw err;
-//         channels = JSON.parse(data);
-//         callback();
-//     });
-//     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/names', function (err, data) {
-//         if (err) throw err;
-//         names = JSON.parse(data);
-//     });
-//     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/filters', function (err, data) {
-//         if (err) throw err;
-//         filters = JSON.parse(data);
-//     });
-//     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/nick_aliases', function (err, data) {
-//         if (err) throw err;
-//         nick_aliases = JSON.parse(data);
-//     });
-//     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', function (err, data) {
-//         if (err) throw err;
-//         csdcdata = JSON.parse(data);
-//     });
-//     fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/colourmap', function (err, data) {
-//         if (err) throw err;
-//         colourmap = JSON.parse(data);
-//     });
 }
 
 function nick_aliases(nick) {
@@ -215,24 +165,28 @@ function announce(name, alias, message) {
     //                                 }
     //                             }
         }
-    
-        var matched = true;
-        //db.channels.distinct('filters',{channel:ch}).forEach(function(match) {
-        //    if (message.search(match)==-1){
-        //        matched = false;
-        //    }
-        //});
-        if (matched){
-            var colour = 'gray';
-            //var colourmap = db.channels.distinct('colourmap',{channel:ch})[0]
-            //for (match in colourmap) {
-            //    if (message.search(match)>-1) {
-            //        colour = colourmap[match];
-            //    }
-            //}
-            bot.say(ch, irc.colors.wrap(colour, message));
-            //console.log(ch+" :"+message);
-        }
+        
+        db.channels.distinct('filters',{channel:ch},function(err, matches) {
+            var matched = true;
+            matches.forEach(function(match) {
+                if (message.search(match)==-1){
+                    matched = false;
+                }
+            });
+            if (matched){
+                db.channels.distinct('colourmap',{channel:ch},function(err, colourmaps) {
+                    var colour = 'gray';
+                    var colourmap = colourmaps[0];
+                    for (match in colourmap) {
+                        if (message.search(match)>-1) {
+                            colour = colourmap[match];
+                        }
+                    }
+                    bot.say(ch, irc.colors.wrap(colour, message));
+                    //console.log(ch+" :"+message);
+                });
+            }
+        });
     });});
 }
 
@@ -246,7 +200,7 @@ function handle_message(nick, chan, message) {
     if (chan == observe_channel){
         //check if from announcer
         db.announcers.find({"name":nick},function(err, docs){ if (docs!=null) {
-            console.log("found announcement");
+            //console.log("found announcement");
             // go through all names in all channels
             db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
                 //get aliases
@@ -262,52 +216,6 @@ function handle_message(nick, chan, message) {
             });});
         }});
     }
-            
-            // console.log("found announcement");
-//             channels.forEach(function(ch) {
-//                 //console.log(ch)
-//                 names[ch].forEach(function(name) {
-//                     name = nick_aliases[name] ? nick_aliases[name] : name;
-//                     //console.log(name);
-//                     if (message.search(new RegExp("^("+name+") ", "i"))>-1){
-//                         name = message.match(new RegExp("^("+name+") ", "i"))[1];
-//                         //console.log(message+" contains "+name);
-//                         //console.log('name match: '+message.match(new RegExp("^("+name+") ", "i")));
-//                         
-//                         if (ch=='##csdc' && csdcrunning) {
-//                             for (var csdcwk in csdcdata) {
-//                                 if (csdcdata.hasOwnProperty(csdcwk)){
-//                                     //console.log("checking for char:"+new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"]));
-//                                     //console.log("char match: "+message.search(new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"])));
-//                                     if (csdcdata[csdcwk]["active"] && message.search("\\(L\\d+ "+csdcdata[csdcwk]["wkchar"]+"\\)")>-1){
-//                                         //console.log("checking points for "+name);
-//                                         check_csdc_points(bot, name, message, csdcwk);
-//                                     }
-//                                 }
-//                             }
-//                         }
-//                         
-//                         var matched = true;
-//                         filters[ch].forEach(function(match) {
-//                             if (message.search(match)==-1){
-//                                 matched = false;
-//                             }
-//                         });
-//                         if (matched){
-//                             var colour = 'gray';
-//                             for (match in colourmap[ch]) {if (colourmap[ch].hasOwnProperty(match)){
-//                                 if (message.search(match)>-1) {
-//                                     colour = colourmap[ch][match];
-//                                 }
-//                             }}
-//                             bot.say(ch, irc.colors.wrap(colour, message));
-//                             //console.log(ch+" :"+message);
-//                         }
-//                     }
-//                 });
-//             });
-//        }
-//    }
     
 //     //kramell queries
 //     //csdcdata format: {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","playerdata":{}}}
