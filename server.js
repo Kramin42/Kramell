@@ -575,7 +575,7 @@ function handle_message(nick, chan, message) {
 }
 
 bot = new irc.Client('chat.freenode.net', botnick, {
-    channels: [control_channel,observe_channel].concat(channels),
+    channels: [control_channel,observe_channel].concat(db.channels.distinct('channel')),
     port: 8001,
     debug: true
 });
