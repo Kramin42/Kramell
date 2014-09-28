@@ -26,14 +26,16 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 }
 console.log("connection_string: "+connection_string);
 var mongojs = require('mongojs');
-var db = mongojs(connection_string);
+var db = mongojs(connection_string, ['announcers','channels','csdc','nick_aliases']);
 var announcers = db.collection('announcers');
 var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
 console.log(channels);
 console.log("channels:");
-console.log(db.channels.find());
+db.channels.find(function(err, docs) {
+    console.log(docs);
+});
 console.log("end channels");
 // similar syntax as the Mongo command-line interface
 // log each of the first ten docs in the collection
