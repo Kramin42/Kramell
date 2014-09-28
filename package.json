@@ -25,7 +25,8 @@
   },
 
   "dependencies": {
-    "irc": ">= 0.3.6"
+    "irc": ">= 0.3.6",
+    "mongojs": ">= 0.14.2"
   },
   "devDependencies": {},
   "bundleDependencies": [],
