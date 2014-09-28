@@ -202,7 +202,7 @@ function nick_aliases(nick) {
 
 function announce(name, alias, message) {
     //go through the channels with the name
-    db.channels.distinct('channel',{names:{$in: [name]}}).forEach(function(ch) {
+    db.channels.distinct('channel',{names:{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
         if (ch=='##csdc' && csdcrunning) {
     //                             for (var csdcwk in csdcdata) {
     //                                 if (csdcdata.hasOwnProperty(csdcwk)){
@@ -233,7 +233,7 @@ function announce(name, alias, message) {
             bot.say(ch, irc.colors.wrap(colour, message));
             //console.log(ch+" :"+message);
         }
-    });
+    });});
 }
 
 function handle_message(nick, chan, message) {
@@ -248,9 +248,10 @@ function handle_message(nick, chan, message) {
         db.announcers.find({"name":nick},function(err, docs){ if (docs!=null) {
             console.log("found announcement");
             // go through all names in all channels
-            db.channels.distinct('names').forEach(function(name) {
+            db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
                 //get aliases
                 db.nick_aliases.distinct('aliases',{"name":name},function(err, alias){
+                    alias=alias[0] ? alias[0] : name;
                     //get the actual alias in use and announce
                     if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
                         alias = message.match(new RegExp("^("+alias+") ", "i"))[1];
@@ -258,7 +259,7 @@ function handle_message(nick, chan, message) {
                         announce(name, alias, message);
                     }
                 });
-            });
+            });});
         }});
     }
             
@@ -598,9 +599,9 @@ bot = new irc.Client('chat.freenode.net', botnick, {
     debug: true
 });
 
-db.channels.distinct('channel').forEach(function(err, chan) {
+db.channels.distinct('channel',function(err, chans) {chans.forEach(function(chan){
     bot.join(chan,null);
-});
+});});
 
 bot.addListener('message', handle_message);
 
