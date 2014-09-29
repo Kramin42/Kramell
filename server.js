@@ -302,7 +302,7 @@ function do_command(arg) {
             }
         } else if (arg.length==2) {
             db.channels.distinct('colourmap', {'channel':arg[1]}, function(err, colourmap) {
-                bot.say(control_channel, "Colouring filters for "+arg[1]+": "+colourmap.map(JSON.stringify).join(', '));
+                bot.say(control_channel, "Colouring filters for "+arg[1]+": "+JSON.stringify(colourmap));
             });
         } else {
             bot.say(control_channel, "Usage: !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
@@ -310,7 +310,7 @@ function do_command(arg) {
 //        });
     }
     
-    if ((arg[0]=="!colours" || arg[0]=="!colours") && arg.length==1) {
+    if ((arg[0]=="!colors" || arg[0]=="!colours") && arg.length==1) {
         bot.say(control_channel, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
     }
     
@@ -409,7 +409,7 @@ function handle_message(nick, chan, message) {
             for (i=4; i<msgarray.length; i+=2){
                 NAaliases = NAaliases+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
             }
-            bot.say(control_channel, "nick mapping: "+NAnick+" => "+nick_aliases[NAnick])
+            bot.say(control_channel, "nick mapping: "+NAnick+" => "+NAaliases)
             updateNA=true;
         } else if (message.search(/^NAJNR/)>-1){
             //get existing first (don't need to actually, it will still be stored in NAaliases)
