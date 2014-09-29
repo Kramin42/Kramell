@@ -276,17 +276,19 @@ function do_command(arg) {
                 arg[3] = arg.slice(3, arg.length).join(' ');
                 argchan = arg[2];
                 argfilter = arg[3];
-                key = "colourmap."+argfilter;
-                console.log("removing "+key);
-                db.channels.update({"channel":argchan},{$unset: {key:1}});
+                toremove = {}
+                toremove["colourmap."+argfilter] = argcolour;
+                console.log("removing "+toremove);
+                db.channels.update({"channel":argchan},{$unset: toremove});
             } else {
                 arg[3] = arg.slice(3, arg.length).join(' ');
                 argchan = arg[1];
                 argcolour = arg[2];
                 argfilter = arg[3];
-                key = "colourmap."+argfilter;
-                console.log("adding "+key);
-                db.channels.update({"channel":argchan},{$addToSet: {key:argcolour}});
+                toinsert = {}
+                toinsert["colourmap."+argfilter] = argcolour
+                console.log("adding "+insert);
+                db.channels.update({"channel":argchan},{$addToSet: toinsert});
             }
         } else if (arg.length==2) {
             db.channels.distinct('colourmap', {'channel':arg[1]}, function(err, colourmap) {
