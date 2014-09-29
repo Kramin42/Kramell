@@ -126,24 +126,23 @@ function update_aliases(nick) {
 function csdc_enroll(name) {
     //check if the alias is in each of the csdc docs and add otherwise
     db.csdc.update({players: {$not: {$elemMatch: {name:name}}}},
-        {$addToSet: {
-                "name": name,
-                "points": [
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0 
-                ],
-                "runes": 0,
-                "t1disqual": false,
-                "t2disqual": false 
-            }
-        },
+        {$addToSet: {players: {
+            "name": name,
+            "points": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0 
+            ],
+            "runes": 0,
+            "t1disqual": false,
+            "t2disqual": false 
+        }}},
         {multi:true});
 }
 
