@@ -277,6 +277,7 @@ function do_command(arg) {
                 argchan = arg[2];
                 argfilter = arg[3];
                 key = "colourmap."+argfilter;
+                console.log("removing "+key);
                 db.channels.update({"channel":argchan},{$unset: {key:1}});
             } else {
                 arg[3] = arg.slice(3, arg.length).join(' ');
