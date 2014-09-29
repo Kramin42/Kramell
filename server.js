@@ -198,7 +198,7 @@ function do_command(arg) {
     }
 
     if (arg[0]=="!announcer" || arg[0]=="!announcers"){
-        db.announcers.distinct('name',function(err, announcers){
+        db.announcers.distinct('name',function(err, ann){
             if (arg.length>2 (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
                     db.announcers.remove({'name':arg[2]})
@@ -206,7 +206,7 @@ function do_command(arg) {
                     db.announcers.insert({"name":arg[1]})
                 } 
             } else if (arg.length==0) {
-                bot.say(control_channel, "announcers: "+announcers.join(', '));
+                bot.say(control_channel, "announcers: "+ann.join(', '));
             } else {
                 bot.say(control_channel, "Usage: !announcer [-rm] <announcer name>");
             }
