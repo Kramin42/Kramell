@@ -288,7 +288,7 @@ function do_command(arg) {
                 toinsert = {}
                 toinsert["colourmap."+argfilter] = argcolour
                 //console.log("adding "+toinsert);
-                db.channels.update({"channel":argchan},{$add: toinsert});
+                db.channels.update({"channel":argchan},{$set: toinsert});
             }
         } else if (arg.length==2) {
             db.channels.distinct('colourmap', {'channel':arg[1]}, function(err, colourmap) {
