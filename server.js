@@ -287,7 +287,7 @@ function do_command(arg) {
                 argfilter = arg[3];
                 toinsert = {}
                 toinsert["colourmap."+argfilter] = argcolour
-                console.log("adding "+insert);
+                console.log("adding "+toinsert);
                 db.channels.update({"channel":argchan},{$addToSet: toinsert});
             }
         } else if (arg.length==2) {
