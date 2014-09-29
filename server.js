@@ -176,7 +176,7 @@ function announce(name, alias, message) {
                     week:1
                 }
             ).forEach(function(err, week) {
-                if (message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
+                if (week && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
                     //check_csdc_points(alias, message, week);
                     console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
                 }
