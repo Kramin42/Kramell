@@ -302,7 +302,7 @@ function do_command(arg) {
             }
         } else if (arg.length==2) {
             db.channels.distinct('colourmap', {'channel':arg[1]}, function(err, colourmap) {
-                bot.say(control_channel, "Colouring filters for "+arg[1]+": "+colourmap.join(', '));
+                bot.say(control_channel, "Colouring filters for "+arg[1]+": "+colourmap.map(JSON.stringify).join(', '));
             });
         } else {
             bot.say(control_channel, "Usage: !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
@@ -310,7 +310,7 @@ function do_command(arg) {
 //        });
     }
     
-    if (arg[0]=="!colours") {
+    if ((arg[0]=="!colours" || arg[0]=="!colours") && arg.length==1) {
         bot.say(control_channel, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
     }
     
