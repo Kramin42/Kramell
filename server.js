@@ -123,7 +123,7 @@ function update_aliases(nick) {
     bot.say(sequell, ".echo nick-alias:"+nick+":$(join ' NAJNR' (split ' ' (nick-aliases "+nick+")))");
 }
 
-function csdc_enroll(name) {
+function csdc_enroll(name, callback) {
     //check if the alias is in each of the csdc docs and add otherwise
     db.csdc.update({players: {$not: {$elemMatch: {name:name}}}},
         {$addToSet: {players: {
@@ -143,7 +143,7 @@ function csdc_enroll(name) {
             "t1disqual": false,
             "t2disqual": false 
         }}},
-        {multi:true});
+        {multi:true}, callback);
 }
 
 function announce(name, alias, message) {
@@ -161,24 +161,25 @@ function announce(name, alias, message) {
 //                 }
 //             }
             
-            csdc_enroll(alias);
-            
-            //go through active weeks with the name and return only data for that player (+general data)
-            db.csdc.find({active:true}, 
-                {players: {$elemMatch: {name:name}},
-                    char:1,
-                    gods:1,
-                    t1qual:1,
-                    t1disqual:1,
-                    t2qual:1,
-                    t2disqual:1,
-                    week:1
-                }
-            ).forEach(function(err, week) {
-                if (week && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
-                    //check_csdc_points(alias, message, week);
-                    console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
-                }
+            //ensure they are enrolled first
+            csdc_enroll(alias, function(){
+                //go through active weeks with the name and return only data for that player (+general data)
+                db.csdc.find({active:true}, 
+                    {players: {$elemMatch: {name:name}},
+                        char:1,
+                        gods:1,
+                        t1qual:1,
+                        t1disqual:1,
+                        t2qual:1,
+                        t2disqual:1,
+                        week:1
+                    }
+                ).forEach(function(err, week) {
+                    if (week && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
+                        //check_csdc_points(alias, message, week);
+                        console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
+                    }
+                });
             });
         }
         
