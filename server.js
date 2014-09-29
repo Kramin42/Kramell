@@ -284,7 +284,9 @@ function do_command(arg) {
                 argchan = arg[1];
                 argcolour = arg[2];
                 argfilter = arg[3];
-                db.channels.update({"channel":argchan},{$addToSet: {"colourmap":{argfilter:argcolour}}});
+                key = "colourmap."+argfilter;
+                console.log("adding "+key);
+                db.channels.update({"channel":argchan},{$addToSet: {key:argcolour}});
             }
         } else if (arg.length==2) {
             db.channels.distinct('colourmap', {'channel':arg[1]}, function(err, colourmap) {
