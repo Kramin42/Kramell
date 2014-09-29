@@ -198,14 +198,14 @@ function do_command(arg) {
     }
 
     if (arg[0]=="!announcer" || arg[0]=="!announcers"){
-        db.announcers.distinct('name',{} , function(err, ann){
+        db.announcers.distinct('name', function(err, ann){
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
-                    db.announcers.remove({'name':arg[2]})
+                    db.announcers.remove({'name':arg[2]});
                 } else if (ann.indexOf(arg[1])==-1){
-                    db.announcers.insert({"name":arg[1]})
+                    db.announcers.insert({"name":arg[1]});
                 } 
-             } else if (arg.length==0) {
+             } else if (arg.length==1) {
                 bot.say(control_channel, "announcers: "+ann.join(', '));
             } else {
                 bot.say(control_channel, "Usage: !announcer [-rm] <announcer name>");
@@ -213,37 +213,43 @@ function do_command(arg) {
         });
     }
 
-    // if (arg[0]=="!channel"){
-//         if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
-//             if (arg[1]=="-rm"){
-//                 if (channels.indexOf(arg[2])>-1){
-//                     channels.pop(arg[2]);
-//                     delete names[arg[2]];
-//                     delete filters[arg[2]];
-//                     delete colourmap[arg[2]];
-//                     bot.part(arg[2],'',null)
-//                     bot.say(control_channel, "channels: "+channels.join(', '));
-//                 } else {
-//                     bot.say(control_channel, "No such channel");
-//                 }
-//             } else if (forbidden.indexOf(arg[1])==-1) {
-//                 if (channels.indexOf(arg[1])>-1){
-//                     bot.say(control_channel, "Names in "+arg[1]+": "+names[arg[1]].join(', '));
-//                 } else {
-//                     channels.push(arg[1]);
-//                     names[arg[1]]=[];
-//                     filters[arg[1]]=[];
-//                     colourmap[arg[1]]={};
-//                     bot.join(arg[1],null);
-//                     bot.say(control_channel, "channels: "+channels.join(', '));
-//                 }
-//             } else {
-//                 bot.say(control_channel, "Sorry, I don't allow that channel");
-//             }
-//         } else {
-//             bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
-//         }
-//     }
+    if (arg[0]=="!channel"){
+        db.channels.distinct('channel', function(err, chans){
+            if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
+                if (arg[1]=="-rm"){
+                    if (chans.indexOf(arg[2])>-1){
+//                         channels.pop(arg[2]);
+//                         delete names[arg[2]];
+//                         delete filters[arg[2]];
+//                         delete colourmap[arg[2]];
+                        bot.part(arg[2],'',null)
+                        db.channels.remove({'channel':arg[2]});
+                        //bot.say(control_channel, "channels: "+channels.join(', '));
+                    } else {
+                        bot.say(control_channel, "No such channel");
+                    }
+                } else if (forbidden.indexOf(arg[1])==-1) {
+                    if (chans.indexOf(arg[1])>-1){
+                        //bot.say(control_channel, "Names in "+arg[1]+": "+names[arg[1]].join(', '));
+                    } else {
+//                         channels.push(arg[1]);
+//                         names[arg[1]]=[];
+//                         filters[arg[1]]=[];
+//                         colourmap[arg[1]]={};
+                        db.channels.insert({"channel": "##holypan", "names": [], "filters": [], "colourmap": {"[\\w]*": "gray"}});
+                        bot.join(arg[1],null);
+                        //bot.say(control_channel, "channels: "+channels.join(', '));
+                    }
+                } else {
+                    bot.say(control_channel, "Sorry, I don't allow that channel");
+                }
+            } else if (arg.length==1) {
+                bot.say(control_channel, "channels: "+chans.join(', '));
+            } else {
+                bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
+            }
+        });
+    }
 //
 //     if (arg[0]=="!name"){
 //         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
