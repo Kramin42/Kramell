@@ -165,7 +165,7 @@ function announce(name, alias, message) {
             csdc_enroll(alias, function(){
                 //go through active weeks with the name and return only data for that player (+general data)
                 db.csdc.find({active:true}, 
-                    {players: {$elemMatch: {name:name}},
+                    {players: {$elemMatch: {name:alias}},
                         char:1,
                         gods:1,
                         t1qual:1,
