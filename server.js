@@ -170,7 +170,7 @@ function announce(name, alias, message) {
             });
             if (matched){
                 //there should only be one colourmap per channel, could just use findOne() and colourmap = doc["colourmap"] here
-                db.channels.distinct('colourmap',{channel:ch},function(err, colourmaps) {
+                db.channels.distinct('colourmap',{'channel':ch},function(err, colourmaps) {
                     var colour = 'gray';
                     var colourmap = colourmaps[0];
                     for (match in colourmap) {
