@@ -198,14 +198,15 @@ function do_command(arg) {
     }
 
     if (arg[0]=="!announcer" || arg[0]=="!announcers"){
+        //get announcers
         db.announcers.distinct('name', function(err, ann){
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
-                if (arg[1]=="-rm"){
+                if (arg[1]=="-rm"){// arg[2] is the announcer to remove
                     db.announcers.remove({'name':arg[2]});
-                } else if (ann.indexOf(arg[1])==-1){
+                } else if (ann.indexOf(arg[1])==-1){// arg[1] is the announcer to add
                     db.announcers.insert({"name":arg[1]});
                 } 
-             } else if (arg.length==1) {
+            } else if (arg.length==1) {
                 bot.say(control_channel, "announcers: "+ann.join(', '));
             } else {
                 bot.say(control_channel, "Usage: !announcer [-rm] <announcer name>");
@@ -217,28 +218,17 @@ function do_command(arg) {
         db.channels.distinct('channel', function(err, chans){
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
-                    if (chans.indexOf(arg[2])>-1){
-//                         channels.pop(arg[2]);
-//                         delete names[arg[2]];
-//                         delete filters[arg[2]];
-//                         delete colourmap[arg[2]];
-                        bot.part(arg[2],'',null)
+                    if (chans.indexOf(arg[2])>-1){// remove and part from channel arg[2]
+                        bot.part(arg[2],'',null);
                         db.channels.remove({'channel':arg[2]});
-                        //bot.say(control_channel, "channels: "+channels.join(', '));
                     } else {
                         bot.say(control_channel, "No such channel");
                     }
                 } else if (forbidden.indexOf(arg[1])==-1) {
                     if (chans.indexOf(arg[1])>-1){
-                        //bot.say(control_channel, "Names in "+arg[1]+": "+names[arg[1]].join(', '));
-                    } else {
-//                         channels.push(arg[1]);
-//                         names[arg[1]]=[];
-//                         filters[arg[1]]=[];
-//                         colourmap[arg[1]]={};
-                        db.channels.insert({"channel": "##holypan", "names": [], "filters": [], "colourmap": {"[\\w]*": "gray"}});
+                    } else {// add and join channel arg[1]
+                        db.channels.insert({"channel": arg[1], "names": [], "filters": [], "colourmap": {"[\\w]*": "gray"}});
                         bot.join(arg[1],null);
-                        //bot.say(control_channel, "channels: "+channels.join(', '));
                     }
                 } else {
                     bot.say(control_channel, "Sorry, I don't allow that channel");
@@ -250,36 +240,28 @@ function do_command(arg) {
             }
         });
     }
-//
-//     if (arg[0]=="!name"){
-//         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
-//             if (arg[1]=="-rm"){
-//                 if (channels.indexOf(arg[2])>-1){
-//                     if (names[arg[2]].indexOf(arg[3])>-1){
-//                         names[arg[2]].pop(arg[3]);
-//                         bot.say(control_channel, arg[2]+": "+names[arg[2]].join(", "));
-//                     } else {
-//                         bot.say(control_channel, "No such name");
-//                     }
-//                 } else {
-//                     bot.say(control_channel, "No such channel");
-//                 }
-//             } else {
-//                 if (channels.indexOf(arg[1])>-1){
-//                     if (names[arg[1]].indexOf(arg[2])==-1){
-//                         names[arg[1]].push(arg[2]);
-//                     }
-//                     update_aliases(arg[2]);
-//                     bot.say(control_channel, arg[1]+": "+names[arg[1]].join(", "));
-//                 } else {
-//                     bot.say(control_channel, "No such channel");
-//                 }
-//             }
-//         } else {
-//             bot.say(control_channel, "Usage: !name [-rm] <channel name> <user name>");
-//         }
-//     }
-// 
+
+    if (arg[0]=="!name"){
+        //db.channels.find({},{"channel":1,"names":1,_id:0})
+        if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
+            if (arg[1]=="-rm"){
+                argchan = arg[2];
+                argname = arg[3];
+                db.channels.update({"channel":argchan},{$pull: {"names":argname}});
+            } else {
+                argchan = arg[1];
+                argname = arg[2];
+                db.channels.update({"channel":argchan},{$addToSet: {"names":argname}});
+            }
+        } else if (arg.length==1) {
+            db.channels.distinct('names', {'channel':argchan}, function(err, names) {
+                bot.say(control_channel, "Names in "+arg[1]+": "+names.join(', '));
+            });
+        } else {
+            bot.say(control_channel, "Usage: !name [-rm] <channel name> <user name>");
+        }
+    }
+
 //     if (arg[0]=="!filter"){
 //         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
 //             if (arg[1]=="-rm"){
