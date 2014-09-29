@@ -198,19 +198,19 @@ function do_command(arg) {
     }
 
     if (arg[0]=="!announcer" || arg[0]=="!announcers"){
-        if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
-            db.announcers.distinct('name',function(err, announcers){
+        db.announcers.distinct('name',function(err, announcers){
+            if (arg.length>2 (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
                     db.announcers.remove({'name':arg[2]})
                 } else if (announcers.indexOf(arg[1])==-1){
                     db.announcers.insert({"name":arg[1]})
-                } else {
-                    bot.say(control_channel, "announcers: "+announcers.join(', '));
-                }
-            });
-        } else {
-            bot.say(control_channel, "Usage: !announcer [-rm] <announcer name>");
-        }
+                } 
+            } else if (arg.length==0) {
+                bot.say(control_channel, "announcers: "+announcers.join(', '));
+            } else {
+                bot.say(control_channel, "Usage: !announcer [-rm] <announcer name>");
+            }
+        });
     }
 
     // if (arg[0]=="!channel"){
@@ -244,7 +244,7 @@ function do_command(arg) {
 //             bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
 //         }
 //     }
-// 
+//
 //     if (arg[0]=="!name"){
 //         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
 //             if (arg[1]=="-rm"){
