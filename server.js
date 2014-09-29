@@ -45,7 +45,7 @@ var csdcrunning = true;
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 
-function check_csdc_points(name, message, csdcwk) {
+function check_csdc_points(name, message, week) {
     var lowername = name.toLowerCase();
     var save = false;
     if (!(lowername in csdcdata[csdcwk]['playerdata'])){
@@ -112,36 +112,75 @@ function check_csdc_points(name, message, csdcwk) {
         }
     }
     
-    if (save) {
-        fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', JSON.stringify(csdcdata), function (err) {
-            if (err) throw err;
-        });
-    }
+//     if (save) {
+//         fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', JSON.stringify(csdcdata), function (err) {
+//             if (err) throw err;
+//         });
+//     }
 }
 
 function update_aliases(nick) {
     bot.say(sequell, ".echo nick-alias:"+nick+":$(join ' NAJNR' (split ' ' (nick-aliases "+nick+")))");
 }
 
-// function nick_aliases(nick) {
-//     aliases = db.nick_aliases.distinct('aliases',{name:"Kramin"});
-//     return aliases ? aliases : nick;
-// }
+function csdc_enroll(name) {
+    //check if the alias is in each of the csdc docs and add otherwise
+    db.csdc.update({players: {$not: {$elemMatch: {name:name}}}},
+        {$addToSet: {
+                "name": "stickyfingers",
+                "points": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0 
+                ],
+                "runes": 0,
+                "t1disqual": false,
+                "t2disqual": false 
+            }
+        },
+        {multi:true});
+}
 
 function announce(name, alias, message) {
     //go through the channels with the name
     db.channels.distinct('channel',{names:{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
         if (ch=='##csdc' && csdcrunning) {
-    //                             for (var csdcwk in csdcdata) {
-    //                                 if (csdcdata.hasOwnProperty(csdcwk)){
-    //                                     //console.log("checking for char:"+new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"]));
-    //                                     //console.log("char match: "+message.search(new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"])));
-    //                                     if (csdcdata[csdcwk]["active"] && message.search("\\(L\\d+ "+csdcdata[csdcwk]["wkchar"]+"\\)")>-1){
-    //                                         //console.log("checking points for "+name);
-    //                                         check_csdc_points(bot, alias, message, csdcwk);
-    //                                     }
-    //                                 }
-    //                             }
+//             for (var csdcwk in csdcdata) {
+//                 if (csdcdata.hasOwnProperty(csdcwk)){
+//                     //console.log("checking for char:"+new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"]));
+//                     //console.log("char match: "+message.search(new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"])));
+//                     if (csdcdata[csdcwk]["active"] && message.search("\\(L\\d+ "+csdcdata[csdcwk]["wkchar"]+"\\)")>-1){
+//                         //console.log("checking points for "+name);
+//                         check_csdc_points(bot, alias, message, csdcwk);
+//                     }
+//                 }
+//             }
+            
+            csdc_enroll(name);
+            
+            //go through active weeks with the name and return only data for that player (+general data)
+            db.csdc.find({active:true}, 
+                {players: {$elemMatch: {name:name}},
+                    char:1,
+                    gods:1,
+                    t1qual:1,
+                    t1disqual:1,
+                    t2qual:1,
+                    t2disqual:1,
+                    week:1
+                }
+            ).forEach(function(err, week) {
+                if (message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
+                    //check_csdc_points(alias, message, week);
+                    console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
+                }
+            });
         }
         
         //get the regexes that it must match
@@ -447,9 +486,7 @@ function handle_message(nick, chan, message) {
 //             bot.say(chan, pstr);
 //         }
 //     }
-// 
-// 
-// 
+
     if (chan == control_channel && message[0]=='!'){
         var arg = message.split(' ');
         do_command(arg);
