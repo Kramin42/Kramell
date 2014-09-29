@@ -139,10 +139,10 @@ function update_aliases(nick) {
     bot.say(sequell, ".echo nick-alias:"+nick+":$(join ' NAJNR' (split ' ' (nick-aliases "+nick+")))");
 }
 
-function nick_aliases(nick) {
-    aliases = db.nick_aliases.distinct('aliases',{name:"Kramin"});
-    return aliases ? aliases : nick;
-}
+// function nick_aliases(nick) {
+//     aliases = db.nick_aliases.distinct('aliases',{name:"Kramin"});
+//     return aliases ? aliases : nick;
+// }
 
 function announce(name, alias, message) {
     //go through the channels with the name
@@ -214,7 +214,7 @@ function do_command(arg) {
         });
     }
 
-    if (arg[0]=="!channel"){
+    if (arg[0]=="!channel" || arg[0]=="!channels"){
         db.channels.distinct('channel', function(err, chans){
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
@@ -241,7 +241,7 @@ function do_command(arg) {
         });
     }
 
-    if (arg[0]=="!name"){
+    if (arg[0]=="!name" || arg[0]=="!names"){
         //db.channels.find({},{"channel":1,"names":1,_id:0})
         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
@@ -252,9 +252,10 @@ function do_command(arg) {
                 argchan = arg[1];
                 argname = arg[2];
                 db.channels.update({"channel":argchan},{$addToSet: {"names":argname}});
+                update_aliases(argname);
             }
-        } else if (arg.length==1) {
-            db.channels.distinct('names', {'channel':argchan}, function(err, names) {
+        } else if (arg.length==2) {
+            db.channels.distinct('names', {'channel':arg[1]}, function(err, names) {
                 bot.say(control_channel, "Names in "+arg[1]+": "+names.join(', '));
             });
         } else {
@@ -262,67 +263,52 @@ function do_command(arg) {
         }
     }
 
-//     if (arg[0]=="!filter"){
-//         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
-//             if (arg[1]=="-rm"){
-//                 if (channels.indexOf(arg[2])>-1){
-//                     arg[3] = arg.slice(3, arg.length).join(' ');
-//                     if (filters[arg[2]].indexOf(arg[3])>-1){
-//                         filters[arg[2]].pop(arg[3]);
-//                         bot.say(control_channel, arg[2]+" filters: "+filters[arg[2]].join(", "));
-//                     } else {
-//                         bot.say(control_channel, "No such filter");
-//                     }
-//                 } else {
-//                     bot.say(control_channel, "No such channel");
-//                 }
-//             } else {
-//                 if (channels.indexOf(arg[1])>-1){
-//                     arg[2] = arg.slice(2, arg.length).join(' ');
-//                     if (filters[arg[1]].indexOf(arg[2])==-1){
-//                         filters[arg[1]].push(arg[2]);
-//                     }
-//                     bot.say(control_channel, arg[1]+" filters: "+filters[arg[1]].join(" , "));
-//                 } else {
-//                     bot.say(control_channel, "No such channel");
-//                 }
-//             }
-//         } else {
-//             bot.say(control_channel, "Usage: !filter [-rm] <channel name> <regex filter>");
-//         }
-//     }
-//     
-//     if (arg[0]=="!colour" || arg[0]=="!color"){
-//         if (arg.length>3){
-//             if (arg[1]=="-rm"){
-//                 if (channels.indexOf(arg[2])>-1){
-//                     arg[3] = arg.slice(3, arg.length).join(' ');
-//                     if (arg[3] in colourmap[arg[2]]){
-//                         delete colourmap[arg[2]][arg[3]];
-//                         bot.say(control_channel, arg[2]+" colouring filters: "+JSON.stringify(colourmap[arg[2]]));
-//                     } else {
-//                         bot.say(control_channel, "No such colouring filter");
-//                     }
-//                 } else {
-//                     bot.say(control_channel, "No such channel");
-//                 }
-//             } else {
-//                 if (channels.indexOf(arg[1])>-1){
-//                     arg[3] = arg.slice(3, arg.length).join(' ');
-//                     if (!(arg[3] in colourmap[arg[1]])){
-//                         colourmap[arg[1]][arg[3]]=arg[2];
-//                     }
-//                     bot.say(control_channel, arg[1]+" colouring filters: "+JSON.stringify(colourmap[arg[1]]));
-//                 } else {
-//                     bot.say(control_channel, "No such channel");
-//                 }
-//             }
-//         } else if (channels.indexOf(arg[1])>-1) {
-//             bot.say(control_channel, arg[1]+" colouring filters: "+JSON.stringify(colourmap[arg[1]]));
-//         } else {
-//             bot.say(control_channel, "Usage: !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
-//         }
-//     }
+    if (arg[0]=="!filter" || arg[0]=="!filters"){
+        if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
+            if (arg[1]=="-rm"){
+                arg[3] = arg.slice(3, arg.length).join(' ');
+                argchan = arg[2];
+                argfilter = arg[3];
+                db.channels.update({"channel":argchan},{$pull: {"filters":argfilter}});
+            } else {
+                arg[2] = arg.slice(2, arg.length).join(' ');
+                argchan = arg[1];
+                argfilter = arg[2];
+                db.channels.update({"channel":argchan},{$addToSet: {"filters":argfilter}});
+            }
+        } else if (arg.length==2) {
+            db.channels.distinct('filters', {'channel':arg[1]}, function(err, filters) {
+                bot.say(control_channel, "Filters for "+arg[1]+": "+filters.join(', '));
+            });
+        } else {
+            bot.say(control_channel, "Usage: !filter [-rm] <channel name> <regex filter>");
+        }
+    }
+  
+    if (arg[0]=="!colour" || arg[0]=="!color" || arg[0]=="!colours" || arg[0]=="!colors"){
+//        db.channels.distinct('channel', function(err, chans){
+        if (arg.length>3){
+            if (arg[1]=="-rm"){
+                arg[3] = arg.slice(3, arg.length).join(' ');
+                argchan = arg[2];
+                argfilter = arg[3];
+                db.channels.update({"channel":argchan},{$pull: {"colourmap":{argfilter:argcolour}}});
+            } else {
+                arg[3] = arg.slice(3, arg.length).join(' ');
+                argchan = arg[1];
+                argcolour = arg[2];
+                argfilter = arg[3];
+                db.channels.update({"channel":argchan},{$addToSet: {"colourmap":{argfilter:argcolour}}});
+            }
+        } else if (arg.length==2) {
+            db.channels.distinct('colourmap', {'channel':arg[1]}, function(err, colourmap) {
+                bot.say(control_channel, "Colouring filters for "+arg[1]+": "+colourmap.join(', '));
+            });
+        } else {
+            bot.say(control_channel, "Usage: !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
+        }
+//        });
+    }
     
     if (arg[0]=="!colours") {
         bot.say(control_channel, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
