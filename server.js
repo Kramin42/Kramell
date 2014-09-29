@@ -127,7 +127,7 @@ function csdc_enroll(name) {
     //check if the alias is in each of the csdc docs and add otherwise
     db.csdc.update({players: {$not: {$elemMatch: {name:name}}}},
         {$addToSet: {
-                "name": "stickyfingers",
+                "name": name,
                 "points": [
                     0,
                     0,
