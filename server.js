@@ -1,5 +1,9 @@
 #!/bin/env node
 
+//
+// Author: Cameron Dykstra
+// Email: dykstra.cameron@gmail.com
+
 var express = require('express');
 var fs      = require('fs');
 
@@ -31,31 +35,10 @@ var announcers = db.collection('announcers');
 var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
-// console.log(channels);
-// console.log("channels:");
-// db.channels.find(function(err, docs) {
-//     console.log(docs);
-// });
-// console.log("end channels");
-// similar syntax as the Mongo command-line interface
-// log each of the first ten docs in the collection
-//db.books.find({}).limit(10).forEach(function(err, doc) {
-//  if (err) throw err;
-//  if (doc) { console.dir(doc); }
-//});
-
-//var announcers = ["Henzell","Sizzell","Lantell","Rotatell","Gretell",'Kramin'];
-//var names = {'##crawl-sprigganrockhaulersinc': ['Kramin']};
-//var channels = ['##crawl-sprigganrockhaulersinc','##csdc'];
-//var filters = {'##crawl-sprigganrockhaulersinc':[]};
-//var colourmap = {'##crawl-sprigganrockhaulersinc':{}};
-//nick_aliases = {"Kramin":"Kramin|hyperkramin"};
 
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
-//var csdcdata = {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","playerdata":{}}};
-//var csdcwk = 'csdc3wktest';
 var csdcrunning = true;
 
 var cheiquerychan = control_channel;
@@ -171,7 +154,7 @@ function announce(name, alias, message) {
             if (matched){
                 //there should only be one colourmap per channel, could just use findOne() and colourmap = doc["colourmap"] here
                 db.channels.distinct('colourmap',{'channel':ch},function(err, colourmaps) {
-                    var colour = 'gray';
+                    var colour = 'grey';
                     var colourmap = colourmaps[0];
                     for (match in colourmap) {
                         if (message.search(match)>-1) {
