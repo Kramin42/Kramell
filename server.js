@@ -161,7 +161,7 @@ function announce(name, alias, message) {
 //                 }
 //             }
             
-            csdc_enroll(name);
+            csdc_enroll(alias);
             
             //go through active weeks with the name and return only data for that player (+general data)
             db.csdc.find({active:true}, 
