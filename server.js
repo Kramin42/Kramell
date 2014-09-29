@@ -15,6 +15,7 @@ var irc = require('irc');
 var observe_channel = "##crawl";
 var bot;
 
+
 //mongoDB stuff
 var ip_addr = process.env.OPENSHIFT_NODEJS_IP   || '127.0.0.1';
 var port    = process.env.OPENSHIFT_NODEJS_PORT || '8080';
@@ -275,7 +276,7 @@ function do_command(arg) {
                 arg[3] = arg.slice(3, arg.length).join(' ');
                 argchan = arg[2];
                 argfilter = arg[3];
-                db.channels.update({"channel":argchan},{$pull: {"colourmap":{argfilter:argcolour}}});
+                db.channels.update({"channel":argchan},{$unset: {"colourmap."+argfilter:1}});
             } else {
                 arg[3] = arg.slice(3, arg.length).join(' ');
                 argchan = arg[1];
