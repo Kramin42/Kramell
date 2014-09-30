@@ -181,7 +181,7 @@ function announce(name, alias, message) {
                     }
                 ).forEach(function(err, week) {
                     //if (week && !week["active"]) {bot.say(control_channel, "Kramin: Bug: checking csdc points on inactive week!");}
-                    console.log(JSON.stringify(week));
+                    //console.log(JSON.stringify(week));
                     if (week && week["active"] && week['players'][0]["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
                         check_csdc_points(alias, message, week);
                         //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
