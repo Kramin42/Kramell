@@ -312,7 +312,6 @@ function do_command(arg) {
     }
   
     if (arg[0]=="!colour" || arg[0]=="!color" || arg[0]=="!colours" || arg[0]=="!colors"){
-//        db.channels.distinct('channel', function(err, chans){
         if (arg.length>3){
             if (arg[1]=="-rm"){
                 arg[3] = arg.slice(3, arg.length).join(' ');
@@ -339,7 +338,6 @@ function do_command(arg) {
         } else {
             bot.say(control_channel, "Usage: !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
         }
-//        });
     }
     
     if ((arg[0]=="!colors" || arg[0]=="!colours") && arg.length==1) {
@@ -354,6 +352,7 @@ function do_command(arg) {
             bot.say(control_channel, 'csdc now off');
         }
     }
+    
     if (arg[0]=="!csdcwkon") {
         arg[1] = arg.slice(1, arg.length).join(' ');
         db.csdc.update({"week":arg[1]},{$set: {"active":true}}, function(err, updated) {
@@ -363,6 +362,7 @@ function do_command(arg) {
             }
         });
     }
+    
     if (arg[0]=="!csdcwkoff") {
         arg[1] = arg.slice(1, arg.length).join(' ');
         db.csdc.update({"week":arg[1]},{$set: {"active":false}}, function(err, updated) {
@@ -371,6 +371,7 @@ function do_command(arg) {
             }
         });
     }
+    
     if (arg[0]=="!csdcweek") {
         if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
@@ -411,6 +412,22 @@ function do_command(arg) {
             }
         } else {
             bot.say(control_channel, "Usage: !csdcweek [-rm] <week name>");
+        }
+    }
+    
+    if (arg[0]=="!csdcset") {
+        if (arg.length>3 && (arg[1]=="char" || arg[1]=="gods" || arg[1]=="t1qual" || arg[1]=="t1disqual" || arg[1]=="t2qual" || arg[1]=="t2disqual")) {
+            arg[3] = arg.slice(3, arg.length).join(' ');
+            toset = {};
+            toset[arg[1]] = arg[3];
+            db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
+                //console.log(updated);
+                if (updated["n"]>0) {
+                    bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]);
+                }
+            });
+        } else {
+            bot.say(control_channel, "Usage: !csdcset <char|gods|t1qual|t1disqual|t2qual|t2disqual> <week name> <value>");
         }
     }
 }
