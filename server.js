@@ -42,6 +42,8 @@ var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 var csdcrunning = true;
 
+var NAnick;
+var NAaliases;
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 
@@ -441,8 +443,8 @@ function handle_message(nick, chan, message) {
         msgarray = message.split(':');
         var updateNA = false;
         if (msgarray.length>2 && msgarray[0]=="nick-alias"){
-            var NAnick = msgarray[1];
-            var NAaliases = msgarray[2].replace(/ NAJNR/g,'|').replace('\r\n','');
+            NAnick = msgarray[1];
+            NAaliases = msgarray[2].replace(/ NAJNR/g,'|').replace('\r\n','');
             for (i=4; i<msgarray.length; i+=2){
                 NAaliases = NAaliases+'|'+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n','');
             }
