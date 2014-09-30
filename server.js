@@ -349,46 +349,64 @@ function do_command(arg) {
     if (arg[0]=="!csdc"){
         csdcrunning = !csdcrunning;
         if (csdcrunning){
-            bot.say(control_channel, 'csdc on');
+            bot.say(control_channel, 'csdc now on');
         } else {
-            bot.say(control_channel, 'csdc off');
+            bot.say(control_channel, 'csdc now off');
         }
     }
-//     if (arg[0]=="!csdcwkon") {
-//         if (arg[1] in csdcdata){
-//             csdcdata[arg[1]]["active"] = true;
-//             bot.say(control_channel, arg[1]+' on');
-//         }
-//     }
-//     if (arg[0]=="!csdcwkoff") {
-//         if (arg[1] in csdcdata){
-//             csdcdata[arg[1]]["active"] = false;
-//             bot.say(control_channel, arg[1]+' off');
-//         }
-//     }
-//     if (arg[0]=="!csdcwk") {
-//         if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
-//             if (arg[1]=="-rm"){
-//                 if (arg[2] in csdcdata){
-//                     delete csdcdata[arg[2]];
-//                     bot.say(control_channel, "csdc weeks: "+Object.keys(csdcdata));
-//                 } else {
-//                     bot.say(control_channel, "No such week");
-//                 }
-//             } else {
-//                 if (arg[1] in csdcdata){
-//                     bot.say(control_channel, "Week "+arg[1]+" active: "+csdcdata[arg[1]]["active"]);
-//                     bot.say(control_channel, "Week "+arg[1]+" char: "+csdcdata[arg[1]]["wkchar"]);
-//                     bot.say(control_channel, "Week "+arg[1]+" gods: "+csdcdata[arg[1]]["wkgods"]);
-//                 } else {
-//                     csdcdata[arg[1]]={"active":false,"wkchar":"....","wkgods":"\\w*","playerdata":{}};
-//                     bot.say(control_channel, "csdc weeks: "+Object.keys(csdcdata));
-//                 }
-//             }
-//         } else {
-//             bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
-//         }
-//     }
+    if (arg[0]=="!csdcwkon") {
+        db.csdc.update({"week":arg[1]},{$set: {"active":true}}, function(err, updated) {
+            if (updated) {
+                bot.say(control_channel, arg[1]+' on');
+            }
+        });
+    }
+    if (arg[0]=="!csdcwkoff") {
+        db.csdc.update({"week":arg[1]},{$set: {"active":false}}, function(err, updated) {
+            if (updated) {
+                bot.say(control_channel, arg[1]+' off');
+            }
+        });
+    }
+    if (arg[0]=="!csdcweek") {
+        if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
+            if (arg[1]=="-rm"){
+                db.csdc.remove({"week":arg[2]}, function(err, numberRemoved) {
+                    if (numberRemoved) {
+                        bot.say(control_channel, arg[2]+"Removed");
+                    }
+                });
+            } else {
+                db.csdc.findOne({"week":arg[1]}, function(err,week) { 
+                    if (week) {
+                        bot.say(control_channel, "Week "+week["week"] +" active: "+week["active"]);
+                        bot.say(control_channel, "Week "+week["week"] +" char: "+week["char"]);
+                        bot.say(control_channel, "Week "+week["week"] +" gods: "+week["gods"]);
+                        bot.say(control_channel, "Week "+week["week"] +" t1qual: "+week["t1qual"]);
+                        bot.say(control_channel, "Week "+week["week"] +" t1disqual: "+week["t1disqual"]);
+                        bot.say(control_channel, "Week "+week["week"] +" t2qual: "+week["t2qual"]);
+                        bot.say(control_channel, "Week "+week["week"] +" t2disqual: "+week["t2disqual"]);
+                    } else {
+                        db.csdc.insert({
+                            "week": arg[1],
+                            "active": false,
+                            "char": "unset",
+                            "gods": "unset",
+                            "players": [],
+                            "t1disqual": "unset",
+                            "t1qual": "unset",
+                            "t2disqual": "unset",
+                            "t2qual": "unset"
+                        }, function(err,inserted) {
+                            bot.say(control_channel, arg[2]+"Added");
+                        });
+                    }
+                });
+            }
+        } else {
+            bot.say(control_channel, "Usage: !csdcweek [-rm] <week name>");
+        }
+    }
 }
 
 function handle_message(nick, chan, message) {
@@ -482,7 +500,7 @@ function handle_message(nick, chan, message) {
                 weeks.forEach(function(week) {
                         if (week) {
                             if (!first) {pstr+=", ";}
-                            pstr+=week["week"]+" "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
+                            pstr+=week["week"]+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
                             first=false;
                         }
                 });
