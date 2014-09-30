@@ -357,8 +357,8 @@ function do_command(arg) {
     if (arg[0]=="!csdcwkon") {
         arg[1] = arg.slice(1, arg.length).join(' ');
         db.csdc.update({"week":arg[1]},{$set: {"active":true}}, function(err, updated) {
-            console.log(updated);
-            if (updated) {
+            //console.log(updated);
+            if (updated["n"]>0) {
                 bot.say(control_channel, arg[1]+' on');
             }
         });
@@ -366,7 +366,7 @@ function do_command(arg) {
     if (arg[0]=="!csdcwkoff") {
         arg[1] = arg.slice(1, arg.length).join(' ');
         db.csdc.update({"week":arg[1]},{$set: {"active":false}}, function(err, updated) {
-            if (updated) {
+            if (updated["n"]>0) {
                 bot.say(control_channel, arg[1]+' off');
             }
         });
@@ -376,9 +376,9 @@ function do_command(arg) {
             if (arg[1]=="-rm"){
                 arg[2] = arg.slice(2, arg.length).join(' ');
                 db.csdc.remove({"week":arg[2]}, function(err, numberRemoved) {
-                    console.log(numberRemoved);
-                    if (numberRemoved>0) {
-                        bot.say(control_channel, arg[2]+"Removed");
+                    //console.log(numberRemoved);
+                    if (numberRemoved["n"]>0) {
+                        bot.say(control_channel, arg[2]+" Removed");
                     }
                 });
             } else {
@@ -404,7 +404,7 @@ function do_command(arg) {
                             "t2disqual": "unset",
                             "t2qual": "unset"
                         }, function(err,inserted) {
-                            bot.say(control_channel, arg[2]+"Added");
+                            bot.say(control_channel, arg[1]+" Added");
                         });
                     }
                 });
