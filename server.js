@@ -48,7 +48,9 @@ var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 
 function check_csdc_points(name, message, week) {
-    //var lowername = name.toLowerCase();
+    //check they are the right race for that week first
+    if (!(message.search("\(L(\d+) "+week["char"]+"\)")>-1)) {return;}
+    
     //should Only be one player in the week doc
     points = week['players'][0]['points'];
     
@@ -454,7 +456,7 @@ function handle_message(nick, chan, message) {
                     //get the actual alias in use and announce
                     if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
                         alias = message.match(new RegExp("^("+alias+") ", "i"))[1];
-                        console.log("announcement for "+alias);
+                        //console.log("announcement for "+alias);
                         announce(name, alias, message);
                     }
                 });
