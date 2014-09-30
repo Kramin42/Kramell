@@ -48,11 +48,12 @@ var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 
 function check_csdc_points(name, message, week) {
-    //check they are the right race for that week first
+    //check they are the right race for this week first
     if (!(message.search("\(L(\d+) "+week["char"]+"\)")>-1)) {return;}
     
-    //should Only be one player in the week doc
-    points = week['players'][0]['points'];
+    //should only be one player in the week doc
+    player = week['players'][0];
+    points = player['points'];
     
     //0   Go directly to D:1, do not pass char selection, do not collect points
     if (message.search(/with \d+ points after \d+ turns/)>-1 && !(message.search(/escaped with the Orb/)>-1)) {
@@ -111,7 +112,7 @@ function check_csdc_points(name, message, week) {
             db.csdc.update({"players.name":name},{$set: {"players.$.points.4":1}});
         }
         //csdcdata[csdcwk]['playerdata'][lowername][4]+=1;
-        if (week['players'][0]["runes"]>=3 && points[5]==0){
+        if (player["runes"]>=3 && points[5]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found their third rune for 1 point!'));
             db.csdc.update({"players.name":name},{$set: {"players.$.points.5":1}});
         }
@@ -126,11 +127,37 @@ function check_csdc_points(name, message, week) {
         }
     }
     
-//     if (save) {
-//         fs.writeFile(process.env.OPENSHIFT_DATA_DIR+'/csdcdata', JSON.stringify(csdcdata), function (err) {
-//             if (err) throw err;
-//         });
-//     }
+    //8   Tier 1 bonus
+    //disqualify
+    if (message.search(week["t1disqual"])>-1){
+        if (!player["t1disqual"]){
+            db.csdc.update({"players.name":name},{$set: {"players.$.t1disqual":true}});
+            bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier 1 bonus for '+week["week"]));
+        }
+    }
+    //qualify
+    if (!player["t1disqual"] && message.search(week["t1qual"])>-1){
+        if (points[7]==0){
+            db.csdc.update({"players.name":name},{$set: {"players.$.points.7":1}});
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier 1 bonus for '+week["week"]));
+        }
+    }
+    
+    //9   Tier 2 bonus
+    //disqualify
+    if (message.search(week["t2disqual"])>-1){
+        if (!player["t2disqual"]){
+            db.csdc.update({"players.name":name},{$set: {"players.$.t2disqual":true}});
+            bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier 2 bonus for '+week["week"]));
+        }
+    }
+    //qualify
+    if (!player["t2disqual"] && message.search(week["t2qual"])>-1){
+        if (points[8]==0){
+            db.csdc.update({"players.name":name},{$set: {"players.$.points.8":2}});
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier 2 bonus for '+week["week"]));
+        }
+    }
 }
 
 function update_aliases(nick) {
