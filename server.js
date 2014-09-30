@@ -64,8 +64,8 @@ function check_csdc_points(name, message, week) {
             db.csdc.update({"players.name":name},{$set: {"players.$.tries":1}});//no more retries
             //console.log(name+" died at xl<5");
         } else {
-            //db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});//rip
-            console.log(name+" is out");
+            db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});//rip
+            //console.log(name+" is out");
         }
     }
     
