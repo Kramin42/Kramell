@@ -418,6 +418,7 @@ function do_command(arg) {
     if (arg[0]=="!csdcset") {
         if (arg.length>3 && (arg[1]=="char" || arg[1]=="gods" || arg[1]=="t1qual" || arg[1]=="t1disqual" || arg[1]=="t2qual" || arg[1]=="t2disqual")) {
             arg[3] = arg.slice(3, arg.length).join(' ');
+            arg[2] = arg[2].replace(/_/g,' ');
             toset = {};
             toset[arg[1]] = arg[3];
             db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
@@ -427,7 +428,7 @@ function do_command(arg) {
                 }
             });
         } else {
-            bot.say(control_channel, "Usage: !csdcset <char|gods|t1qual|t1disqual|t2qual|t2disqual> <week name> <value>");
+            bot.say(control_channel, "Usage: !csdcset <char|gods|t1qual|t1disqual|t2qual|t2disqual> <week name (_ for spaces)> <value>");
         }
     }
 }
