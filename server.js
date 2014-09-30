@@ -51,7 +51,7 @@ function check_csdc_points(name, message, week) {
     //should only be one player in the week doc
     player = week['players'][0];
     points = player['points'];
-    console.log("checking csdc for "+player["name"]+" <=> "+name);
+    //console.log("checking csdc for "+player["name"]+" <=> "+name);
     
     //0   Go directly to D:1, do not pass char selection, do not collect points
     if (message.search(/with \d+ points after \d+ turns/)>-1 && !(message.search(/escaped with the Orb/)>-1)) {
