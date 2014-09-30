@@ -53,10 +53,10 @@ function check_csdc_points(name, message, week) {
     points = week['players'][0]['points'];
     
     //0   Go directly to D:1, do not pass char selection, do not collect points
-    if (message.search(/with \d+ points after \d+ turns/)>-1 && !(message.search(/escaped with the Orb/))) {
+    if (message.search(/with \d+ points after \d+ turns/)>-1 && !(message.search(/escaped with the Orb/)>-1)) {
         //get the xl
         xl = parseInt(message.match(/\(L(\d+) ....\)/)[1]);
-        bot.say('##csdc',name+" died at xl: "+xl);
+        //bot.say('##csdc',name+" died at xl: "+xl);
         //one retry if xl<5
         if (week['players'][0]['tries']==0 && xl<5){
             db.csdc.update({"players.name":name},{$set: {"players.$.tries":1}});//no more retries
