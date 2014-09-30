@@ -478,7 +478,7 @@ function handle_message(nick, chan, message) {
         if (arg[0]=="#points") {
             var pstr = "Points for "+arg[1]+": ";
             var first=true
-            db.csdc.find({},{players: {$elemMatch: {name:new RegExp(arg[1], "i")}}}, function(err, weeks) {
+            db.csdc.find({},{players: {$elemMatch: {name:new RegExp(arg[1], "i")}}, week:1}, function(err, weeks) {
                 weeks.forEach(function(week) {
                         if (week) {
                             if (!first) {pstr+=", ";}
