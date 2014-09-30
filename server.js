@@ -170,7 +170,7 @@ function announce(name, alias, message) {
             csdc_enroll(alias, function(){
                 //go through active weeks with the name and return only data for that player (+general data)
                 db.csdc.find({"active":true}, 
-                    {players: {$elemMatch: {name:alias}},
+                    {"players": {$elemMatch: {"name":alias}},
                         char:1,
                         gods:1,
                         t1qual:1,
@@ -180,8 +180,9 @@ function announce(name, alias, message) {
                         week:1
                     }
                 ).forEach(function(err, week) {
-                    if (week && !week["active"]) {bot.say(control_channel, "Kramin: Bug: checking csdc points on inactive week!");}
-                    if (week && week['players'][0]["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
+                    //if (week && !week["active"]) {bot.say(control_channel, "Kramin: Bug: checking csdc points on inactive week!");}
+                    console.log(JSON.stringify(week));
+                    if (week && week["active"] && week['players'][0]["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
                         check_csdc_points(alias, message, week);
                         //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
                     }
