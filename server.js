@@ -51,11 +51,12 @@ function check_csdc_points(name, message, week) {
     //var lowername = name.toLowerCase();
     //should Only be one player in the week doc
     points = week['players'][0]['points'];
+    
     //0   Go directly to D:1, do not pass char selection, do not collect points
     if (message.search(/with \d+ points after \d+ turns/)>-1 && !(message.search(/escaped with the Orb/))) {
         //get the xl
         xl = parseInt(message.match(/\(L(\d+) ....\)/)[1]);
-        
+        bot.say('##csdc',name+" died at xl: "+xl);
         //one retry if xl<5
         if (week['players'][0]['tries']==0 && xl<5){
             db.csdc.update({"players.name":name},{$set: {"players.$.tries":1}});//no more retries
@@ -89,7 +90,7 @@ function check_csdc_points(name, message, week) {
     }
     
     //4   Champion a listed god (from weekly list):
-    console.log(new RegExp("Champion of ("+week["gods"]+")"));
+    //console.log(new RegExp("Champion of ("+week["gods"]+")")); // <= correct
     if (message.search(new RegExp("Champion of ("+week["gods"]+")"))>-1){
         if (points[3]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
