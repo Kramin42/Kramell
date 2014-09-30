@@ -61,6 +61,7 @@ function check_csdc_points(name, message, week) {
         //one retry if xl<5
         if (week['players'][0]['tries']==0 && xl<5){
             db.csdc.update({"players.name":name},{$set: {"players.$.tries":1}});//no more retries
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' may have another try at the '+week["week"]+' challenge'));
             //console.log(name+" died at xl<5");
         } else {
             db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});//rip
