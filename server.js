@@ -65,7 +65,7 @@ function check_csdc_points(name, message, week) {
             //console.log(name+" died at xl<5");
         } else {
             db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});//rip
-            bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},0));
+            bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},0)));
             //console.log(name+" is out");
         }
     }
@@ -124,7 +124,7 @@ function check_csdc_points(name, message, week) {
             bot.say('##csdc', irc.colors.wrap('light_green', name+' has won a game for 1 point!'));
             db.csdc.update({"players.name":name},{$set: {"players.$.points.6":1}});
             db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});
-            bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},1));//+1 for the win point
+            bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},1)));//+1 for the win point
         }
     }
     
