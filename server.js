@@ -137,8 +137,8 @@ function update_aliases(nick) {
 
 function csdc_enroll(name, callback) {
     //check if the alias is in each of the csdc docs and add otherwise
-    db.csdc.update({players: {$not: {$elemMatch: {name:name}}}},
-        {$addToSet: {players: {
+    db.csdc.update({"players": {$not: {$elemMatch: {"name":name}}}},
+        {$addToSet: {"players": {
             "name": name,
             "points": [
                 0,
@@ -162,12 +162,12 @@ function csdc_enroll(name, callback) {
 
 function announce(name, alias, message) {
     //go through the channels with the name
-    db.channels.distinct('channel',{names:{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
+    db.channels.distinct('channel',{"names":{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
         if (ch=='##csdc' && csdcrunning) {
             //ensure they are enrolled first
             csdc_enroll(alias, function(){
                 //go through active weeks with the name and return only data for that player (+general data)
-                db.csdc.find({active:true}, 
+                db.csdc.find({"active":true}, 
                     {players: {$elemMatch: {name:alias}},
                         char:1,
                         gods:1,
@@ -178,7 +178,7 @@ function announce(name, alias, message) {
                         week:1
                     }
                 ).forEach(function(err, week) {
-                    if (week && !week["active"]) {bot.say(sequell, "!tell Kramin Bug: checking csdc points on inactive week!");}
+                    if (week && !week["active"]) {bot.say(control_channel, "Kramin: Bug: checking csdc points on inactive week!");}
                     if (week && week['players'][0]["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
                         check_csdc_points(alias, message, week);
                         //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
@@ -522,7 +522,7 @@ function handle_message(nick, chan, message) {
         if (arg[0]=="#points") {
             var pstr = "Points for "+arg[1]+": ";
             var first=true
-            db.csdc.find({},{players: {$elemMatch: {name:new RegExp(arg[1], "i")}}, week:1}, function(err, weeks) {
+            db.csdc.find({},{"players": {$elemMatch: {"name":new RegExp(arg[1], "i")}}, week:1}, function(err, weeks) {
                 weeks.forEach(function(week) {
                         if (week) {
                             if (!first) {pstr+=", ";}
