@@ -60,9 +60,9 @@ function check_csdc_points(name, message, week) {
         //one retry if xl<5
         if (week['players'][0]['tries']==0 && xl<5){
             db.csdc.update({"players.name":name},{$set: {"players.$.tries":1}});//no more retries
-            console.log(name+" died at xl<5");
+            //console.log(name+" died at xl<5");
         } else {
-            db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});//rip
+            //db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});//rip
             console.log(name+" is out");
         }
     }
@@ -164,17 +164,6 @@ function announce(name, alias, message) {
     //go through the channels with the name
     db.channels.distinct('channel',{names:{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
         if (ch=='##csdc' && csdcrunning) {
-//             for (var csdcwk in csdcdata) {
-//                 if (csdcdata.hasOwnProperty(csdcwk)){
-//                     //console.log("checking for char:"+new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"]));
-//                     //console.log("char match: "+message.search(new RegExp("L\d+ "+csdcdata[csdcwk]["wkchar"])));
-//                     if (csdcdata[csdcwk]["active"] && message.search("\\(L\\d+ "+csdcdata[csdcwk]["wkchar"]+"\\)")>-1){
-//                         //console.log("checking points for "+name);
-//                         check_csdc_points(bot, alias, message, csdcwk);
-//                     }
-//                 }
-//             }
-            
             //ensure they are enrolled first
             csdc_enroll(alias, function(){
                 //go through active weeks with the name and return only data for that player (+general data)
@@ -480,26 +469,27 @@ function handle_message(nick, chan, message) {
         bot.say(cheiquerychan, message);
     }
     
-//     //kramell queries
-//     //csdcdata format: {"csdc3wktest":{"active":true,"wkchar":"....","wkgods":"\\w*","playerdata":{}}}
-//     if (message[0] == '#') {
-//         var arg = message.replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
-//         if (arg.length==1){
-//             arg[1]=nick;
-//         }
-//         if (arg[0]=="#points") {
-//             var pstr = "Points for "+arg[1]+": ";
-//             var first=true
-//             for (var csdcwk in csdcdata) { if (csdcdata.hasOwnProperty(csdcwk)){
-//                 if (arg[1].toLowerCase() in csdcdata[csdcwk]["playerdata"]) {
-//                     if (!first) {pstr+=", ";}
-//                     pstr+=csdcwk+" "+csdcdata[csdcwk]["playerdata"][arg[1].toLowerCase()].reduce(function(a,b,i){return a+Math.min(1,b)+((i==8 && b>0) ? 1 : 0);},0);
-//                     first=false;
-//                 }
-//             }}
-//             bot.say(chan, pstr);
-//         }
-//     }
+    //kramell queries
+    if (message[0] == '#') {
+        var arg = message.replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
+        if (arg.length==1){
+            arg[1]=nick;
+        }
+        if (arg[0]=="#points") {
+            var pstr = "Points for "+arg[1]+": ";
+            var first=true
+            db.csdc.find({},{players: {$elemMatch: {name:new RegExp(arg[1], "i")}}}, function(err, weeks) {
+                weeks.forEach(function(week) {
+                        if (week) {
+                            if (!first) {pstr+=", ";}
+                            pstr+=week["week"]+" "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
+                            first=false;
+                        }
+                });
+                bot.say(chan, pstr);
+            });
+        }
+    }
 
     if (chan == control_channel && message[0]=='!'){
         var arg = message.split(' ');
