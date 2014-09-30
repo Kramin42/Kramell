@@ -46,69 +46,75 @@ var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 
 function check_csdc_points(name, message, week) {
-    var lowername = name.toLowerCase();
-    var save = false;
-    if (!(lowername in csdcdata[csdcwk]['playerdata'])){
-        csdcdata[csdcwk]['playerdata'][lowername]=[0,0,0,0,0,0,0,0,0];
-        //console.log('added '+name+' to '+csdcwk);
-        save = true;
+    //var lowername = name.toLowerCase();
+    //should Only be one player in the week doc
+    points = week['players'][0]['points'];
+    //0   Go directly to D:1, do not pass char selection, do not collect points
+    if (message.search(/with \d+ points after \d+ turns/)>-1 && !(message.search(/escaped with the Orb/))) {
+        //get the xl
+        xl = parseInt(message.match(/\(L(\d+) ....\)/)[1]);
+        
+        //one retry if xl<5
+        if (week['players'][0]['tries']==0 && xl<5){
+            db.csdc.update({"players.name":name},{$set: {"players.$.tries":1}});//no more retries
+        } else {
+            db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});//rip
+        }
     }
+    
     //1   Kill a unique:
     if (message.search(/\) killed/)>-1 && !(message.search(/the ghost/)>-1) && !(message.search(/with \d+ points after \d+ turns/)>-1)){
-        if (csdcdata[csdcwk]['playerdata'][lowername][0]==0){
-            csdcdata[csdcwk]['playerdata'][lowername][0]=1;
+        if (points[0]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed a unique for 1 point!'));
-            save = true;
+            db.csdc.update({"players.name":name},{$set: {"players.$.points.0":1}});
         }
     }
     
     //2   Enter a multi-level branch of the Dungeon:
     if (message.search(/entered the Depths|\((Lair|Orc):/)>-1){
-        if (csdcdata[csdcwk]['playerdata'][lowername][1]==0){
-            csdcdata[csdcwk]['playerdata'][lowername][1]=1;
+        if (points[1]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered a branch for 1 point!'));
-            save = true;
+            db.csdc.update({"players.name":name},{$set: {"players.$.points.1":1}});
         }
     }
     
     //3   Reach the end of any multi-level branch (includes D):
     if (message.search(/reached level/)>-1){
-        if (csdcdata[csdcwk]['playerdata'][lowername][2]==0){
-            csdcdata[csdcwk]['playerdata'][lowername][2]=1;
+        if (points[2]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished a branch for 1 point!'));
-            save = true;
+            db.csdc.update({"players.name":name},{$set: {"players.$.points.2":1}});
         }
     }
     
     //4   Champion a listed god (from weekly list):
-    if (message.search("Champion of "+csdcdata[csdcwk]['wkgods'])>-1){
-        if (csdcdata[csdcwk]['playerdata'][lowername][3]==0){
-            csdcdata[csdcwk]['playerdata'][lowername][3]=1;
+    if (message.search("Champion of ("+week["gods"]+")")>-1){
+        if (points[3]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
-            save=true;
+            db.csdc.update({"players.name":name},{$set: {"players.$.points.3":1}});
         }
     }
     
     //5   Collect a rune:
     //6   Collect 3 or more runes in a game:
     if (message.search(/rune of Zot/)>-1){
-        if (csdcdata[csdcwk]['playerdata'][lowername][4]==0){
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found a rune for 1 point!'));
+        db.csdc.update({"players.name":name},{$inc: {"players.$.runes":1}});
+        if (points[4]==0){
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has their first rune for 1 point!'));
+            db.csdc.update({"players.name":name},{$set: {"players.$.points.4":1}});
         }
-        csdcdata[csdcwk]['playerdata'][lowername][4]+=1;
-        if (csdcdata[csdcwk]['playerdata'][lowername][4]>=3 && csdcdata[csdcwk]['playerdata'][lowername][5]==0){
-            csdcdata[csdcwk]['playerdata'][lowername][5]=1;
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found 3 runes for 1 point!'));
+        //csdcdata[csdcwk]['playerdata'][lowername][4]+=1;
+        if (week['players'][0][runes]>=3 && points[5]==0){
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found their third rune for 1 point!'));
+            db.csdc.update({"players.name":name},{$set: {"players.$.points.5":1}});
         }
-        save = true;
     }
     
     //7   Win a game
     if (message.search(/escaped with the Orb/)>-1){
-        if (csdcdata[csdcwk]['playerdata'][lowername][6]==0){
-            csdcdata[csdcwk]['playerdata'][lowername][6]=1;
+        if (points[6]==0){
             bot.say('##csdc', irc.colors.wrap('light_green', name+' has won a game for 1 point!'));
-            save = true;
+            db.csdc.update({"players.name":name},{$set: {"players.$.points.6":1}});
+            db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});
         }
     }
     
@@ -141,7 +147,9 @@ function csdc_enroll(name, callback) {
             ],
             "runes": 0,
             "t1disqual": false,
-            "t2disqual": false 
+            "t2disqual": false,
+            "alive": true,
+            "tries": 0
         }}},
         {multi:true}, callback);
 }
@@ -175,9 +183,9 @@ function announce(name, alias, message) {
                         week:1
                     }
                 ).forEach(function(err, week) {
-                    if (week && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
-                        //check_csdc_points(alias, message, week);
-                        console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
+                    if (week && week['players'][0]["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
+                        check_csdc_points(alias, message, week);
+                        //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
                     }
                 });
             });
