@@ -48,8 +48,6 @@ var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 
 function check_csdc_points(name, message, week) {
-    //check they are the right race for this week first
-    if (!(message.search("\(L\d+ "+week["char"]+"\)")>-1)) {return;}
     //should only be one player in the week doc
     player = week['players'][0];
     points = player['points'];
@@ -207,7 +205,7 @@ function announce(name, alias, message) {
                         week:1
                     }
                 ).forEach(function(err, week) {
-                    console.log(JSON.stringify(week));
+                    //console.log(JSON.stringify(week));
                     if (week && week['players'][0]["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
                         check_csdc_points(alias, message, week);
                         //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
