@@ -178,6 +178,7 @@ function announce(name, alias, message) {
                         week:1
                     }
                 ).forEach(function(err, week) {
+                    if (week && !week["active"]) {bot.say(sequell, "!tell Kramin Bug: checking csdc points on inactive week!");}
                     if (week && week['players'][0]["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
                         check_csdc_points(alias, message, week);
                         //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
@@ -344,32 +345,33 @@ function do_command(arg) {
         bot.say(control_channel, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
     }
     
-    if (arg[0]=="!csdc"){
-        csdcrunning = !csdcrunning;
-        if (csdcrunning){
-            bot.say(control_channel, 'csdc now on');
+    if (arg[0]=="!csdcon") {
+        if (arg.length>1) {
+            arg[1] = arg.slice(1, arg.length).join(' ');
+            db.csdc.update({"week":arg[1]},{$set: {"active":true}}, function(err, updated) {
+                //console.log(updated);
+                if (updated["n"]>0) {
+                    bot.say(control_channel, arg[1]+' on');
+                }
+            });
         } else {
-            bot.say(control_channel, 'csdc now off');
+            csdcrunning = true;
+            bot.say(control_channel, 'csdc on');
         }
     }
     
-    if (arg[0]=="!csdcwkon") {
-        arg[1] = arg.slice(1, arg.length).join(' ');
-        db.csdc.update({"week":arg[1]},{$set: {"active":true}}, function(err, updated) {
-            //console.log(updated);
-            if (updated["n"]>0) {
-                bot.say(control_channel, arg[1]+' on');
-            }
-        });
-    }
-    
-    if (arg[0]=="!csdcwkoff") {
-        arg[1] = arg.slice(1, arg.length).join(' ');
-        db.csdc.update({"week":arg[1]},{$set: {"active":false}}, function(err, updated) {
-            if (updated["n"]>0) {
-                bot.say(control_channel, arg[1]+' off');
-            }
-        });
+    if (arg[0]=="!csdcoff") {
+        if (arg.length>1) {
+            arg[1] = arg.slice(1, arg.length).join(' ');
+            db.csdc.update({"week":arg[1]},{$set: {"active":false}}, function(err, updated) {
+                if (updated["n"]>0) {
+                    bot.say(control_channel, arg[1]+' off');
+                }
+            });
+        } else {
+            csdcrunning = false;
+            bot.say(control_channel, 'csdc off');
+        }
     }
     
     if (arg[0]=="!csdcweek") {
