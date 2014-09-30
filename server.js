@@ -89,7 +89,7 @@ function check_csdc_points(name, message, week) {
     }
     
     //4   Champion a listed god (from weekly list):
-    
+    console.log(new RegExp("Champion of ("+week["gods"]+")"));
     if (message.search(new RegExp("Champion of ("+week["gods"]+")"))>-1){
         if (points[3]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
