@@ -89,7 +89,8 @@ function check_csdc_points(name, message, week) {
     }
     
     //4   Champion a listed god (from weekly list):
-    if (message.search("Champion of ("+week["gods"]+")")>-1){
+    
+    if (message.search(new RegExp("Champion of ("+week["gods"]+")"))>-1){
         if (points[3]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
             db.csdc.update({"players.name":name},{$set: {"players.$.points.3":1}});
@@ -105,7 +106,7 @@ function check_csdc_points(name, message, week) {
             db.csdc.update({"players.name":name},{$set: {"players.$.points.4":1}});
         }
         //csdcdata[csdcwk]['playerdata'][lowername][4]+=1;
-        if (week['players'][0][runes]>=3 && points[5]==0){
+        if (week['players'][0]["runes"]>=3 && points[5]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found their third rune for 1 point!'));
             db.csdc.update({"players.name":name},{$set: {"players.$.points.5":1}});
         }
