@@ -86,7 +86,7 @@ function check_csdc_points(name, message, week) {
     }
     
     //3   Reach the end of any multi-level branch (includes D):
-    if (message.search(/reached level/)>-1){
+    if (message.search(/reached level|Lair:8|Orc:4/)>-1){
         if (points[2]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished a branch for 1 point!'));
             db.csdc.update({"players.name":name},{$set: {"players.$.points.2":1}});
@@ -127,37 +127,37 @@ function check_csdc_points(name, message, week) {
         }
     }
     
-    //8   Tier 1 bonus
-    //disqualify
-    if (message.search(week["t1disqual"])>-1){
-        if (!player["t1disqual"]){
-            db.csdc.update({"players.name":name},{$set: {"players.$.t1disqual":true}});
-            bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier 1 bonus for '+week["week"]));
-        }
-    }
-    //qualify
-    if (!player["t1disqual"] && message.search(week["t1qual"])>-1){
-        if (points[7]==0){
-            db.csdc.update({"players.name":name},{$set: {"players.$.points.7":1}});
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier 1 bonus for '+week["week"]+', 1 point!'));
-        }
-    }
-    
-    //9   Tier 2 bonus
-    //disqualify
-    if (message.search(week["t2disqual"])>-1){
-        if (!player["t2disqual"]){
-            db.csdc.update({"players.name":name},{$set: {"players.$.t2disqual":true}});
-            bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier 2 bonus for '+week["week"]));
-        }
-    }
-    //qualify
-    if (!player["t2disqual"] && message.search(week["t2qual"])>-1){
-        if (points[8]==0){
-            db.csdc.update({"players.name":name},{$set: {"players.$.points.8":2}});
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier 2 bonus for '+week["week"]+', 2 points!'));
-        }
-    }
+//     //8   Tier 1 bonus
+//     //disqualify
+//     if (message.search(week["t1disqual"])>-1){
+//         if (!player["t1disqual"]){
+//             db.csdc.update({"players.name":name},{$set: {"players.$.t1disqual":true}});
+//             bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier 1 bonus for '+week["week"]));
+//         }
+//     }
+//     //qualify
+//     if (!player["t1disqual"] && message.search(week["t1qual"])>-1){
+//         if (points[7]==0){
+//             db.csdc.update({"players.name":name},{$set: {"players.$.points.7":1}});
+//             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier 1 bonus for '+week["week"]+', 1 point!'));
+//         }
+//     }
+//     
+//     //9   Tier 2 bonus
+//     //disqualify
+//     if (message.search(week["t2disqual"])>-1){
+//         if (!player["t2disqual"]){
+//             db.csdc.update({"players.name":name},{$set: {"players.$.t2disqual":true}});
+//             bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier 2 bonus for '+week["week"]));
+//         }
+//     }
+//     //qualify
+//     if (!player["t2disqual"] && message.search(week["t2qual"])>-1){
+//         if (points[8]==0){
+//             db.csdc.update({"players.name":name},{$set: {"players.$.points.8":2}});
+//             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier 2 bonus for '+week["week"]+', 2 points!'));
+//         }
+//     }
 }
 
 function update_aliases(nick) {
@@ -176,13 +176,10 @@ function csdc_enroll(name, callback) {
                 0,
                 0,
                 0,
-                0,
-                0,
-                0 
+                0
             ],
             "runes": 0,
-            "t1disqual": false,
-            "t2disqual": false,
+            "bonusdisqual":[],
             "alive": true,
             "tries": 0
         }}},
@@ -200,10 +197,9 @@ function announce(name, alias, message) {
                     {"players": {$elemMatch: {"name":alias}},
                         char:1,
                         gods:1,
-                        t1qual:1,
-                        t1disqual:1,
-                        t2qual:1,
-                        t2disqual:1,
+                        bonusqual:1,
+                        bonusdisqual:1,
+                        bonusworth:1,
                         week:1
                     }
                 ).forEach(function(err, week) {
@@ -421,21 +417,20 @@ function do_command(arg) {
                         bot.say(control_channel, "Week "+week["week"] +" active: "+week["active"]);
                         bot.say(control_channel, "Week "+week["week"] +" char: "+week["char"]);
                         bot.say(control_channel, "Week "+week["week"] +" gods: "+week["gods"]);
-                        bot.say(control_channel, "Week "+week["week"] +" t1qual: "+week["t1qual"]);
-                        bot.say(control_channel, "Week "+week["week"] +" t1disqual: "+week["t1disqual"]);
-                        bot.say(control_channel, "Week "+week["week"] +" t2qual: "+week["t2qual"]);
-                        bot.say(control_channel, "Week "+week["week"] +" t2disqual: "+week["t2disqual"]);
+                        //bot.say(control_channel, "Week "+week["week"] +" t1qual: "+week["t1qual"]);
+                        //bot.say(control_channel, "Week "+week["week"] +" t1disqual: "+week["t1disqual"]);
+                        //bot.say(control_channel, "Week "+week["week"] +" t2qual: "+week["t2qual"]);
+                        //bot.say(control_channel, "Week "+week["week"] +" t2disqual: "+week["t2disqual"]);
                     } else {
                         db.csdc.insert({
                             "week": arg[1],
                             "active": false,
-                            "char": "unset",
-                            "gods": "unset",
+                            "char": "^$",
+                            "gods": "^$",
                             "players": [],
-                            "t1disqual": "unset",
-                            "t1qual": "unset",
-                            "t2disqual": "unset",
-                            "t2qual": "unset"
+                            "bonusqual":[],
+                            "bonusdisqual":[],
+                            "bonusworth":[]
                         }, function(err,inserted) {
                             bot.say(control_channel, arg[1]+" Added");
                         });
@@ -448,7 +443,7 @@ function do_command(arg) {
     }
     
     if (arg[0]=="!csdcset") {
-        if (arg.length>3 && (arg[1]=="char" || arg[1]=="gods" || arg[1]=="t1qual" || arg[1]=="t1disqual" || arg[1]=="t2qual" || arg[1]=="t2disqual")) {
+        if (arg.length>3 && (arg[1]=="char" || arg[1]=="gods")) {// || arg[1]="bonusqual" || arg[1]="bonusdisqual" || arg[1]="bonusworth"
             arg[3] = arg.slice(3, arg.length).join(' ');
             arg[2] = arg[2].replace(/_/g,' ');
             toset = {};
@@ -460,7 +455,7 @@ function do_command(arg) {
                 }
             });
         } else {
-            bot.say(control_channel, "Usage: !csdcset <char|gods|t1qual|t1disqual|t2qual|t2disqual> <week name (_ for spaces)> <value>");
+            bot.say(control_channel, "Usage: !csdcset <char|gods|bonusqual|bonusdisqual|bonusworth> [<num> if bonus setting] <week name (_ for spaces)> <value>");
         }
     }
 }
