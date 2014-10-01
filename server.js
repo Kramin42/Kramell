@@ -1,6 +1,5 @@
 #!/bin/env node
 
-//
 // Author: Cameron Dykstra
 // Email: dykstra.cameron@gmail.com
 
@@ -501,7 +500,7 @@ function handle_message(nick, chan, message) {
             cheiquerychan = chan;
         }
         if ('!=&.?@^'.indexOf(message[0])>-1){
-            bot.say(sequell, message.replace(/ \. /g, ' @'+nick+' ').replace(/ \.$/, ' @'+nick));
+            bot.say(sequell, message.replace(/ \./g, ' @'+nick);
             sequellquerychan = chan;
         }
     }});
