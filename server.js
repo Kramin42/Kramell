@@ -121,7 +121,7 @@ function check_csdc_points(name, message, week) {
     //7   Win a game
     if (message.search(/escaped with the Orb/)>-1){
         if (points[6]==0){
-            bot.say('##csdc', irc.colors.wrap('light_green', name+' has won a game for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('light_blue', name+' has won a game for 1 point!'));
             db.csdc.update({"players.name":name},{$set: {"players.$.points.6":1}});
             db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});
             bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},1)));//+1 for the win point
@@ -140,7 +140,7 @@ function check_csdc_points(name, message, week) {
     if (!player["t1disqual"] && message.search(week["t1qual"])>-1){
         if (points[7]==0){
             db.csdc.update({"players.name":name},{$set: {"players.$.points.7":1}});
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier 1 bonus for '+week["week"]));
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier 1 bonus for '+week["week"]+', 1 point!'));
         }
     }
     
@@ -156,7 +156,7 @@ function check_csdc_points(name, message, week) {
     if (!player["t2disqual"] && message.search(week["t2qual"])>-1){
         if (points[8]==0){
             db.csdc.update({"players.name":name},{$set: {"players.$.points.8":2}});
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier 2 bonus for '+week["week"]));
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier 2 bonus for '+week["week"]+', 2 points!'));
         }
     }
 }
@@ -343,11 +343,12 @@ function do_command(arg) {
     }
   
     if (arg[0]=="!colour" || arg[0]=="!color" || arg[0]=="!colours" || arg[0]=="!colors"){
-        if (arg.length>3){
+        if (arg.length>4 || (arg.length==4 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
-                arg[3] = arg.slice(3, arg.length).join(' ');
+                arg[4] = arg.slice(4, arg.length).join(' ');
                 argchan = arg[2];
-                argfilter = arg[3];
+                argcolour = arg[3];
+                argfilter = arg[4];
                 toremove = {}
                 toremove["colourmap."+argfilter] = argcolour;
                 //console.log("removing "+toremove);
@@ -367,7 +368,7 @@ function do_command(arg) {
                 bot.say(control_channel, "Colouring filters for "+arg[1]+": "+JSON.stringify(colourmap));
             });
         } else {
-            bot.say(control_channel, "Usage: !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
+            bot.say(control_channel, "Usage: !colour [-rm] <channel name> <colour> <regex filter>");
         }
     }
     
