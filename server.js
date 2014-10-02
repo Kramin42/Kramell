@@ -127,6 +127,28 @@ function check_csdc_points(name, message, week) {
         }
     }
     
+    //8,9,etc tier bonus points
+    for (i=0;i<week["bonusworth"].length;i++) {
+        //disqualify
+        if (message.search(week["bonusdisqual"][i])>-1){
+            if (!player["t1disqual"]){
+                toset = {};
+                toset["players.$.bonusdisqual"] = true;
+                db.csdc.update({"players.name":name},{$set: toset});
+                bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier '+i+' bonus for '+week["week"]));
+            }
+        }
+        //qualify
+        if (!player["t1disqual"] && message.search(week["bonusqual"][i])>-1){
+            if (points[i+7]==0){
+                toset = {};
+                toset["players.$.points."+(i+7)] = week["bonusworth"][i];
+                db.csdc.update({"players.name":name},{$set: toset});
+                bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier '+i+' bonus for '+week["week"]+', 1 point!'));
+            }
+        }
+    }
+    
 //     //8   Tier 1 bonus
 //     //disqualify
 //     if (message.search(week["t1disqual"])>-1){
