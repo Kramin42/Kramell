@@ -230,7 +230,7 @@ function announce(name, alias, message) {
 
 function do_command(arg) {
     // commands
-    if (arg[0]=="!help" || arg[0]=="!commands"){
+    if (arg[0]=="help" || arg[0]=="commands"){
         bot.say(control_channel, "commands:");
         bot.say(control_channel, "  !state");
         bot.say(control_channel, "  !announcer [-rm] <announcer name>");
@@ -240,7 +240,7 @@ function do_command(arg) {
         bot.say(control_channel, "  !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
     }
 
-    if (arg[0]=="!announcer" || arg[0]=="!announcers"){
+    if (arg[0]=="announcer" || arg[0]=="announcers"){
         //get announcers
         db.announcers.distinct('name', function(err, ann){
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
@@ -257,7 +257,7 @@ function do_command(arg) {
         });
     }
 
-    if (arg[0]=="!channel" || arg[0]=="!channels"){
+    if (arg[0]=="channel" || arg[0]=="channels"){
         db.channels.distinct('channel', function(err, chans){
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
@@ -284,7 +284,7 @@ function do_command(arg) {
         });
     }
 
-    if (arg[0]=="!name" || arg[0]=="!names"){
+    if (arg[0]=="name" || arg[0]=="names"){
         //db.channels.find({},{"channel":1,"names":1,_id:0})
         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
@@ -306,7 +306,7 @@ function do_command(arg) {
         }
     }
 
-    if (arg[0]=="!filter" || arg[0]=="!filters"){
+    if (arg[0]=="filter" || arg[0]=="filters"){
         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
                 //arg[3] = arg.slice(3, arg.length).join(' ');
@@ -328,7 +328,7 @@ function do_command(arg) {
         }
     }
   
-    if (arg[0]=="!colour" || arg[0]=="!color" || arg[0]=="!colours" || arg[0]=="!colors"){
+    if (arg[0]=="colour" || arg[0]=="color" || arg[0]=="colours" || arg[0]=="colors"){
         if (arg.length>4 || (arg.length==4 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
                 //arg[4] = arg.slice(4, arg.length).join(' ');
@@ -358,11 +358,11 @@ function do_command(arg) {
         }
     }
     
-    if ((arg[0]=="!colors" || arg[0]=="!colours") && arg.length==1) {
+    if ((arg[0]=="colors" || arg[0]=="colours") && arg.length==1) {
         bot.say(control_channel, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
     }
     
-    if (arg[0]=="!csdcon") {
+    if (arg[0]=="csdcon") {
         if (arg.length>1) {
             //arg[1] = arg.slice(1, arg.length).join(' ');
             db.csdc.update({"week":arg[1]},{$set: {"active":true}}, function(err, updated) {
@@ -377,7 +377,7 @@ function do_command(arg) {
         }
     }
     
-    if (arg[0]=="!csdcoff") {
+    if (arg[0]=="csdcoff") {
         if (arg.length>1) {
             //arg[1] = arg.slice(1, arg.length).join(' ');
             db.csdc.update({"week":arg[1]},{$set: {"active":false}}, function(err, updated) {
@@ -391,7 +391,7 @@ function do_command(arg) {
         }
     }
     
-    if (arg[0]=="!csdcweek") {
+    if (arg[0]=="csdcweek") {
         if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
                 //arg[2] = arg.slice(2, arg.length).join(' ');
@@ -433,7 +433,7 @@ function do_command(arg) {
         }
     }
     
-    if (arg[0]=="!csdcset") {
+    if (arg[0]=="csdcset") {
         if (arg.length>3 && (arg[1]=="char" || arg[1]=="gods")) {
             //arg[3] = arg.slice(3, arg.length).join(' ');
             //arg[2] = arg[2].replace(/_/g,' ');
@@ -466,7 +466,7 @@ function do_command(arg) {
         }
     }
     
-    if (arg[0]=="!rejoin") {
+    if (arg[0]=="rejoin") {
         db.channels.distinct('channel',function(err, chans) {chans.forEach(function(chan){
             bot.join(chan,null);
         });});
@@ -536,6 +536,10 @@ function handle_message(nick, chan, message) {
                 updateNA=true;
             //});
         } else {
+            //truncate long replies, they can pm for these
+            if (message.length>512){
+                message = message.slice(0, 509)+"...";
+            }
             bot.say(sequellquerychan, message);
         }
         if (updateNA) {
@@ -551,13 +555,19 @@ function handle_message(nick, chan, message) {
         bot.say(cheiquerychan, message);
     }
     
-    //kramell queries
-    if (message[0] == '#') {
-        var arg = message.replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
+    //kramell queries (use $ or #)
+    if ('$#'.indexOf(message[0])>-1) {
+        //remove prefix and add username as first arg if there is none
+        var arg = message.slice(1, message.length).replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
         if (arg.length==1){
             arg[1]=nick;
         }
-        if (arg[0]=="#points") {
+        
+        if (arg[0]=="help") {
+            
+        }
+        
+        if (arg[0]=="points") {
             var pstr = "Points for "+arg[1]+": ";
             var first=true;
             db.csdc.find({},{"players": {$elemMatch: {"name":new RegExp(arg[1], "i")}}, week:1}, function(err, weeks) {
@@ -573,8 +583,9 @@ function handle_message(nick, chan, message) {
         }
     }
 
-    if (chan == control_channel && message[0]=='!'){
-        arg = message.trim().split('\"');
+    if (chan==control_channel && '!$#'.indexOf(message[0])>-1){
+        //remove prefix and handle " "
+        arg = message.slice(1, message.length).trim().split('\"');
         arg = arg.map(function(val,index) {return index%2==0 ? val : val.replace(/ /g, 'SPCSPCSPC');});
         arg = arg.join('').split(' ');
         arg = arg.map(function(val,index) {return val.replace(/SPCSPCSPC/g, ' ');});
