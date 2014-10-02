@@ -445,7 +445,7 @@ function do_command(arg) {
                     bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]);
                 }
             });
-        } else if (arg.length> && arg[1]=="bonus")
+        } else if (arg.length>5 && arg[1]=="bonus")
         } else {
             bot.say(control_channel, "Usage: !csdcset <char|gods|bonus> <week name> <char|god regex|[num] [qual] [disqual]>");
         }
