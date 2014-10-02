@@ -176,7 +176,7 @@ function update_aliases(nick) {
 
 function csdc_checkdeaths(name, week) {
     console.log("Checking for deaths...");
-    bot.say(sequell, ".echo CSDCDEATHCHECK:"+week["week"]+":"+name+":$(!lg "+name+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" s=xl join:\" \" fmt:\"${.}\")");
+    bot.say(sequell, ".echo CSDCDEATHCHECK:"+week["week"]+":"+name+":$(!lg "+name+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" s=xl join:\" \" fmt:\"${.}\" stub:\"\")");
 }
 
 function csdc_disqualcheck(name, week, index) {
@@ -583,6 +583,8 @@ function handle_message(nick, chan, message) {
             xllist = msgarray[3].split(' ');
             if (xllist.length>1 || parseInt(xllist[0])>4){
                 db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: {"players.$.alive":false}});//rip
+            } else if (parseInt(xllist[0])<5) {
+                db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: {"players.$.tries":1}});//no more retries
             }
         } else if (msgarray[0]=="CSDCDISQUALCHECK") {
             console.log(msgarray);
