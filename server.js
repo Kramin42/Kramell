@@ -445,20 +445,20 @@ function do_command(arg) {
                     bot.say(control_channel, err);
                 }
                 if (updated["n"]>0) {
-                    bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]);
+                    bot.say(control_channel, arg[2]+" "+arg[1]+": "+arg[3]);
                 }
             });
         } else if (arg.length>6 && arg[1]=="bonus") {
             toset={};
             toset["bonusworth."+arg[3]] = arg[4];
             toset["bonusqual."+arg[3]] = arg[5];
-            toset["bonusidsqual."+arg[3]] = arg[6];
+            toset["bonusdisqual."+arg[3]] = arg[6];
             db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
                 if (err) {
                     bot.say(control_channel, err);
                 }
                 if (updated["n"]>0) {
-                    bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]);
+                    bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]+" points: "+arg[4]+", qual: "+arg[5]+", disqual: "+arg[6]);
                 }
             });
         } else {
@@ -568,9 +568,11 @@ function handle_message(nick, chan, message) {
     }
 
     if (chan == control_channel && message[0]=='!'){
-        arg = message.split('\"');
-        arg = arg.map(function(val,index) {return index%2==0 ? val.trim().split(' ') : val;});
-        arg = [].concat.apply([], arg);
+        arg = message.trim().split('\"');
+        arg = arg.map(function(val,index) {return index%2==0 ? val : val.split(' ').join('SPCSPCPSC');});
+        arg = arg.join('').split(' ');
+        arg = arg.map(function(val,index) {return val.replace('SPCSPCSPC', ' ');});
+        //arg = [].concat.apply([], arg);
         console.log(arg);
         do_command(arg);
     }
