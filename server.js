@@ -52,7 +52,7 @@ function pad(n) {
 }
 function getTimeStamp() {
     now = new Date();
-    return parseInt(now.getUTCFullYear()+pad(now.getUTCMonth())+pad(now.getUTCDate()));
+    return parseInt(now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate()));
 }
 
 function check_csdc_points(name, message, week) {
