@@ -131,21 +131,21 @@ function check_csdc_points(name, message, week) {
     for (i=0;i<week["bonusworth"].length;i++) {
         //disqualify
         if (message.search(week["bonusdisqual"][i])>-1){
-            if (!player["t1disqual"]){
+            if (!player["bonusdisqual"][i]){
                 toset = {};
                 toset["players.$.bonusdisqual"] = true;
                 toset["players.$.points."+(i+7)] = 0;
                 db.csdc.update({"players.name":name},{$set: toset});
-                bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier '+i+' bonus for '+week["week"]));
+                bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier '+(i+1)+' bonus for '+week["week"]));
             }
         }
         //qualify
-        if (!player["t1disqual"] && message.search(week["bonusqual"][i])>-1){
+        if (!player["bonusdisqual"][i] && message.search(week["bonusqual"][i])>-1){
             if (points[i+7]==0){
                 toset = {};
                 toset["players.$.points."+(i+7)] = week["bonusworth"][i];
                 db.csdc.update({"players.name":name},{$set: toset});
-                bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier '+i+' bonus for '+week["week"]+', 1 point!'));
+                bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier '+(i+1)+' bonus for '+week["week"]+', 1 point!'));
             }
         }
     }
