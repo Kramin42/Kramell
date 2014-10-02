@@ -539,12 +539,12 @@ function handle_message(nick, chan, message) {
             //});
         } else {
             //truncate long replies, they can pm for these
-            sequellreply+=1;
             if (sequellreply==0) {
                 bot.say(sequellquerychan, message);
             } else if (sequellreply==1) {
                 bot.say(sequellquerychan, "...");
             }
+            sequellreply+=1;
         }
         if (updateNA) {
             //add new after clearing
