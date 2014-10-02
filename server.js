@@ -309,12 +309,12 @@ function do_command(arg) {
     if (arg[0]=="!filter" || arg[0]=="!filters"){
         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
-                arg[3] = arg.slice(3, arg.length).join(' ');
+                //arg[3] = arg.slice(3, arg.length).join(' ');
                 argchan = arg[2];
                 argfilter = arg[3];
                 db.channels.update({"channel":argchan},{$pull: {"filters":argfilter}});
             } else {
-                arg[2] = arg.slice(2, arg.length).join(' ');
+                //arg[2] = arg.slice(2, arg.length).join(' ');
                 argchan = arg[1];
                 argfilter = arg[2];
                 db.channels.update({"channel":argchan},{$addToSet: {"filters":argfilter}});
@@ -331,7 +331,7 @@ function do_command(arg) {
     if (arg[0]=="!colour" || arg[0]=="!color" || arg[0]=="!colours" || arg[0]=="!colors"){
         if (arg.length>4 || (arg.length==4 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
-                arg[4] = arg.slice(4, arg.length).join(' ');
+                //arg[4] = arg.slice(4, arg.length).join(' ');
                 argchan = arg[2];
                 argcolour = arg[3];
                 argfilter = arg[4];
@@ -340,7 +340,7 @@ function do_command(arg) {
                 //console.log("removing "+toremove);
                 db.channels.update({"channel":argchan},{$unset: toremove});
             } else {
-                arg[3] = arg.slice(3, arg.length).join(' ');
+                //arg[3] = arg.slice(3, arg.length).join(' ');
                 argchan = arg[1];
                 argcolour = arg[2];
                 argfilter = arg[3];
@@ -364,7 +364,7 @@ function do_command(arg) {
     
     if (arg[0]=="!csdcon") {
         if (arg.length>1) {
-            arg[1] = arg.slice(1, arg.length).join(' ');
+            //arg[1] = arg.slice(1, arg.length).join(' ');
             db.csdc.update({"week":arg[1]},{$set: {"active":true}}, function(err, updated) {
                 //console.log(updated);
                 if (updated["n"]>0) {
@@ -379,7 +379,7 @@ function do_command(arg) {
     
     if (arg[0]=="!csdcoff") {
         if (arg.length>1) {
-            arg[1] = arg.slice(1, arg.length).join(' ');
+            //arg[1] = arg.slice(1, arg.length).join(' ');
             db.csdc.update({"week":arg[1]},{$set: {"active":false}}, function(err, updated) {
                 if (updated["n"]>0) {
                     bot.say(control_channel, arg[1]+' off');
@@ -394,7 +394,7 @@ function do_command(arg) {
     if (arg[0]=="!csdcweek") {
         if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
-                arg[2] = arg.slice(2, arg.length).join(' ');
+                //arg[2] = arg.slice(2, arg.length).join(' ');
                 db.csdc.remove({"week":arg[2]}, function(err, numberRemoved) {
                     //console.log(numberRemoved);
                     if (numberRemoved["n"]>0) {
@@ -402,7 +402,7 @@ function do_command(arg) {
                     }
                 });
             } else {
-                arg[1] = arg.slice(1, arg.length).join(' ');
+                //arg[1] = arg.slice(1, arg.length).join(' ');
                 db.csdc.findOne({"week":arg[1]}, function(err,week) { 
                     if (week) {
                         bot.say(control_channel, "Week "+week["week"] +" active: "+week["active"]);
@@ -435,7 +435,7 @@ function do_command(arg) {
     
     if (arg[0]=="!csdcset") {
         if (arg.length>3 && (arg[1]=="char" || arg[1]=="gods")) {
-            arg[3] = arg.slice(3, arg.length).join(' ');
+            //arg[3] = arg.slice(3, arg.length).join(' ');
             //arg[2] = arg[2].replace(/_/g,' ');
             toset = {};
             toset[arg[1]] = arg[3];
