@@ -214,7 +214,7 @@ function announce(name, alias, message) {
             //go through active weeks with the name and return only data for that player (+general data)
             db.csdc.find({"active":true}, 
                 {"players": {$elemMatch: {"name":alias}},
-                    char:1,
+                    "char":1,
                     gods:1,
                     bonusqual:1,
                     bonusdisqual:1,
@@ -227,7 +227,7 @@ function announce(name, alias, message) {
                 //console.log(JSON.stringify(week));
                 timeStamp = getTimeStamp();
                 console.log(timeStamp);
-                if (week && timeStamp > week["start"] && timeStamp < week["end"]) {
+                if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
                     if (week['players'][0]) {
                         check_csdc_points(alias, message, week);
                             //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
