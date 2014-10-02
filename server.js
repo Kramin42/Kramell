@@ -441,14 +441,28 @@ function do_command(arg) {
             toset[arg[1]] = arg[3];
             db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
                 //console.log(updated);
+                if (err) {
+                    bot.say(control_channel, err);
+                }
                 if (updated["n"]>0) {
                     bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]);
                 }
             });
-        } else if (arg.length>5 && arg[1]=="bonus") {
-            
+        } else if (arg.length>6 && arg[1]=="bonus") {
+            toset={};
+            toset["bonusworth."+arg[3]] = arg[4];
+            toset["bonusqual."+arg[3]] = arg[5];
+            toset["bonusidsqual."+arg[3]] = arg[6];
+            db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
+                if (err) {
+                    bot.say(control_channel, err);
+                }
+                if (updated["n"]>0) {
+                    bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]);
+                }
+            });
         } else {
-            bot.say(control_channel, "Usage: !csdcset <char|gods|bonus> <week name> <char|god regex|[num] [qual] [disqual]>");
+            bot.say(control_channel, "Usage: !csdcset <char|gods|bonus> <week name> <char|god regex|[num] [worth] [qual] [disqual]>");
         }
     }
 }
@@ -555,7 +569,7 @@ function handle_message(nick, chan, message) {
 
     if (chan == control_channel && message[0]=='!'){
         arg = message.split('\"');
-        arg = arg.map(function(val,index) {return index%2==0 ? val.split(' ') : val;});
+        arg = arg.map(function(val,index) {return index%2==0 ? val.trim().split(' ') : val;});
         arg = [].concat.apply([], arg);
         console.log(arg);
         do_command(arg);
