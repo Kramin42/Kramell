@@ -47,9 +47,12 @@ var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 var sequellreply = 0;
 
+function pad(n) {
+    return (n < 10) ? ("0" + n.toString()) : n.toString();
+}
 function getTimeStamp() {
     now = new Date();
-    return parseInt(now.getUTCFullYear().toString()+now.getUTCMonth().toString()+now.getUTCDate().toString());
+    return parseInt(now.getUTCFullYear()+pad(now.getUTCMonth())+pad(now.getUTCDate()));
 }
 
 function check_csdc_points(name, message, week) {
