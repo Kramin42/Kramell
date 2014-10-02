@@ -176,12 +176,12 @@ function update_aliases(nick) {
 
 function csdc_checkdeaths(name, week) {
     console.log("Checking for deaths...");
-    bot.say(sequell, ".echo CSDCDEATHCHECK:"+week["week"]+":"+name+":$(!lg "+name+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" s=xl join:\" \" fmt:\"${.}\" stub:\"\")");
+    bot.say(sequell, ".echo CSDCDEATHCHECK:"+week["week"]+":"+name+":$(!lg "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" s=xl join:\" \" fmt:\"${.}\" stub:\"\")");
 }
 
 function csdc_disqualcheck(name, week, index) {
     console.log("Checking for disqual...");
-    bot.say(sequell, ".echo CSDCDISQUALCHECK:"+week["week"]+":"+name+":"+index+":"+week["bonusworth"][index]+":$(!lm "+name+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" "+week["disqualcheck"][index]+" fmt:\"${n}\" stub:\"0\")");
+    bot.say(sequell, ".echo CSDCDISQUALCHECK:"+week["week"]+":"+name+":"+index+":"+week["bonusworth"][index]+":$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" "+week["disqualcheck"][index]+" fmt:\"${n}\" stub:\"0\")");
 }
 
 function csdc_enroll(name, week, callback) {
@@ -642,7 +642,7 @@ function handle_message(nick, chan, message) {
                 weeks.forEach(function(week) {
                         if (week && week["players"] && week["players"][0]) {
                             if (!first) {pstr+=", ";}
-                            pstr+=week["week"]+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
+                            pstr+=week["week"]+(week["players"][0]["alive"] ? "(in prog.)" : "")+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
                             first=false;
                         }
                 });
