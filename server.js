@@ -465,6 +465,12 @@ function do_command(arg) {
             bot.say(control_channel, "Usage: !csdcset <char|gods|bonus> <week name> <char|god regex|[num] [worth] [qual] [disqual]>");
         }
     }
+    
+    if (arg[0]=="!rejoin") {
+        db.channels.distinct('channel',function(err, chans) {chans.forEach(function(chan){
+            bot.join(chan,null);
+        });});
+    }
 }
 
 function handle_message(nick, chan, message) {
