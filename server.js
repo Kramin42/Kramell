@@ -450,7 +450,7 @@ function do_command(arg) {
             });
         } else if (arg.length>6 && arg[1]=="bonus") {
             toset={};
-            toset["bonusworth."+arg[3]] = arg[4];
+            toset["bonusworth."+arg[3]] = parseInt(arg[4]);
             toset["bonusqual."+arg[3]] = arg[5];
             toset["bonusdisqual."+arg[3]] = arg[6];
             db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
