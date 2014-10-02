@@ -47,11 +47,21 @@ var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 var sequellreply = 0;
 
+function getTimeStamp() {
+    now = new Date();
+    return parseInt((''+now.getUTCFullYear())+now.getUTCMonth()+now.getUTCDate());
+}
+
 function check_csdc_points(name, message, week) {
     //should only be one player in the week doc
     player = week['players'][0];
     points = player['points'];
     //console.log("checking csdc for "+player["name"]+" <=> "+name);
+    
+    //check that they have the right char and are in the game still for this week
+    if (!(player["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1)) {
+        return;
+    }
     
     //0   Go directly to D:1, do not pass char selection, do not collect points
     if (message.search(/with \d+ points after \d+ turns/)>-1 && !(message.search(/escaped with the Orb/)>-1)) {
@@ -60,11 +70,11 @@ function check_csdc_points(name, message, week) {
         //bot.say('##csdc',name+" died at xl: "+xl);
         //one retry if xl<5
         if (week['players'][0]['tries']==0 && xl<5){
-            db.csdc.update({"players.name":name},{$set: {"players.$.tries":1}});//no more retries
+            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.tries":1}});//no more retries
             bot.say('##csdc', irc.colors.wrap('dark_blue', name+' may have another try at the '+week["week"]+' challenge'));
             //console.log(name+" died at xl<5");
         } else {
-            db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});//rip
+            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.alive":false}});//rip
             bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},0)));
             //console.log(name+" is out");
         }
@@ -74,7 +84,7 @@ function check_csdc_points(name, message, week) {
     if (message.search(/\) killed/)>-1 && !(message.search(/the ghost/)>-1) && !(message.search(/with \d+ points after \d+ turns/)>-1)){
         if (points[0]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed a unique for 1 point!'));
-            db.csdc.update({"players.name":name},{$set: {"players.$.points.0":1}});
+            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.0":1}});
         }
     }
     
@@ -82,7 +92,7 @@ function check_csdc_points(name, message, week) {
     if (message.search(/entered the Depths|\((Lair|Orc):/)>-1){
         if (points[1]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered a branch for 1 point!'));
-            db.csdc.update({"players.name":name},{$set: {"players.$.points.1":1}});
+            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.1":1}});
         }
     }
     
@@ -90,7 +100,7 @@ function check_csdc_points(name, message, week) {
     if (message.search(/reached level|Lair:8|Orc:4/)>-1){
         if (points[2]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished a branch for 1 point!'));
-            db.csdc.update({"players.name":name},{$set: {"players.$.points.2":1}});
+            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.2":1}});
         }
     }
     
@@ -99,7 +109,7 @@ function check_csdc_points(name, message, week) {
     if (message.search(new RegExp("Champion of ("+week["gods"]+")"))>-1){
         if (points[3]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
-            db.csdc.update({"players.name":name},{$set: {"players.$.points.3":1}});
+            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.3":1}});
         }
     }
     
@@ -109,12 +119,12 @@ function check_csdc_points(name, message, week) {
         db.csdc.update({"players.name":name},{$inc: {"players.$.runes":1}});
         if (points[4]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has their first rune for 1 point!'));
-            db.csdc.update({"players.name":name},{$set: {"players.$.points.4":1}});
+            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.4":1}});
         }
         //csdcdata[csdcwk]['playerdata'][lowername][4]+=1;
         if (player["runes"]>=3 && points[5]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found their third rune for 1 point!'));
-            db.csdc.update({"players.name":name},{$set: {"players.$.points.5":1}});
+            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.5":1}});
         }
     }
     
@@ -122,8 +132,8 @@ function check_csdc_points(name, message, week) {
     if (message.search(/escaped with the Orb/)>-1){
         if (points[6]==0){
             bot.say('##csdc', irc.colors.wrap('light_blue', name+' has won a game for 1 point!'));
-            db.csdc.update({"players.name":name},{$set: {"players.$.points.6":1}});
-            db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});
+            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.6":1}});
+            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.alive":false}});
             bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},1)+" points"));//+1 for the win point
         }
     }
@@ -136,7 +146,7 @@ function check_csdc_points(name, message, week) {
                 toset = {};
                 toset["players.$.bonusdisqual"] = true;
                 toset["players.$.points."+(i+7)] = 0;
-                db.csdc.update({"players.name":name},{$set: toset});
+                db.csdc.update({"week":week["week"], "players.name":name},{$set: toset});
                 bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier '+(i+1)+' bonus for '+week["week"]));
             }
         }
@@ -145,7 +155,7 @@ function check_csdc_points(name, message, week) {
             if (points[i+7]==0){
                 toset = {};
                 toset["players.$.points."+(i+7)] = week["bonusworth"][i];
-                db.csdc.update({"players.name":name},{$set: toset});
+                db.csdc.update({"week":week["week"], "players.name":name},{$set: toset});
                 bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier '+(i+1)+' bonus for '+week["week"]+', 1 point!'));
             }
         }
@@ -156,9 +166,14 @@ function update_aliases(nick) {
     bot.say(sequell, ".echo nick-alias:"+nick+":$(join ' NAJNR' (split ' ' (nick-aliases "+nick+")))");
 }
 
-function csdc_enroll(name, callback) {
-    //check if the alias is in each of the csdc docs and add otherwise
-    db.csdc.update({"players": {$not: {$elemMatch: {"name":name}}}},
+function csdc_checkdeaths(name, week) {
+    bot.say(sequell, ".echo CSDCDEATHCHECK:"+week["week"]+":"+name+":$(!lg "+name+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" s=xl join:\" \" fmt:\"${.}\")");
+}
+
+function csdc_enroll(name, week, callback) {
+    csdc_checkdeaths(name, week);
+    //check if the alias is in the csdc doc for that week and add otherwise
+    db.csdc.update({"week": week["week"], "players": {$not: {$elemMatch: {"name":name}}}},
         {$addToSet: {"players": {
             "name": name,
             "points": [
@@ -182,25 +197,32 @@ function announce(name, alias, message) {
     //go through the channels with the name
     db.channels.distinct('channel',{"names":{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
         if (ch=='##csdc' && csdcrunning) {
-            //ensure they are enrolled first
-            csdc_enroll(alias, function(){
-                //go through active weeks with the name and return only data for that player (+general data)
-                db.csdc.find({"active":true}, 
-                    {"players": {$elemMatch: {"name":alias}},
-                        char:1,
-                        gods:1,
-                        bonusqual:1,
-                        bonusdisqual:1,
-                        bonusworth:1,
-                        week:1
-                    }
-                ).forEach(function(err, week) {
-                    //console.log(JSON.stringify(week));
-                    if (week && week['players'][0]["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1) {
+            //go through active weeks with the name and return only data for that player (+general data)
+            db.csdc.find({"active":true}, 
+                {"players": {$elemMatch: {"name":alias}},
+                    char:1,
+                    gods:1,
+                    bonusqual:1,
+                    bonusdisqual:1,
+                    bonusworth:1,
+                    week:1,
+                    start:1,
+                    end:1
+                }
+            ).forEach(function(err, week) {
+                //console.log(JSON.stringify(week));
+                timeStamp = getTimeStamp();
+                if (week && timeStamp > week["start"] && timeStamp < week["end"]) {
+                    if (week['players'][0]) {
                         check_csdc_points(alias, message, week);
-                        //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
+                            //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
+                    } else {
+                        csdc_enroll(alias, week, function(){
+                            week["players"][0] = {"name": alias, "points": [0, 0, 0, 0, 0, 0, 0], "runes": 0, "bonusdisqual":[], "alive": true, "tries": 0};
+                            check_csdc_points(alias, message, week);
+                        });
                     }
-                });
+                }
             });
         }
         
@@ -417,6 +439,8 @@ function do_command(arg) {
                         db.csdc.insert({
                             "week": arg[1],
                             "active": false,
+                            "start": 20141002,
+                            "end": 20141025,
                             "char": "^$",
                             "gods": "^$",
                             "players": [],
@@ -435,7 +459,7 @@ function do_command(arg) {
     }
     
     if (arg[0]=="csdcset") {
-        if (arg.length>3 && (arg[1]=="char" || arg[1]=="gods")) {
+        if (arg.length>3 && (arg[1]=="char" || arg[1]=="gods" || arg[1]=="start" || arg[1]=="end")) {
             //arg[3] = arg.slice(3, arg.length).join(' ');
             //arg[2] = arg[2].replace(/_/g,' ');
             toset = {};
@@ -463,7 +487,7 @@ function do_command(arg) {
                 }
             });
         } else {
-            bot.say(control_channel, "Usage: !csdcset <char|gods|bonus> <week name> <char|god regex|[num] [worth] [qual] [disqual]>");
+            bot.say(control_channel, "Usage: !csdcset <char|gods|start|end|bonus> <week name> <[char]|[god regex]|[start]|[end](YYYYMMDD)|[num] [worth] [qual] [disqual]>");
         }
     }
     
@@ -537,6 +561,11 @@ function handle_message(nick, chan, message) {
                 }
                 updateNA=true;
             //});
+        } else if (msgarray[0]=="CSDCDEATHCHECK") {
+            xllist = msgarray[3].split(' ');
+            if (xllist.length>1 || parseInt(xllist[0])>4){
+                db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: {"players.$.alive":false}});//rip
+            }
         } else {
             //truncate long replies, they can pm for these
             if (sequellreply==0) {
