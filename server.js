@@ -123,7 +123,7 @@ function check_csdc_points(name, message, week) {
             bot.say('##csdc', irc.colors.wrap('light_blue', name+' has won a game for 1 point!'));
             db.csdc.update({"players.name":name},{$set: {"players.$.points.6":1}});
             db.csdc.update({"players.name":name},{$set: {"players.$.alive":false}});
-            bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},1)));//+1 for the win point
+            bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},1)+" points"));//+1 for the win point
         }
     }
     
@@ -537,6 +537,8 @@ function handle_message(nick, chan, message) {
             //});
         } else {
             //truncate long replies, they can pm for these
+            console.log(message);
+            console.log(message.length);
             if (message.length>512){
                 message = message.slice(0, 509)+"...";
             }
