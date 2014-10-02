@@ -555,7 +555,7 @@ function handle_message(nick, chan, message) {
 
     if (chan == control_channel && message[0]=='!'){
         arg = message.split('\"');
-        arg = arg.map(function(val,index) {return index%2==0 ? val.split(' ') : val};
+        arg = arg.map(function(val,index) {return index%2==0 ? val.split(' ') : val;});
         arg = [].concat.apply([], arg);
         console.log(arg);
         do_command(arg);
