@@ -49,7 +49,7 @@ var sequellreply = 0;
 
 function getTimeStamp() {
     now = new Date();
-    return parseInt((''+now.getUTCFullYear())+now.getUTCMonth()+now.getUTCDate());
+    return parseInt(((''+now.getUTCFullYear())+now.getUTCMonth())+now.getUTCDate());
 }
 
 function check_csdc_points(name, message, week) {
