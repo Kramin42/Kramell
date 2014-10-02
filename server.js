@@ -134,6 +134,7 @@ function check_csdc_points(name, message, week) {
             if (!player["t1disqual"]){
                 toset = {};
                 toset["players.$.bonusdisqual"] = true;
+                toset["players.$.points."+(i+7)] = 0;
                 db.csdc.update({"players.name":name},{$set: toset});
                 bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier '+i+' bonus for '+week["week"]));
             }
