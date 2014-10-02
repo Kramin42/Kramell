@@ -45,6 +45,7 @@ var NAnick;
 var NAaliases;
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
+var sequellreply = 0;
 
 function check_csdc_points(name, message, week) {
     //should only be one player in the week doc
@@ -510,6 +511,7 @@ function handle_message(nick, chan, message) {
         if ('!=&.?@^'.indexOf(message[0])>-1){
             bot.say(sequell, message.replace(/ \./g, ' @'+nick));
             sequellquerychan = chan;
+            sequellreply = 0;
         }
     }});
     
@@ -537,12 +539,12 @@ function handle_message(nick, chan, message) {
             //});
         } else {
             //truncate long replies, they can pm for these
-            console.log(message);
-            console.log(message.length);
-            if (message.length>512){
-                message = message.slice(0, 509)+"...";
+            sequellreply+=1;
+            if (sequellreply==0) {
+                bot.say(sequellquerychan, message);
+            } else if (sequellreply==1) {
+                bot.say(sequellquerychan, "...");
             }
-            bot.say(sequellquerychan, message);
         }
         if (updateNA) {
             //add new after clearing
