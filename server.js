@@ -228,12 +228,12 @@ function announce(name, alias, message) {
                 timeStamp = getTimeStamp();
                 console.log(timeStamp);
                 if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
-                    if (week['players'][0]) {
+                    if (week['players'] && week['players'][0]) {
                         check_csdc_points(alias, message, week);
                             //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
                     } else {
                         csdc_enroll(alias, week, function(){
-                            week["players"][0] = {"name": alias, "points": [0, 0, 0, 0, 0, 0, 0], "runes": 0, "bonusdisqual":[], "alive": true, "tries": 0};
+                            week["players"] = [{"name": alias, "points": [0, 0, 0, 0, 0, 0, 0], "runes": 0, "bonusdisqual":[], "alive": true, "tries": 0}];
                             check_csdc_points(alias, message, week);
                         });
                     }
