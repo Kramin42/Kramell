@@ -553,10 +553,10 @@ function handle_message(nick, chan, message) {
         }
         if (arg[0]=="#points") {
             var pstr = "Points for "+arg[1]+": ";
-            var first=true
+            var first=true;
             db.csdc.find({},{"players": {$elemMatch: {"name":new RegExp(arg[1], "i")}}, week:1}, function(err, weeks) {
                 weeks.forEach(function(week) {
-                        if (week && week["players"][0]) {
+                        if (week && week["players"] && week["players"][0]) {
                             if (!first) {pstr+=", ";}
                             pstr+=week["week"]+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
                             first=false;
