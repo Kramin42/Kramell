@@ -223,6 +223,7 @@ function announce(name, alias, message) {
             ).forEach(function(err, week) {
                 //console.log(JSON.stringify(week));
                 timeStamp = getTimeStamp();
+                console.log(timeStamp);
                 if (week && timeStamp > week["start"] && timeStamp < week["end"]) {
                     if (week['players'][0]) {
                         check_csdc_points(alias, message, week);
