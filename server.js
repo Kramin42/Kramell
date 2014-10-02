@@ -569,9 +569,9 @@ function handle_message(nick, chan, message) {
 
     if (chan == control_channel && message[0]=='!'){
         arg = message.trim().split('\"');
-        arg = arg.map(function(val,index) {return index%2==0 ? val : val.split(' ').join('SPCSPCPSC');});
+        arg = arg.map(function(val,index) {return index%2==0 ? val : val.replace(/ /g, 'SPCSPCSPC');});
         arg = arg.join('').split(' ');
-        arg = arg.map(function(val,index) {return val.replace('SPCSPCSPC', ' ');});
+        arg = arg.map(function(val,index) {return val.replace(/SPCSPCSPC/g, ' ');});
         //arg = [].concat.apply([], arg);
         console.log(arg);
         do_command(arg);
