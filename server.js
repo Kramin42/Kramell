@@ -556,7 +556,7 @@ function handle_message(nick, chan, message) {
             var first=true
             db.csdc.find({},{"players": {$elemMatch: {"name":new RegExp(arg[1], "i")}}, week:1}, function(err, weeks) {
                 weeks.forEach(function(week) {
-                        if (week) {
+                        if (week && week["players"][0]) {
                             if (!first) {pstr+=", ";}
                             pstr+=week["week"]+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
                             first=false;
