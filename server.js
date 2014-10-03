@@ -50,6 +50,7 @@ var sequellreply = 0;
 function pad(n) {
     return (n < 10) ? ("0" + n.toString()) : n.toString();
 }
+
 function getTimeStamp() {
     now = new Date();
     return parseInt(now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate()));
@@ -65,6 +66,9 @@ function check_csdc_points(name, message, week) {
     if (!(player["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1)) {
         return;
     }
+    
+    //announce the message if they are alive and the right char
+    announce_with_filters("##csdc", message);
     
     //0   Go directly to D:1, do not pass char selection, do not collect points
     if (message.search(/with \d+ points after \d+ turns/)>-1 && !(message.search(/escaped with the Orb/)>-1)) {
@@ -207,7 +211,32 @@ function csdc_enroll(name, week, callback) {
         {multi:true}, callback);
 }
 
-function announce(name, alias, message) {
+function announce_with_filters(chan, message) {
+    //get the regexes that it must match
+    db.channels.distinct('filters',{channel:chan},function(err, matches) {
+        var matched = true;
+        matches.forEach(function(match) {
+            if (message.search(match)==-1){
+                matched = false;
+            }
+        });
+        if (matched){
+            //there should only be one colourmap per channel, could just use findOne() and colourmap = doc["colourmap"] here
+            db.channels.distinct('colourmap',{'channel':chan},function(err, colourmaps) {
+                var colour = 'gray';
+                var colourmap = colourmaps[0];
+                for (match in colourmap) {
+                    if (message.search(match)>-1) {
+                        colour = colourmap[match];
+                    }
+                }
+                bot.say(chan, irc.colors.wrap(colour, message));;
+            });
+        }
+    });
+}
+
+function direct_announcement(name, alias, message) {
     //go through the channels with the name
     db.channels.distinct('channel',{"names":{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
         if (ch=='##csdc' && csdcrunning) {
@@ -241,28 +270,9 @@ function announce(name, alias, message) {
             });
         }
         
-        //get the regexes that it must match
-        db.channels.distinct('filters',{channel:ch},function(err, matches) {
-            var matched = true;
-            matches.forEach(function(match) {
-                if (message.search(match)==-1){
-                    matched = false;
-                }
-            });
-            if (matched){
-                //there should only be one colourmap per channel, could just use findOne() and colourmap = doc["colourmap"] here
-                db.channels.distinct('colourmap',{'channel':ch},function(err, colourmaps) {
-                    var colour = 'gray';
-                    var colourmap = colourmaps[0];
-                    for (match in colourmap) {
-                        if (message.search(match)>-1) {
-                            colour = colourmap[match];
-                        }
-                    }
-                    bot.say(ch, irc.colors.wrap(colour, message));;
-                });
-            }
-        });
+        if (ch!="##csdc") {
+            announce_with_filters(ch, message);
+        }
     });});
 }
 
@@ -535,7 +545,7 @@ function handle_message(nick, chan, message) {
                     if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
                         alias = message.match(new RegExp("^("+alias+") ", "i"))[1];
                         //console.log("announcement for "+alias);
-                        announce(name, alias, message);
+                        direct_announcement(name, alias, message);
                     }
                 });
             });});
@@ -642,7 +652,7 @@ function handle_message(nick, chan, message) {
                 weeks.forEach(function(week) {
                         if (week && week["players"] && week["players"][0]) {
                             if (!first) {pstr+=", ";}
-                            pstr+=week["week"]+(week["players"][0]["alive"] ? "(in prog.)" : "")+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
+                            pstr+=week["week"]+(week["players"][0]["alive"] ? " (in prog.)" : "")+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
                             first=false;
                         }
                 });
