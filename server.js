@@ -135,7 +135,7 @@ function check_csdc_points(name, message, week) {
     //8,9,etc tier bonus points
     for (i=0;i<week["bonusworth"].length;i++) {
         //disqualify (only if not already obtained)
-        if (if (!points[i+7] && message.search(week["bonusdisqual"][i])>-1){
+        if (!points[i+7] && message.search(week["bonusdisqual"][i])>-1){
             if (!player["bonusdisqual"][i]){
                 toset = {};
                 toset["players.$.bonusdisqual."+i] = true;
