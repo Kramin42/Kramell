@@ -145,8 +145,8 @@ function check_csdc_points(name, message, week) {
             }
         }
         //qualify
-        if (!player["bonusdisqual"][i] && message.search(week["bonusqual"][i])>-1){
-            if (points[i+7]==0){
+        if ((player["bonusdisqual"]==[] || !player["bonusdisqual"][i]) && message.search(week["bonusqual"][i])>-1){
+            if (!points[i+7]){
                 //double check that they are not disqualified and are definitely qualified:
                 csdc_bonuscheck(name, week, i)
                 // if (week["disqualcheck"][i]) {
