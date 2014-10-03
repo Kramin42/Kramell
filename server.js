@@ -177,7 +177,7 @@ function csdc_checkdeaths(name, week) {
 // }
 
 function csdc_bonuscheck(name, week, index) {
-    console.log("Checking for bonus qual/disqual...");
+    console.log("Checking for bonus qual/disqual for "+week["week"]+"...");
     qualcmd = week["qualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" "+week["qualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "1";//default to 1 (qualified)
     disqualcmd = week["disqualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" "+week["disqualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "0";//default to 0 (not disqualified)
     bot.say(sequell, ".echo CSDCBONUSCHECK:"+week["week"]+":"+name+":"+index+":"+week["bonusworth"][index]+":"+qualcmd+":"+disqualcmd);
