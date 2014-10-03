@@ -275,7 +275,7 @@ function route_announcement(name, alias, message) {
                             //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
                     } else {
                         csdc_enroll(alias, week, function(){
-                            week["players"] = [{"name": alias, "points": [0, 0, 0, 0, 0, 0, 0], "runes": 0, "alive": true, "tries": 0}];
+                            week["players"] = [{"name": alias, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
                             csdc_announce(alias, message, week);
                         });
                     }
