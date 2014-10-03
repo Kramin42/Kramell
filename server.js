@@ -523,7 +523,7 @@ function do_command(arg) {
                     bot.say(control_channel, err);
                 }
                 if (updated["n"]>0) {
-                    bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]+" points: "+arg[4]+", qual: "+arg[5]+", disqual: "+arg[6]+", disqualcheck: "+arg[7]);
+                    bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]+" points: "+arg[4]+", qual: "+arg[5]+", disqual: "+arg[6]+", qualcheck: "+arg[7]+", disqualcheck: "+arg[8]);
                 }
             });
         } else {
