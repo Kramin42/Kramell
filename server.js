@@ -100,7 +100,7 @@ function check_csdc_points(name, message, week) {
     
     //4   Champion a listed god (from weekly list):
     //console.log(new RegExp("Champion of ("+week["gods"]+")")); // <= correct
-    if (message.search(new RegExp("Champion of ("+week["gods"]+")"))>-1){
+    if (message.search(new RegExp("Champion of ("+week["gods"]+")","i"))>-1){
         if (points[3]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.3":1}});
@@ -205,7 +205,7 @@ function csdc_announce(name, message, week) {
     //console.log("checking csdc for "+player["name"]+" <=> "+name);
     
     //check that they have the right char and are in the game still for this week
-    if (!(player["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1)) {
+    if (!(player["alive"] && message.search(new RegExp("\\(L\\d+ "+week["char"]+"\\)","i"))>-1)) {
         return;
     }
     
@@ -239,7 +239,7 @@ function announce_with_filters(chan, message, callback) {
     });
 }
 
-function direct_announcement(name, alias, message) {
+function route_announcement(name, alias, message) {
     //go through the channels with the name
     db.channels.distinct('channel',{"names":{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
         if (ch=='##csdc' && csdcrunning) {
@@ -548,7 +548,7 @@ function handle_message(nick, chan, message) {
                     if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
                         alias = message.match(new RegExp("^("+alias+") ", "i"))[1];
                         //console.log("announcement for "+alias);
-                        direct_announcement(name, alias, message);
+                        route_announcement(name, alias, message);
                     }
                 });
             });});
