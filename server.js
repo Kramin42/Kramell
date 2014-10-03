@@ -57,19 +57,6 @@ function getTimeStamp() {
 }
 
 function check_csdc_points(name, message, week) {
-    //should only be one player in the week doc
-    player = week['players'][0];
-    points = player['points'];
-    //console.log("checking csdc for "+player["name"]+" <=> "+name);
-    
-    //check that they have the right char and are in the game still for this week
-    if (!(player["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1)) {
-        return;
-    }
-    
-    //announce the message if they are alive and the right char
-    announce_with_filters("##csdc", message);
-    
     //0   Go directly to D:1, do not pass char selection, do not collect points
     if (message.search(/with \d+ points after \d+ turns/)>-1 && !(message.search(/escaped with the Orb/)>-1)) {
         //get the xl
@@ -211,7 +198,22 @@ function csdc_enroll(name, week, callback) {
         {multi:true}, callback);
 }
 
-function announce_with_filters(chan, message) {
+function csdc_announce(name, message, week) {
+    //should only be one player in the week doc
+    player = week['players'][0];
+    points = player['points'];
+    //console.log("checking csdc for "+player["name"]+" <=> "+name);
+    
+    //check that they have the right char and are in the game still for this week
+    if (!(player["alive"] && message.search("\\(L\\d+ "+week["char"]+"\\)")>-1)) {
+        return;
+    }
+    
+    //announce the message if they are alive and the right char, then check points after
+    announce_with_filters("##csdc", message, function(){check_csdc_points(name, message, week)});
+}
+
+function announce_with_filters(chan, message, callback) {
     //get the regexes that it must match
     db.channels.distinct('filters',{channel:chan},function(err, matches) {
         var matched = true;
@@ -230,7 +232,8 @@ function announce_with_filters(chan, message) {
                         colour = colourmap[match];
                     }
                 }
-                bot.say(chan, irc.colors.wrap(colour, message));;
+                bot.say(chan, irc.colors.wrap(colour, message));
+                if (callback) {callback();}
             });
         }
     });
@@ -258,12 +261,12 @@ function direct_announcement(name, alias, message) {
                 console.log(timeStamp);
                 if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
                     if (week['players'] && week['players'][0]) {
-                        check_csdc_points(alias, message, week);
+                        csdc_announce(alias, message, week);
                             //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
                     } else {
                         csdc_enroll(alias, week, function(){
                             week["players"] = [{"name": alias, "points": [0, 0, 0, 0, 0, 0, 0], "runes": 0, "bonusdisqual":[], "alive": true, "tries": 0}];
-                            check_csdc_points(alias, message, week);
+                            csdc_announce(alias, message, week);
                         });
                     }
                 }
@@ -633,7 +636,7 @@ function handle_message(nick, chan, message) {
         bot.say(cheiquerychan, message);
     }
     
-    //kramell queries (use $ or #)
+    //kramell csdc queries (use $ or #)
     if ('$#'.indexOf(message[0])>-1) {
         //remove prefix and add username as first arg if there is none
         var arg = message.slice(1, message.length).replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
@@ -642,7 +645,7 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="help") {
-            
+            bot.say(chan, "commands: #points <player>");
         }
         
         if (arg[0]=="points") {
@@ -690,7 +693,6 @@ bot.addListener('message', handle_message);
 function nop(){}
 
 //  OpenShift sample Node application
-
 
 /**
  *  Define the sample application.
