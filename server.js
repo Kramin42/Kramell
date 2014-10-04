@@ -39,7 +39,7 @@ var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
 
-//this would use too much disk space
+// code for downloading log files, this would use too much disk space
 // child = spawn('wget -c -O '+process.env.OPENSHIFT_DATA_DIR+'/CAO_milestones15 http://crawl.akrasiac.org/milestones15');
 // 
 // child.stdout.on('data', function (data) {
@@ -134,7 +134,8 @@ function check_csdc_points(name, message, week) {
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.4":1}});
         }
         //csdcdata[csdcwk]['playerdata'][lowername][4]+=1;
-        if (player["runes"]>=3 && points[5]==0){
+        //had 2 runes, now have 3
+        if (player["runes"]>=2 && points[5]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found their third rune for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.5":1}});
         }
@@ -166,7 +167,7 @@ function check_csdc_points(name, message, week) {
         if ((player["bonusdisqual"]==[] || !player["bonusdisqual"][i]) && message.search(week["bonusqual"][i])>-1){
             if (!points[i+7]){
                 //double check that they are not disqualified and are definitely qualified:
-                csdc_bonuscheck(name, week, i)
+                setTimeout(csdc_bonuscheck(name, week, i), 2000);//give sequell a bit of time to update
                 // if (week["disqualcheck"][i]) {
 //                     csdc_disqualcheck(name, week, i);
 //                 } else {//no disqual check, go ahead and give the points
