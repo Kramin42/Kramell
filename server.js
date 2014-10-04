@@ -466,9 +466,9 @@ function do_command(arg) {
                 //arg[1] = arg.slice(1, arg.length).join(' ');
                 db.csdc.findOne({"week":arg[1]}, function(err,week) { 
                     if (week) {
-                        bot.say(control_channel, "Week "+week["week"] +" active: "+week["active"]);
-                        bot.say(control_channel, "Week "+week["week"] +" char: "+week["char"]);
-                        bot.say(control_channel, "Week "+week["week"] +" gods: "+week["gods"]);
+                        bot.say(control_channel, week["week"] +" active: "+week["active"]);
+                        bot.say(control_channel, week["week"] +" char: "+week["char"]);
+                        bot.say(control_channel, week["week"] +" gods: "+week["gods"]);
                         //bot.say(control_channel, "Week "+week["week"] +" t1qual: "+week["t1qual"]);
                         //bot.say(control_channel, "Week "+week["week"] +" t1disqual: "+week["t1disqual"]);
                         //bot.say(control_channel, "Week "+week["week"] +" t2qual: "+week["t2qual"]);
