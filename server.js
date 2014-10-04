@@ -466,7 +466,7 @@ function do_command(arg) {
                 //arg[1] = arg.slice(1, arg.length).join(' ');
                 db.csdc.findOne({"week":arg[1]}, function(err,week) { 
                     if (week) {
-                        bot.say(control_channel, week["week"] +" active: "+week["active"]);
+                        bot.say(control_channel, week["week"] +" active: "+week["active"]+(week["active"] ? "(from "+week["start"]+" to "+week["end"]+")" : ""));
                         bot.say(control_channel, week["week"] +" char: "+week["char"]);
                         bot.say(control_channel, week["week"] +" gods: "+week["gods"]);
                         //bot.say(control_channel, "Week "+week["week"] +" t1qual: "+week["t1qual"]);
@@ -502,6 +502,9 @@ function do_command(arg) {
         if (arg.length>3 && (arg[1]=="char" || arg[1]=="gods" || arg[1]=="start" || arg[1]=="end")) {
             //arg[3] = arg.slice(3, arg.length).join(' ');
             //arg[2] = arg[2].replace(/_/g,' ');
+            if (arg[1]=="start" || arg[1]=="end") {
+                arg[3] = parseInt(arg[3]);
+            }
             toset = {};
             toset[arg[1]] = arg[3];
             db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
