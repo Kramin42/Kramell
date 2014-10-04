@@ -5,7 +5,6 @@
 
 var express = require('express');
 var fs      = require('fs');
-var util = require('util'),
 
 var spawn = require('child_process').spawn,
     child;
