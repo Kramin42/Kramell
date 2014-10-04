@@ -6,8 +6,8 @@
 var express = require('express');
 var fs      = require('fs');
 
-var spawn = require('child_process').spawn,
-    child;
+// var spawn = require('child_process').spawn,
+//     child;
 
 // IRC bot
 var botnick = 'Kramell';
@@ -39,19 +39,20 @@ var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
 
-child = spawn('wget -ca -O '+process.env.OPENSHIFT_DATA_DIR+'/CAO_milestones-git http://crawl.akrasiac.org/milestones-git');
-
-child.stdout.on('data', function (data) {
-  console.log('stdout: ' + data);
-});
-
-child.stderr.on('data', function (data) {
-  console.log('stderr: ' + data);
-});
-
-child.on('close', function (code) {
-  console.log('child process exited with code ' + code);
-});
+//this would use too much disk space
+// child = spawn('wget -c -O '+process.env.OPENSHIFT_DATA_DIR+'/CAO_milestones15 http://crawl.akrasiac.org/milestones15');
+// 
+// child.stdout.on('data', function (data) {
+//   console.log('stdout: ' + data);
+// });
+// 
+// child.stderr.on('data', function (data) {
+//   console.log('stderr: ' + data);
+// });
+// 
+// child.on('close', function (code) {
+//   console.log('child process exited with code ' + code);
+// });
 
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
