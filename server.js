@@ -39,7 +39,7 @@ var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
 
-child = spawn('wget',['-ca', '-O '+process.env.OPENSHIFT_DATA_DIR+'/CAO/milestones-git.txt', '-o /dev/null', 'http://crawl.akrasiac.org/milestones-git.txt']);
+child = spawn('wget',['-ca', '-O '+process.env.OPENSHIFT_DATA_DIR+'/CAO/milestones-git.txt', 'http://crawl.akrasiac.org/milestones-git.txt']);
 
 child.stdout.on('data', function (data) {
   console.log('stdout: ' + data);
