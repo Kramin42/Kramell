@@ -178,8 +178,8 @@ function csdc_checkdeaths(name, week) {
 
 function csdc_bonuscheck(name, week, index) {
     console.log("Checking for bonus qual/disqual for "+week["week"]+"...");
-    qualcmd = week["qualcheck"] && week["qualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" "+week["qualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "1";//default to 1 (qualified)
-    disqualcmd = week["disqualcheck"] && week["disqualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" "+week["disqualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "0";//default to 0 (not disqualified)
+    qualcmd = week["qualcheck"] && week["qualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" "+week["qualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "1";//default to 1 (qualified)
+    disqualcmd = week["disqualcheck"] && week["disqualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" "+week["disqualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "0";//default to 0 (not disqualified)
     bot.say(sequell, ".echo CSDCBONUSCHECK:"+week["week"]+":"+name+":"+index+":"+week["bonusworth"][index]+":"+qualcmd+":"+disqualcmd);
 }
 
@@ -466,7 +466,7 @@ function do_command(arg) {
                 //arg[1] = arg.slice(1, arg.length).join(' ');
                 db.csdc.findOne({"week":arg[1]}, function(err,week) { 
                     if (week) {
-                        bot.say(control_channel, week["week"] +" active: "+week["active"]+(week["active"] ? "(from "+week["start"]+" to "+week["end"]+")" : ""));
+                        bot.say(control_channel, week["week"] +" active: "+week["active"]+(week["active"] ? " (from "+week["start"]+" to "+week["end"]+")" : ""));
                         bot.say(control_channel, week["week"] +" char: "+week["char"]);
                         bot.say(control_channel, week["week"] +" gods: "+week["gods"]);
                         //bot.say(control_channel, "Week "+week["week"] +" t1qual: "+week["t1qual"]);
