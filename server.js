@@ -5,6 +5,10 @@
 
 var express = require('express');
 var fs      = require('fs');
+var util = require('util'),
+
+var spawn = require('child_process').spawn,
+    child;
 
 // IRC bot
 var botnick = 'Kramell';
@@ -35,6 +39,20 @@ var announcers = db.collection('announcers');
 var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
+
+child = spawn('wget',['-ca', '-O '+OPENSHIFT_DATA_DIR+'/CAO/milestones-git.txt', '-o /dev/null', 'http://crawl.akrasiac.org/milestones-git.txt']);
+
+child.stdout.on('data', function (data) {
+  console.log('stdout: ' + data);
+});
+
+child.stderr.on('data', function (data) {
+  console.log('stderr: ' + data);
+});
+
+child.on('close', function (code) {
+  console.log('child process exited with code ' + code);
+});
 
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
