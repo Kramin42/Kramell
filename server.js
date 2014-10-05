@@ -44,26 +44,29 @@ function byteCount(s) {
     return encodeURI(s).split(/%..|./).length - 1;
 }
 
-function getServerLogs() {
-    var child = exec('curl -sr '+offset+'- http://crawl.akrasiac.org/milestones-git');
+function getServerLogs(announcer) {
+    db.announcers.find({"name": announcer}, function(err, server) {
+        //console.log("checking milestones for "+announcer);
+        var child = exec('curl -sr '+offset+'- '+server["milestones"]);
 
-    child.stdout.on('data', function (data) {
-        if (data.search("416 Requested Range Not Satisfiable")==-1) {
-            console.log('stdout: ' + data);
-            datalength = byteCount(data);
-            console.log('data size: '+datalength+' bytes');
-            offset+=datalength;
-        } else {
-            console.log("no new content");
-        }
-    });
+        child.stdout.on('data', function (data) {
+            if (data.search("416 Requested Range Not Satisfiable")==-1) {
+                console.log(announcer+': ' + data);
+                datalength = byteCount(data);
+                //console.log('data size: '+datalength+' bytes');
+                offset+=datalength;
+            } else {
+                //console.log("no new content");
+            }
+        });
 
-    child.stderr.on('data', function (data) {
-      console.log('stderr: ' + data);
-    });
+        child.stderr.on('data', function (data) {
+          console.log('stderr: ' + data);
+        });
 
-    child.on('close', function (code) {
-      console.log('child process exited with code ' + code);
+        child.on('close', function (code) {
+            if (code>0) {console.log('child process exited with code ' + code);}
+        });
     });
 }
 
@@ -585,7 +588,7 @@ function handle_message(nick, chan, message) {
     if (chan == observe_channel || chan == control_channel){//remove control_channel when all working
         //check if from announcer
         db.announcers.count({"name":nick},function(err, count){ if (count) {
-            getServerLogs();
+            getServerLogs(nick);
             //console.log("found announcement");
             // go through all names in all channels
             db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
