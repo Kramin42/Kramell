@@ -763,9 +763,8 @@ db.channels.distinct('channel',function(err, chans) {
         port: 8001,
         debug: true
     });
+    bot.addListener('message', handle_message);
 });
-
-bot.addListener('message', handle_message);
 
 //end IRC bot
 
