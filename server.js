@@ -6,8 +6,7 @@
 var express = require('express');
 var fs      = require('fs');
 
-// var spawn = require('child_process').spawn,
-//     child;
+var exec = require('child_process').exec;
 
 // IRC bot
 var botnick = 'Kramell';
@@ -39,20 +38,34 @@ var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
 
-// code for downloading log files, this would use too much disk space
-// child = spawn('wget -c -O '+process.env.OPENSHIFT_DATA_DIR+'/CAO_milestones15 http://crawl.akrasiac.org/milestones15');
-// 
-// child.stdout.on('data', function (data) {
-//   console.log('stdout: ' + data);
-// });
-// 
-// child.stderr.on('data', function (data) {
-//   console.log('stderr: ' + data);
-// });
-// 
-// child.on('close', function (code) {
-//   console.log('child process exited with code ' + code);
-// });
+//code for downloading log files, this would use too much disk space
+offset=630996367;
+function byteCount(s) {
+    return encodeURI(s).split(/%..|./).length - 1;
+}
+
+function getServerLogs() {
+    var child = exec('curl -sr '+offset+'- http://crawl.akrasiac.org/milestones-git');
+
+    child.stdout.on('data', function (data) {
+        if (data.search("416 Requested Range Not Satisfiable")==-1) {
+            console.log('stdout: ' + data);
+            datalength = byteCount(data);
+            console.log('data size: '+datalength+' bytes');
+            offset+=datalength;
+        } else {
+            console.log("no new content");
+        }
+    });
+
+    child.stderr.on('data', function (data) {
+      console.log('stderr: ' + data);
+    });
+
+    child.on('close', function (code) {
+      console.log('child process exited with code ' + code);
+    });
+}
 
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
@@ -572,6 +585,7 @@ function handle_message(nick, chan, message) {
     if (chan == observe_channel || chan == control_channel){//remove control_channel when all working
         //check if from announcer
         db.announcers.count({"name":nick},function(err, count){ if (count) {
+            getServerLogs();
             //console.log("found announcement");
             // go through all names in all channels
             db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
