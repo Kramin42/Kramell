@@ -68,8 +68,8 @@ function process_milestone(milestone) {
         var name = milestone.match(/name=(\w*):/)[1];
         var xl = milestone.match(/xl=(\d+):/)[1];
         var combo = milestone.match(/char=(\w\w\w\w):/)[1];
-        var text = milestone.match(/milestone=(\w*):/)[1];
-        var place = milestone.replace('::',';;').match(/oplace=(.*):/)[1].replace(';;',':');
+        var text = milestone.match(/milestone=(\w*)$/)[1];
+        var place = milestone.replace('::',';;').match(/oplace=([^:]*):/)[1].replace(';;',':');
         var message = name+' (L'+xl+' '+combo+') '+text+' ('+place+')';
     } catch(error) {
         console.log(error);
