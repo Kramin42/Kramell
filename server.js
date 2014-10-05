@@ -63,6 +63,7 @@ function byteCount(s) {
 }
 
 function process_milestone(milestone) {
+    if (!milestone.match(/name=(\w*):/)) {return;}// make sure it's a milestone
     var name = milestone.match(/name=(\w*):/)[1];
     var xl = milestone.match(/xl=(\d+):/)[1];
     var combo = milestone.match(/char=(\w\w\w\w):/)[1];
