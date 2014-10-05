@@ -63,8 +63,11 @@ function byteCount(s) {
 }
 
 function process_milestone(milestone) {
-    var name = milestone.match(/name=(\w):/)[1];
-    console.log("milestone for "+name);
+    var match = milestone.match(/name=(\w*):/);
+    if (match){
+        var name = match[1];
+        console.log("milestone for "+name);
+    }
 }
 
 function getServerLogs(announcer) {
