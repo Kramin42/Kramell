@@ -46,17 +46,18 @@ function byteCount(s) {
 
 function getServerLogs(announcer) {
     db.announcers.find({"name": announcer}, function(err, server) {
-        //console.log("checking milestones for "+announcer);
+        console.log("checking milestones for "+announcer);
+        console.log('curl -sr '+offset+'- '+server["milestones"]);
         var child = exec('curl -sr '+offset+'- '+server["milestones"]);
 
         child.stdout.on('data', function (data) {
             if (data.search("416 Requested Range Not Satisfiable")==-1) {
                 console.log(announcer+': ' + data);
                 datalength = byteCount(data);
-                //console.log('data size: '+datalength+' bytes');
+                console.log('data size: '+datalength+' bytes');
                 offset+=datalength;
             } else {
-                //console.log("no new content");
+                console.log("no new content");
             }
         });
 
