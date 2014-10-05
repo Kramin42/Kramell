@@ -167,7 +167,7 @@ function check_csdc_points(name, message, week) {
         if ((player["bonusdisqual"]==[] || !player["bonusdisqual"][i]) && message.search(week["bonusqual"][i])>-1){
             if (!points[i+7]){
                 //double check that they are not disqualified and are definitely qualified:
-                setTimeout(csdc_bonuscheck(name, week, i), 2000);//give sequell a bit of time to update
+                setTimeout(csdc_bonuscheck(name, week, i), 5000);//give sequell a bit of time to update
                 // if (week["disqualcheck"][i]) {
 //                     csdc_disqualcheck(name, week, i);
 //                 } else {//no disqual check, go ahead and give the points
