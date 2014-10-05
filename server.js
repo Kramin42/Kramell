@@ -67,7 +67,7 @@ function process_milestone(milestone) {
     var xl = milestone.match(/xl=(\d+):/)[1];
     var combo = milestone.match(/char=(\w\w\w\w):/)[1];
     var text = milestone.match(/milestone=(\w*):/)[1];
-    var place = milestone.replace('::',';;').match(/oplace=(.*):/)[1]replace(';;',':');
+    var place = milestone.replace('::',';;').match(/oplace=(.*):/)[1].replace(';;',':');
     var message = name+' (L'+xl+' '+combo+') '+text+' ('+place+')';
     console.log(message);
     //go through active weeks with the name and return only data for that player (+general data)
