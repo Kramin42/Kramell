@@ -63,11 +63,41 @@ function byteCount(s) {
 }
 
 function process_milestone(milestone) {
-    var match = milestone.match(/name=(\w*):/);
-    if (match){
-        var name = match[1];
-        console.log("milestone for "+name);
-    }
+    var name = milestone.match(/name=(\w*):/)[1];
+    var xl = milestone.match(/xl=(\d+):/)[1];
+    var combo = milestone.match(/char=(\w\w\w\w):/)[1];
+    var text = milestone.match(/milestone=(\w*):/)[1];
+    var place = milestone.replace('::',';;').match(/oplace=(.*):/)[1]replace(';;',':');
+    var message = name+' (L'+xl+' '+combo+') '+text+' ('+place+')';
+    console.log(message);
+    //go through active weeks with the name and return only data for that player (+general data)
+    db.csdc.find({"active":true}, 
+        {"players": {$elemMatch: {"name":name}},
+            "char":1,
+            gods:1,
+            bonusqual:1,
+            bonusdisqual:1,
+            bonusworth:1,
+            week:1,
+            start:1,
+            end:1
+        }
+    ).forEach(function(err, week) {
+        //console.log(JSON.stringify(week));
+        timeStamp = getTimeStamp();
+        //console.log(timeStamp);
+        if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
+            if (week['players'] && week['players'][0]) {
+                csdc_announce(name, milestone, week);
+                    //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
+            } else {
+                csdc_enroll(name, week, function(){
+                    week["players"] = [{"name": alias, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
+                    csdc_announce(name, message, week);
+                });
+            }
+        }
+    });
 }
 
 function getServerLogs(announcer) {
@@ -192,7 +222,7 @@ function check_csdc_points(name, message, week) {
         if ((player["bonusdisqual"]==[] || !player["bonusdisqual"][i]) && message.search(week["bonusqual"][i])>-1){
             if (!points[i+7]){
                 //double check that they are not disqualified and are definitely qualified:
-                setTimeout(csdc_bonuscheck(name, week, i), 5000);//give sequell a bit of time to update
+                //setTimeout(csdc_bonuscheck(name, week, i), 5000);//give sequell a bit of time to update
                 // if (week["disqualcheck"][i]) {
 //                     csdc_disqualcheck(name, week, i);
 //                 } else {//no disqual check, go ahead and give the points
@@ -210,12 +240,12 @@ function update_aliases(nick) {
     bot.say(sequell, ".echo nick-alias:"+nick+":$(join ' NAJNR' (split ' ' (nick-aliases "+nick+")))");
 }
 
-function csdc_checkdeaths(name, week) {
+//function csdc_checkdeaths(name, week) {
     console.log("Checking for deaths...");
     bot.say(sequell, ".echo CSDCDEATHCHECK:"+week["week"]+":"+name+":$(!lg "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" s=xl join:\" \" fmt:\"${.}\" stub:\"\")");
 }
 
-function csdc_bonuscheck(name, week, index) {
+//function csdc_bonuscheck(name, week, index) {
     console.log("Checking for bonus qual/disqual for "+week["week"]+"...");
     qualcmd = week["qualcheck"] && week["qualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" "+week["qualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "1";//default to 1 (qualified)
     disqualcmd = week["disqualcheck"] && week["disqualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" "+week["disqualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "0";//default to 0 (not disqualified)
@@ -223,7 +253,7 @@ function csdc_bonuscheck(name, week, index) {
 }
 
 function csdc_enroll(name, week, callback) {
-    csdc_checkdeaths(name, week);
+    //csdc_checkdeaths(name, week);
     //check if the alias is in the csdc doc for that week and add otherwise
     db.csdc.update({"week": week["week"], "players": {$not: {$elemMatch: {"name":name}}}},
         {$addToSet: {"players": {
@@ -257,7 +287,7 @@ function csdc_announce(name, message, week) {
     }
     
     //announce the message if they are alive and the right char, then check points after
-    announce_with_filters("##csdc", message, function(){check_csdc_points(name, message, week)});
+    announce_with_filters("##csdc", message/*, function(){check_csdc_points(name, message, week)}*/);
 }
 
 function announce_with_filters(chan, message, callback) {
@@ -289,38 +319,9 @@ function announce_with_filters(chan, message, callback) {
 function route_announcement(name, alias, message) {
     //go through the channels with the name
     db.channels.distinct('channel',{"names":{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
-        if (ch=='##csdc' && csdcrunning) {
-            //go through active weeks with the name and return only data for that player (+general data)
-            db.csdc.find({"active":true}, 
-                {"players": {$elemMatch: {"name":alias}},
-                    "char":1,
-                    gods:1,
-                    bonusqual:1,
-                    bonusdisqual:1,
-                    bonusworth:1,
-                    qualcheck:1,
-                    disqualcheck:1,
-                    week:1,
-                    start:1,
-                    end:1
-                }
-            ).forEach(function(err, week) {
-                //console.log(JSON.stringify(week));
-                timeStamp = getTimeStamp();
-                console.log(timeStamp);
-                if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
-                    if (week['players'] && week['players'][0]) {
-                        csdc_announce(alias, message, week);
-                            //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
-                    } else {
-                        csdc_enroll(alias, week, function(){
-                            week["players"] = [{"name": alias, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
-                            csdc_announce(alias, message, week);
-                        });
-                    }
-                }
-            });
-        }
+//         if (ch=='##csdc' && csdcrunning) {
+//             
+//         }
         
         if (ch!="##csdc") {
             announce_with_filters(ch, message);
@@ -646,14 +647,14 @@ function handle_message(nick, chan, message) {
                 }
                 updateNA=true;
             //});
-        } else if (msgarray[0]=="CSDCDEATHCHECK") {
-            console.log(msgarray);
-            xllist = msgarray[3].split(' ');
-            if (xllist.length>1 || parseInt(xllist[0])>4){
-                db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: {"players.$.alive":false}});//rip
-            } else if (parseInt(xllist[0])<5) {
-                db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: {"players.$.tries":1}});//no more retries
-            }
+//         } else if (msgarray[0]=="CSDCDEATHCHECK") {
+//             console.log(msgarray);
+//             xllist = msgarray[3].split(' ');
+//             if (xllist.length>1 || parseInt(xllist[0])>4){
+//                 db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: {"players.$.alive":false}});//rip
+//             } else if (parseInt(xllist[0])<5) {
+//                 db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: {"players.$.tries":1}});//no more retries
+//             }
 //         } else if (msgarray[0]=="CSDCDISQUALCHECK") {
 //             console.log(msgarray);
 //             index = parseInt(msgarray[3])
@@ -669,23 +670,23 @@ function handle_message(nick, chan, message) {
 //                 db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: toset});
 //                 bot.say('##csdc', irc.colors.wrap('dark_red', msgarray[2]+' cannot get the tier '+(index+1)+' bonus for '+msgarray[1]));
 //             }
-        } else if (msgarray[0]=="CSDCBONUSCHECK") {
-            console.log(msgarray);
-            index = parseInt(msgarray[3])
-            if (parseInt(msgarray[6])==0) {//not disqualified
-                if (parseInt(msgarray[5])>=1) {//qualified!
-                    toset = {};
-                    toset["players.$.points."+(index+7)] = parseInt(msgarray[4]);
-                    db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: toset});
-                    bot.say('##csdc', irc.colors.wrap('dark_green', msgarray[2]+' has acquired the tier '+(index+1)+' bonus for '+msgarray[1]+', '+msgarray[4]+(msgarray[4]==1 ? ' point!' : ' points!')));
-                }
-            } else {
-                toset = {};
-                toset["players.$.bonusdisqual"] = true;
-                toset["players.$.points."+(index+7)] = 0;
-                db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: toset});
-                bot.say('##csdc', irc.colors.wrap('dark_red', msgarray[2]+' cannot get the tier '+(index+1)+' bonus for '+msgarray[1]));
-            }
+//         } else if (msgarray[0]=="CSDCBONUSCHECK") {
+//             console.log(msgarray);
+//             index = parseInt(msgarray[3])
+//             if (parseInt(msgarray[6])==0) {//not disqualified
+//                 if (parseInt(msgarray[5])>=1) {//qualified!
+//                     toset = {};
+//                     toset["players.$.points."+(index+7)] = parseInt(msgarray[4]);
+//                     db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: toset});
+//                     bot.say('##csdc', irc.colors.wrap('dark_green', msgarray[2]+' has acquired the tier '+(index+1)+' bonus for '+msgarray[1]+', '+msgarray[4]+(msgarray[4]==1 ? ' point!' : ' points!')));
+//                 }
+//             } else {
+//                 toset = {};
+//                 toset["players.$.bonusdisqual"] = true;
+//                 toset["players.$.points."+(index+7)] = 0;
+//                 db.csdc.update({"week":msgarray[1], "players.name":msgarray[2]},{$set: toset});
+//                 bot.say('##csdc', irc.colors.wrap('dark_red', msgarray[2]+' cannot get the tier '+(index+1)+' bonus for '+msgarray[1]));
+//             }
         } else {
             //truncate long replies, they can pm for these
             if (sequellreply==0) {
