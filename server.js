@@ -103,7 +103,7 @@ function process_milestone(milestone) {
                     //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
             } else {
                 csdc_enroll(name, week, function(){
-                    week["players"] = [{"name": alias, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
+                    week["players"] = [{"name": name, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
                     csdc_announce(name, message, week);
                 });
             }
