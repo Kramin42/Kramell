@@ -241,16 +241,16 @@ function update_aliases(nick) {
 }
 
 //function csdc_checkdeaths(name, week) {
-    console.log("Checking for deaths...");
-    bot.say(sequell, ".echo CSDCDEATHCHECK:"+week["week"]+":"+name+":$(!lg "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" s=xl join:\" \" fmt:\"${.}\" stub:\"\")");
-}
+//     console.log("Checking for deaths...");
+//     bot.say(sequell, ".echo CSDCDEATHCHECK:"+week["week"]+":"+name+":$(!lg "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" s=xl join:\" \" fmt:\"${.}\" stub:\"\")");
+// }
 
 //function csdc_bonuscheck(name, week, index) {
-    console.log("Checking for bonus qual/disqual for "+week["week"]+"...");
-    qualcmd = week["qualcheck"] && week["qualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" "+week["qualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "1";//default to 1 (qualified)
-    disqualcmd = week["disqualcheck"] && week["disqualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" "+week["disqualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "0";//default to 0 (not disqualified)
-    bot.say(sequell, ".echo CSDCBONUSCHECK:"+week["week"]+":"+name+":"+index+":"+week["bonusworth"][index]+":"+qualcmd+":"+disqualcmd);
-}
+//     console.log("Checking for bonus qual/disqual for "+week["week"]+"...");
+//     qualcmd = week["qualcheck"] && week["qualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" "+week["qualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "1";//default to 1 (qualified)
+//     disqualcmd = week["disqualcheck"] && week["disqualcheck"][index] ? "$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" "+week["disqualcheck"][index]+" fmt:\"${n}\" stub:\"0\")" : "0";//default to 0 (not disqualified)
+//     bot.say(sequell, ".echo CSDCBONUSCHECK:"+week["week"]+":"+name+":"+index+":"+week["bonusworth"][index]+":"+qualcmd+":"+disqualcmd);
+// }
 
 function csdc_enroll(name, week, callback) {
     //csdc_checkdeaths(name, week);
