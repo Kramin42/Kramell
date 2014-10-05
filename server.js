@@ -38,42 +38,6 @@ var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
 
-//code for downloading log files, this would use too much disk space
-//offset=630996367;
-function byteCount(s) {
-    return encodeURI(s).split(/%..|./).length - 1;
-}
-
-function getServerLogs(announcer) {
-    db.announcers.findOne({"name": announcer}, function(err, server) {
-        //console.log("checking milestones for "+announcer);
-        //console.log('curl -sr '+server["milestonesoffset"]+'- '+server["milestones"]);
-        var child = exec('curl -sr '+server["milestonesoffset"]+'- '+server["milestones"]);
-
-        child.stdout.on('data', function (data) {
-            if (data.search("416 Requested Range Not Satisfiable")==-1) {
-                //console.log(announcer+': ' + data);
-                console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
-                datalength = byteCount(data);
-                //console.log('data size: '+datalength+' bytes');
-                //offset+=datalength;
-                db.announcers.update({name: announcer}, {$inc: {"milestonesoffset": datalength}})
-            } else {
-                //console.log("no new content");
-                console.log("no new milestones for "+announcer);
-            }
-        });
-
-        child.stderr.on('data', function (data) {
-          console.log('stderr: ' + data);
-        });
-
-        child.on('close', function (code) {
-            if (code>0) {console.log('child process exited with code ' + code);}
-        });
-    });
-}
-
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
@@ -92,6 +56,44 @@ function pad(n) {
 function getTimeStamp() {
     now = new Date();
     return parseInt(now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate()));
+}
+
+function byteCount(s) {
+    return encodeURI(s).split(/%..|./).length - 1;
+}
+
+function process_milestone(milestone) {
+    var name = milestone.match(/name=(\w):/)[1];
+    console.log("milestone for "+name);
+}
+
+function getServerLogs(announcer) {
+    db.announcers.findOne({"name": announcer}, function(err, server) {
+        var child = exec('curl -sr '+server["milestonesoffset"]+'- '+server["milestones"]);
+
+        child.stdout.on('data', function (data) {
+            if (data.search("416 Requested Range Not Satisfiable")==-1) {
+                //console.log(announcer+': ' + data);
+                //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
+                data.replace(/^\s+|\s+$/g, '').split("\n").forEach(process_milestone);
+                datalength = byteCount(data);
+                //console.log('data size: '+datalength+' bytes');
+                //offset+=datalength;
+                db.announcers.update({name: announcer}, {$inc: {"milestonesoffset": datalength}})
+            } else {
+                //console.log("no new content");
+                //console.log("no new milestones for "+announcer);
+            }
+        });
+
+        child.stderr.on('data', function (data) {
+          console.log('stderr: ' + data);
+        });
+
+        child.on('close', function (code) {
+            if (code>0) {console.log('child process exited with code ' + code);}
+        });
+    });
 }
 
 function check_csdc_points(name, message, week) {
@@ -209,11 +211,6 @@ function csdc_checkdeaths(name, week) {
     console.log("Checking for deaths...");
     bot.say(sequell, ".echo CSDCDEATHCHECK:"+week["week"]+":"+name+":$(!lg "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" s=xl join:\" \" fmt:\"${.}\" stub:\"\")");
 }
-
-// function csdc_disqualcheck(name, week, index) {
-//     console.log("Checking for disqual...");
-//     bot.say(sequell, ".echo CSDCDISQUALCHECK:"+week["week"]+":"+name+":"+index+":"+week["bonusworth"][index]+":$(!lm "+name+" "+week["char"].replace("....","")+" cv>0.15 god!=ru|gozag start>"+week["start"]+" end<"+week["end"]+" "+week["disqualcheck"][index]+" fmt:\"${n}\" stub:\"0\")");
-// }
 
 function csdc_bonuscheck(name, week, index) {
     console.log("Checking for bonus qual/disqual for "+week["week"]+"...");
