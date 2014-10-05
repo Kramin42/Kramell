@@ -82,33 +82,33 @@ function process_milestone(milestone) {
     }
     console.log(message);
     //go through active weeks with the name and return only data for that player (+general data)
-    db.csdc.find({"active":true}, 
-        {"players": {$elemMatch: {"name":name}},
-            "char":1,
-            gods:1,
-            bonusqual:1,
-            bonusdisqual:1,
-            bonusworth:1,
-            week:1,
-            start:1,
-            end:1
-        }
-    ).forEach(function(err, week) {
-        //console.log(JSON.stringify(week));
-        timeStamp = getTimeStamp();
-        //console.log(timeStamp);
-        if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
-            if (week['players'] && week['players'][0]) {
-                csdc_announce(name, milestone, week);
-                    //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
-            } else {
-                csdc_enroll(name, week, function(){
-                    week["players"] = [{"name": name, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
-                    csdc_announce(name, message, week);
-                });
-            }
-        }
-    });
+    // db.csdc.find({"active":true}, 
+//         {"players": {$elemMatch: {"name":name}},
+//             "char":1,
+//             gods:1,
+//             bonusqual:1,
+//             bonusdisqual:1,
+//             bonusworth:1,
+//             week:1,
+//             start:1,
+//             end:1
+//         }
+//     ).forEach(function(err, week) {
+//         //console.log(JSON.stringify(week));
+//         timeStamp = getTimeStamp();
+//         //console.log(timeStamp);
+//         if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
+//             if (week['players'] && week['players'][0]) {
+//                 csdc_announce(name, milestone, week);
+//                     //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
+//             } else {
+//                 csdc_enroll(name, week, function(){
+//                     week["players"] = [{"name": name, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
+//                     csdc_announce(name, message, week);
+//                 });
+//             }
+//         }
+//     });
 }
 
 function getServerLogs(announcer) {
