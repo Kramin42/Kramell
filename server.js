@@ -148,6 +148,9 @@ function process_milestone(milestone) {
 }
 
 function check_csdc_points(name, milestone, week) {
+    player = week["players"][0];
+    points = player["points"];
+    
     //0   Go directly to D:1, do not pass char selection, do not collect points
     if (milestone.search(/ktyp=/i)>-1 && !(message.search(/ktyp=winning/i)>-1)) {
         //get the xl
@@ -267,7 +270,6 @@ function csdc_enroll(name, week, callback) {
                 0,
                 0
             ],
-            "runes": 0,
             "bonusdisqual":[],
             "alive": true,
             "tries": 0
