@@ -79,7 +79,7 @@ function get_logfile_offset(announcer, url) {
     });
 }
 
-function getServerLogs(announcer) {
+function get_server_logs(announcer) {
     //get the array of files and iterate through
     db.announcers.findOne({"name": announcer}, function(err, server) {server["files"].forEach(function(file) {
         if (file["offset"]) {
@@ -656,7 +656,7 @@ function handle_message(nick, chan, message) {
     if (chan == observe_channel || chan == control_channel){//remove control_channel when all working
         //check if from announcer
         db.announcers.count({"name":nick},function(err, count){ if (count) {
-            getServerLogs(nick);
+            get_server_logs(nick);
             //console.log("found announcement");
             // go through all names in all channels
             db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
