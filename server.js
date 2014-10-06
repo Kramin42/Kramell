@@ -97,7 +97,7 @@ function process_milestone(milestone) {
     //if (!milestone.match(/name=(\w*):/)) {return;}// make sure it's a milestone
     try {
         var name = milestone.match(/name=(\w*):/)[1];
-        var version = milestone.match(/v=(.*):/)[1];
+        var version = milestone.match(/v=(.*):vlong/)[1];
 //         var xl = milestone.match(/xl=(\d+):/)[1];
 //         var combo = milestone.match(/char=(\w\w\w\w):/)[1];
 //         var text = milestone.match(/milestone=(\w*)/)[1];
@@ -114,7 +114,7 @@ function process_milestone(milestone) {
     }
     console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
-    if (milestone.match(/v=0.16-a/)) {//trunk only for csdc
+    if (milestone.match(/v=0.16-a/) && !milestone.match(/god=(Ru|Gozag)/)) {//trunk only for csdc, Ru and Gozag not allowed
         db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
             if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
                 //go through active weeks with the name and return only data for that player (+general data)
