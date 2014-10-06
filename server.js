@@ -201,7 +201,7 @@ function check_csdc_points(name, milestone, week) {
     }
     
     //1   Kill a unique:
-    if (milestone.search(/verb=uniq/i)>-1){
+    if (milestone.search(/type=uniq/i)>-1){
         if (points[0]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed a unique for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.0":1}});
@@ -209,7 +209,7 @@ function check_csdc_points(name, milestone, week) {
     }
     
     //2   Enter a multi-level branch of the Dungeon:
-    if (milestone.search(/verb=br.enter/i)>-1 && !(milestone.search(/noun=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove)/i)>-1)){
+    if (milestone.search(/type=br.enter/i)>-1 && !(milestone.search(/br=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove)/i)>-1)){
         if (points[1]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered a branch for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.1":1}});
@@ -217,7 +217,7 @@ function check_csdc_points(name, milestone, week) {
     }
     
     //3   Reach the end of any multi-level branch (includes D):
-    if (milestone.search(/verb=br.end/)>-1){
+    if (milestone.search(/type=br.end/)>-1){
         if (points[2]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished a branch for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.2":1}});
@@ -226,7 +226,7 @@ function check_csdc_points(name, milestone, week) {
     
     //4   Champion a listed god (from weekly list):
     //console.log(new RegExp("Champion of ("+week["gods"]+")")); // <= correct
-    if (milestone.search(new RegExp("verb=god.maxpiety:noun=("+week["gods"]+")","i"))>-1){
+    if (milestone.search(/type=god.maxpiety/)>-1 && milestone.search(new RegExp("god=("+week["gods"]+")","i"))>-1){
         if (points[3]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.3":1}});
@@ -235,7 +235,7 @@ function check_csdc_points(name, milestone, week) {
     
     //5   Collect a rune:
     //6   Collect 3 or more runes in a game:
-    if (milestone.search(/verb=rune/)>-1){
+    if (milestone.search(/type=rune/)>-1){
         db.csdc.update({"players.name":name},{$inc: {"players.$.runes":1}});
         if (points[4]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has their first rune for 1 point!'));
