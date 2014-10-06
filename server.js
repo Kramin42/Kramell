@@ -73,7 +73,8 @@ function getServerLogs(announcer) {
                 //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
                 data.replace(/^\s+|\s+$/g, '').split("\n").forEach(process_milestone);
                 datalength = byteCount(data);
-                //console.log(announcer+' data size: '+datalength+' bytes');
+                console.log(announcer+' data size: '+datalength+' bytes');
+                console.log(data);
                 //offset+=datalength;
                 db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
             } else {
