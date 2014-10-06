@@ -110,7 +110,7 @@ function process_milestone(milestone) {
         console.log("in milestone: "+milestone)
         return;
     }
-    console.log("milestone for "+name);
+    console.log("milestone for "+name+" : "+milestone.match(/cv=(.*):/));
     //console.log(message);
     if (milestone.match(/cv=0.16-a/)) {//trunk only for csdc
         db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
