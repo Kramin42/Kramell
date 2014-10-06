@@ -151,7 +151,7 @@ function check_csdc_points(name, milestone, week) {
     //0   Go directly to D:1, do not pass char selection, do not collect points
     if (milestone.search(/ktyp=/i)>-1 && !(message.search(/ktyp=winning/i)>-1)) {
         //get the xl
-        xl = parseInt(message.match(/xl=(\d+):/i)[1]);
+        xl = parseInt(milestone.match(/xl=(\d+):/i)[1]);
         //bot.say('##csdc',name+" died at xl: "+xl);
         //one retry if xl<5
         if (week['players'][0]['tries']==0 && xl<5){
@@ -166,7 +166,7 @@ function check_csdc_points(name, milestone, week) {
     }
     
     //1   Kill a unique:
-    if (message.search(/verb=uniq/i)>-1){
+    if (milestone.search(/verb=uniq/i)>-1){
         if (points[0]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed a unique for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.0":1}});
@@ -174,7 +174,7 @@ function check_csdc_points(name, milestone, week) {
     }
     
     //2   Enter a multi-level branch of the Dungeon:
-    if (message.search(/verb=br.enter/i)>-1 && !(message.search(/br=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove)/i)>-1)){
+    if (milestone.search(/verb=br.enter/i)>-1 && !(milestone.search(/br=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove)/i)>-1)){
         if (points[1]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered a branch for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.1":1}});
@@ -182,7 +182,7 @@ function check_csdc_points(name, milestone, week) {
     }
     
     //3   Reach the end of any multi-level branch (includes D):
-    if (message.search(/verb=br.end/)>-1){
+    if (milestone.search(/verb=br.end/)>-1){
         if (points[2]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished a branch for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.2":1}});
@@ -191,7 +191,7 @@ function check_csdc_points(name, milestone, week) {
     
     //4   Champion a listed god (from weekly list):
     //console.log(new RegExp("Champion of ("+week["gods"]+")")); // <= correct
-    if (message.search(new RegExp("verb=god.maxpiety:noun=("+week["gods"]+")","i"))>-1){
+    if (milestone.search(new RegExp("verb=god.maxpiety:noun=("+week["gods"]+")","i"))>-1){
         if (points[3]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.3":1}});
@@ -200,7 +200,7 @@ function check_csdc_points(name, milestone, week) {
     
     //5   Collect a rune:
     //6   Collect 3 or more runes in a game:
-    if (message.search(/verb=rune/)>-1){
+    if (milestone.search(/verb=rune/)>-1){
         db.csdc.update({"players.name":name},{$inc: {"players.$.runes":1}});
         if (points[4]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has their first rune for 1 point!'));
@@ -208,14 +208,14 @@ function check_csdc_points(name, milestone, week) {
         }
         //csdcdata[csdcwk]['playerdata'][lowername][4]+=1;
         //have at least 3 runes
-        if (message.search(/urune=(\d\d|[3456789])/)>-1 && points[5]==0){
+        if (milestone.search(/urune=(\d\d|[3456789])/)>-1 && points[5]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found their third rune for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.5":1}});
         }
     }
     
     //7   Win a game
-    if (message.search(/ktyp=winning/)>-1){
+    if (milestone.search(/ktyp=winning/)>-1){
         if (points[6]==0){
             bot.say('##csdc', irc.colors.wrap('light_blue', name+' has won a game for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.6":1}});
@@ -227,7 +227,7 @@ function check_csdc_points(name, milestone, week) {
     //8,9,etc tier bonus points
     for (i=0;i<week["bonusworth"].length;i++) {
         //disqualify (only if not already obtained)
-        if (!points[i+7] && message.search(week["bonusdisqual"][i])>-1){
+        if (!points[i+7] && milestone.search(week["bonusdisqual"][i])>-1){
             if (!player["bonusdisqual"][i]){
                 toset = {};
                 toset["players.$.bonusdisqual."+i] = true;
@@ -237,7 +237,7 @@ function check_csdc_points(name, milestone, week) {
             }
         }
         //qualify
-        if ((player["bonusdisqual"]==[] || !player["bonusdisqual"][i]) && message.search(week["bonusqual"][i])>-1){
+        if ((player["bonusdisqual"]==[] || !player["bonusdisqual"][i]) && milestone.search(week["bonusqual"][i])>-1){
             if (!points[i+7]){
                 toset = {};
                 toset["players.$.points."+(i+7)] = week["bonusworth"][i];
@@ -550,8 +550,6 @@ function do_command(arg) {
                             "players": [],
                             "bonusqual":[],
                             "bonusdisqual":[],
-                            "disqualcheck":[],
-                            "qualcheck":[],
                             "bonusworth":[]
                         }, function(err,inserted) {
                             bot.say(control_channel, arg[1]+" Added");
