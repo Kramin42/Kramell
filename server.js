@@ -158,6 +158,7 @@ function process_milestone(milestone) {
                             //csdc_announce(name, milestone, week);
                                 //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
                                 console.log("check csdc points for "+name+" in "+week["week"]);
+                                console.log(JSON.stringify(week);
                                 check_csdc_points(name, milestone, week);
                         } else {
                             csdc_enroll(name, week, function(){
