@@ -82,31 +82,33 @@ function get_logfile_offset(announcer, url) {
 function getServerLogs(announcer) {
     //get the array of files and iterate through
     db.announcers.findOne({"name": announcer}, function(err, server) {server["files"].forEach(function(file) {
-        var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
+        if (file["offset"]) {
+            var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
-        child.stdout.on('data', function (data) {
-            if (data.search("416 Requested Range Not Satisfiable")==-1) {
-                //console.log(announcer+': ' + data);
-                //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
-                data.replace(/^\s+|\s+$/g, '').split("\n(?=v=)").forEach(process_milestone);
-                datalength = byteCount(data);
-                //console.log(announcer+' data size: '+datalength+' bytes');
-                //console.log(data);
-                //offset+=datalength;
-                db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
-            } else {
-                //console.log("no new content");
-                //console.log("no new milestones for "+announcer);
-            }
-        });
+            child.stdout.on('data', function (data) {
+                if (data.search("416 Requested Range Not Satisfiable")==-1) {
+                    //console.log(announcer+': ' + data);
+                    //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
+                    data.replace(/^\s+|\s+$/g, '').split("\n(?=v=)").forEach(process_milestone);
+                    datalength = byteCount(data);
+                    //console.log(announcer+' data size: '+datalength+' bytes');
+                    //console.log(data);
+                    //offset+=datalength;
+                    db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
+                } else {
+                    //console.log("no new content");
+                    //console.log("no new milestones for "+announcer);
+                }
+            });
 
-        child.stderr.on('data', function (data) {
-          console.log('stderr: ' + data);
-        });
+            child.stderr.on('data', function (data) {
+              console.log('stderr: ' + data);
+            });
 
-        child.on('close', function (code) {
-            if (code>0) {console.log('logfile fetch for '+file["url"]+' exited with code ' + code);}
-        });
+            child.on('close', function (code) {
+                if (code>0) {console.log('logfile fetch for '+file["url"]+' exited with code ' + code);}
+            });
+        }
     });});
 }
 
@@ -415,7 +417,7 @@ function do_command(arg) {
             if (arg[1]=="-rm"){
                 db.announcers.update({"name": arg[2]}, {$pull: {"files": {"url": arg[3]}}});
             } else {
-                db.announcers.update({"name": arg[1]}, {$addToSet: {"files": {"url": arg[2], "offset": 1000000000000}}});
+                db.announcers.update({"name": arg[1]}, {$addToSet: {"files": {"url": arg[2]}}});
                 get_logfile_offset(arg[1], arg[2]);
             }
         } else {
