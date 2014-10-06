@@ -64,7 +64,7 @@ function byteCount(s) {
 
 function getServerLogs(announcer) {
     //get the array of files and iterate through
-    db.announcers.findOne({"name": announcer}, function(err, server) { server["files"].forEach(function(file) {
+    db.announcers.findOne({"name": announcer}, function(err, server) {server["files"].forEach(function(file) {
         var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
         child.stdout.on('data', function (data) {
@@ -73,12 +73,12 @@ function getServerLogs(announcer) {
                 //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
                 data.replace(/^\s+|\s+$/g, '').split("\n").forEach(process_milestone);
                 datalength = byteCount(data);
-                console.log(announcer+' data size: '+datalength+' bytes');
+                //console.log(announcer+' data size: '+datalength+' bytes');
                 //offset+=datalength;
                 db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
             } else {
                 //console.log("no new content");
-                console.log("no new milestones for "+announcer);
+                //console.log("no new milestones for "+announcer);
             }
         });
 
@@ -110,42 +110,45 @@ function process_milestone(milestone) {
         console.log("in milestone: "+milestone)
         return;
     }
+    console.log("milestone for "+name);
     //console.log(message);
-    db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
-        if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
-            //go through active weeks with the name and return only data for that player (+general data)
-            db.csdc.find({"active":true}, 
-                {"players": {$elemMatch: {"name":name}},
-                    "char":1,
-                    gods:1,
-                    bonusqual:1,
-                    bonusdisqual:1,
-                    bonusworth:1,
-                    week:1,
-                    start:1,
-                    end:1
-                }
-            ).forEach(function(err, week) {
-                //console.log(JSON.stringify(week));
-                timeStamp = getTimeStamp();
-                //console.log(timeStamp);
-                if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
-                    if (week['players'] && week['players'][0]) {
-                        //csdc_announce(name, milestone, week);
-                            //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
-                            console.log("check csdc points for "+name+" in "+week["week"]);
-                            check_csdc_points(name, milestone, week);
-                    } else {
-                        csdc_enroll(name, week, function(){
-                            //week["players"] = [{"name": name, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
-                            //csdc_announce(name, message, week);
-                            console.log("enrolled "+name+" into csdc "+week["week"]);
-                        });
+    if (milestone.match(/cv=0.16-a/)) {//trunk only for csdc
+        db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
+            if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
+                //go through active weeks with the name and return only data for that player (+general data)
+                db.csdc.find({"active":true}, 
+                    {"players": {$elemMatch: {"name":name}},
+                        "char":1,
+                        gods:1,
+                        bonusqual:1,
+                        bonusdisqual:1,
+                        bonusworth:1,
+                        week:1,
+                        start:1,
+                        end:1
                     }
-                }
-            });
-        }
-    });
+                ).forEach(function(err, week) {
+                    //console.log(JSON.stringify(week));
+                    timeStamp = getTimeStamp();
+                    //console.log(timeStamp);
+                    if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
+                        if (week['players'] && week['players'][0]) {
+                            //csdc_announce(name, milestone, week);
+                                //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
+                                console.log("check csdc points for "+name+" in "+week["week"]);
+                                check_csdc_points(name, milestone, week);
+                        } else {
+                            csdc_enroll(name, week, function(){
+                                //week["players"] = [{"name": name, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
+                                //csdc_announce(name, message, week);
+                                console.log("enrolled "+name+" into csdc "+week["week"]);
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
 }
 
 function check_csdc_points(name, milestone, week) {
@@ -153,7 +156,7 @@ function check_csdc_points(name, milestone, week) {
     points = player["points"];
     
     //0   Go directly to D:1, do not pass char selection, do not collect points
-    if (milestone.search(/ktyp=/i)>-1 && !(message.search(/ktyp=winning/i)>-1)) {
+    if (milestone.search(/ktyp=/i)>-1 && !(milestone.search(/ktyp=winning/i)>-1)) {
         //get the xl
         xl = parseInt(milestone.match(/xl=(\d+):/i)[1]);
         //bot.say('##csdc',name+" died at xl: "+xl);
