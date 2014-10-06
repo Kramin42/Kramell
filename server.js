@@ -63,8 +63,9 @@ function byteCount(s) {
 }
 
 function getServerLogs(announcer) {
-    db.announcers.findOne({"name": announcer}, function(err, server) {
-        var child = exec('curl -sr '+server["milestonesoffset"]+'- '+server["milestones"]);
+    //get the array of files and iterate through
+    db.announcers.findOne({"name": announcer}, function(err, server) { server["files"].forEach(function(file) {
+        var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
         child.stdout.on('data', function (data) {
             if (data.search("416 Requested Range Not Satisfiable")==-1) {
@@ -72,12 +73,12 @@ function getServerLogs(announcer) {
                 //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
                 data.replace(/^\s+|\s+$/g, '').split("\n").forEach(process_milestone);
                 datalength = byteCount(data);
-                //console.log('data size: '+datalength+' bytes');
+                console.log(announcer+' data size: '+datalength+' bytes');
                 //offset+=datalength;
-                db.announcers.update({name: announcer}, {$inc: {"milestonesoffset": datalength}})
+                db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
             } else {
                 //console.log("no new content");
-                //console.log("no new milestones for "+announcer);
+                console.log("no new milestones for "+announcer);
             }
         });
 
@@ -88,7 +89,7 @@ function getServerLogs(announcer) {
         child.on('close', function (code) {
             if (code>0) {console.log('child process exited with code ' + code);}
         });
-    });
+    });});
 }
 
 function process_milestone(milestone) {
@@ -376,7 +377,7 @@ function do_command(arg) {
                 if (arg[1]=="-rm"){// arg[2] is the announcer to remove
                     db.announcers.remove({'name':arg[2]});
                 } else if (ann.indexOf(arg[1])==-1){// arg[1] is the announcer to add
-                    db.announcers.insert({"name":arg[1]});
+                    db.announcers.insert({"name":arg[1], "files": []});
                 } 
             } else if (arg.length==1) {
                 bot.say(control_channel, "announcers: "+ann.join(', '));
@@ -384,6 +385,18 @@ function do_command(arg) {
                 bot.say(control_channel, "Usage: !announcer [-rm] <announcer name>");
             }
         });
+    }
+    
+    if (arg[0]=="logfile") {
+        if (arg.length>=4){
+            if (arg[1]=="-rm"){
+                db.announcers.update({"name": arg[2]}, {$pull: {"files": {"url": arg[3]}}});
+            } else {
+                db.announcers.update({"name": arg[1]}, {$addToSet: {"files": {"url": arg[2], "offset": parseInt(arg[3])}}});
+            }
+        } else {
+            bot.say(control_channel, "Usage: !logfile [-rm] <announcer name> <url> [offset if adding]");
+        }
     }
 
     if (arg[0]=="channel" || arg[0]=="channels"){
