@@ -62,6 +62,23 @@ function byteCount(s) {
     return encodeURI(s).split(/%..|./).length - 1;
 }
 
+function get_logfile_offset(announcer, url) {
+    //curl -sI http://crawl.akrasiac.org/milestones-git | grep Content-Length  | awk '{print $2}'
+    var child = exec("curl -sI "+url+" | grep Content-Length  | awk '{print $2}'");
+    child.stdout.on('data', function (data) {
+        console.log("setting offset for "+url+" to "+data);
+        db.announcers.update({name: announcer, "files.url": url}, {$set: {"files.$.offset": parseInt(data)}});
+    });
+    
+    child.stderr.on('data', function (data) {
+        console.log('stderr: ' + data);
+    });
+    
+    child.on('close', function (code) {
+        if (code>0) {console.log('offset fetch for '+url+' exited with code ' + code);}
+    });
+}
+
 function getServerLogs(announcer) {
     //get the array of files and iterate through
     db.announcers.findOne({"name": announcer}, function(err, server) {server["files"].forEach(function(file) {
@@ -71,7 +88,7 @@ function getServerLogs(announcer) {
             if (data.search("416 Requested Range Not Satisfiable")==-1) {
                 //console.log(announcer+': ' + data);
                 //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
-                data.replace(/^\s+|\s+$/g, '').split("\n").forEach(process_milestone);
+                data.replace(/^\s+|\s+$/g, '').split("\n(?=v=)").forEach(process_milestone);
                 datalength = byteCount(data);
                 //console.log(announcer+' data size: '+datalength+' bytes');
                 //console.log(data);
@@ -88,12 +105,13 @@ function getServerLogs(announcer) {
         });
 
         child.on('close', function (code) {
-            if (code>0) {console.log('child process exited with code ' + code);}
+            if (code>0) {console.log('logfile fetch for '+file["url"]+' exited with code ' + code);}
         });
     });});
 }
 
 function process_milestone(milestone) {
+    milestone = milestone.replace("\n","");//for very long milestones that were split
     //if (!milestone.match(/name=(\w*):/)) {return;}// make sure it's a milestone
     try {
         var name = milestone.match(/name=(\w*):/)[1];
@@ -393,11 +411,12 @@ function do_command(arg) {
     }
     
     if (arg[0]=="logfile") {
-        if (arg.length>=4){
+        if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
                 db.announcers.update({"name": arg[2]}, {$pull: {"files": {"url": arg[3]}}});
             } else {
-                db.announcers.update({"name": arg[1]}, {$addToSet: {"files": {"url": arg[2], "offset": parseInt(arg[3])}}});
+                db.announcers.update({"name": arg[1]}, {$addToSet: {"files": {"url": arg[2], "offset": 1000000000000}}});
+                get_logfile_offset(arg[1], arg[2]);
             }
         } else {
             bot.say(control_channel, "Usage: !logfile [-rm] <announcer name> <url> [offset if adding]");
