@@ -89,9 +89,9 @@ function get_server_logs(announcer) {
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
                     //console.log(announcer+': ' + data);
                     //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
-                    data.replace(/^\s+|\s+$/g, '').split("\n(?=v=)").forEach(process_milestone);
+                    data.replace(/^\s+|\s+$/g, '').split(/\n(?=v=)/).forEach(process_milestone);
                     datalength = byteCount(data);
-                    //console.log(announcer+' data size: '+datalength+' bytes');
+                    console.log(announcer+' data size: '+datalength+' bytes');
                     //console.log(data);
                     //offset+=datalength;
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
@@ -168,7 +168,7 @@ function process_milestone(milestone) {
                                 
                             });
                         }
-                        console.log(milestone);
+                        //console.log(milestone);
                     }
                 });
             }
