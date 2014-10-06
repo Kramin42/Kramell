@@ -155,11 +155,13 @@ function process_milestone(milestone) {
                     //console.log(timeStamp);
                     if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
                         if (week['players'] && week['players'][0]) {
-                            //csdc_announce(name, milestone, week);
+                            if (week['players'][0]['alive']) {
+                                //csdc_announce(name, milestone, week);
                                 //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
                                 console.log("check csdc points for "+name+" in "+week["week"]);
                                 //console.log(JSON.stringify(week));
                                 check_csdc_points(name, milestone, week);
+                            }
                         } else {
                             csdc_enroll(name, week, function(){
                                 //week["players"] = [{"name": name, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
@@ -177,6 +179,7 @@ function process_milestone(milestone) {
 }
 
 function check_csdc_points(name, milestone, week) {
+    console.log(milestone);
     player = week["players"][0];
     points = player["points"];
     
@@ -206,7 +209,7 @@ function check_csdc_points(name, milestone, week) {
     }
     
     //2   Enter a multi-level branch of the Dungeon:
-    if (milestone.search(/verb=br.enter/i)>-1 && !(milestone.search(/br=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove)/i)>-1)){
+    if (milestone.search(/verb=br.enter/i)>-1 && !(milestone.search(/noun=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove)/i)>-1)){
         if (points[1]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered a branch for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.1":1}});
