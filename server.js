@@ -73,7 +73,7 @@ function getServerLogs(announcer) {
                 //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
                 data.replace(/^\s+|\s+$/g, '').split("\n").forEach(process_milestone);
                 datalength = byteCount(data);
-                console.log(announcer+' data size: '+datalength+' bytes');
+                //console.log(announcer+' data size: '+datalength+' bytes');
                 //console.log(data);
                 //offset+=datalength;
                 db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
@@ -112,7 +112,7 @@ function process_milestone(milestone) {
         console.log("in milestone: "+milestone)
         return;
     }
-    console.log("milestone for "+name+" ("+version+")");
+    //console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
     if (milestone.match(/v=0.16-a/) && !milestone.match(/god=(Ru|Gozag)/)) {//trunk only for csdc, Ru and Gozag not allowed
         db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
@@ -329,7 +329,7 @@ function route_announcement(name, alias, message) {
     db.channels.distinct('channel',{"names":{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
         if (ch=='##csdc' && csdcrunning) {
             db.csdc.find({"active":true}, 
-                {"players": {$elemMatch: {"name":name}},
+                {"players": {$elemMatch: {"name":alias}},
                     "char":1,
                     gods:1,
                     bonusqual:1,
