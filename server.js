@@ -165,8 +165,10 @@ function process_milestone(milestone) {
                                 //week["players"] = [{"name": name, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
                                 //csdc_announce(name, message, week);
                                 console.log("enrolled "+name+" into csdc "+week["week"]);
+                                
                             });
                         }
+                        console.log(milestone);
                     }
                 });
             }
@@ -175,7 +177,6 @@ function process_milestone(milestone) {
 }
 
 function check_csdc_points(name, milestone, week) {
-    console.log(milestone);
     player = week["players"][0];
     points = player["points"];
     
