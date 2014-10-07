@@ -190,12 +190,18 @@ function check_csdc_points(name, milestone, week) {
         //bot.say('##csdc',name+" died at xl: "+xl);
         //one retry if xl<5
         if (week['players'][0]['tries']==0 && xl<5){
-            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.tries":1}});//no more retries
-            bot.say('##csdc', irc.colors.wrap('dark_blue', name+' may have another try at the '+week["week"]+' challenge'));
+            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "tries": 0, "alive": true}}},{$set: {"players.$.tries":1}}, function (err, nupdated) {
+                if (nupdated>0) {
+                    bot.say('##csdc', irc.colors.wrap('dark_blue', name+' may have another try at the '+week["week"]+' challenge'));
+                }
+            });
             //console.log(name+" died at xl<5");
         } else {
-            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.alive":false}});//rip
-            bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},0)));
+            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "alive": true}}}, {$set: {"players.$.alive":false}}, function(err, nupdated) {
+                if (nupdated>0) {
+                    bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},0)));
+                }
+            });
             //console.log(name+" is out");
         }
     }
@@ -214,7 +220,7 @@ function check_csdc_points(name, milestone, week) {
     }
     
     //2   Enter a multi-level branch of the Dungeon:
-    if (milestone.search(/type=br.enter/i)>-1 && !(milestone.search(/br=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove)/i)>-1)){
+    if (milestone.search(/type=br.enter/i)>-1 && !(milestone.search(/br=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove|temple)/i)>-1)){
         if (points[1]==0){
             branch = milestone.match(/milestone=entered the ([^\.]*)\./)[1];
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered the '+branch+' for 1 point!'));
