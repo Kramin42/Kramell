@@ -189,16 +189,16 @@ function check_csdc_points(name, milestone, week) {
         xl = parseInt(milestone.match(/xl=(\d+):/i)[1]);
         //bot.say('##csdc',name+" died at xl: "+xl);
         //one retry if xl<5
-        if (week['players'][0]['tries']==0 && xl<5){
-            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "tries": 0, "alive": true}}},{$set: {"players.$.tries":1}}, function (err, nupdated) {
-                if (nupdated>0) {
+        if (player['tries']==0 && xl<5){
+            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "tries": 0, "alive": true}}},{$set: {"players.$.tries":1}}, function (err, updated) {
+                if (updated["n"]>0) {
                     bot.say('##csdc', irc.colors.wrap('dark_blue', name+' has died at XL<5 and is elegible to redo the '+week["week"]+' challenge'));
                 }
             });
             //console.log(name+" died at xl<5");
         } else {
-            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "alive": true}}}, {$set: {"players.$.alive":false}}, function(err, nupdated) {
-                if (nupdated>0) {
+            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "alive": true}}}, {$set: {"players.$.alive":false}}, function(err, updated) {
+                if (updated["n"]>0) {
                     bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},0)));
                 }
             });
@@ -210,8 +210,8 @@ function check_csdc_points(name, milestone, week) {
     if (milestone.search(/type=uniq:milestone=killed/i)>-1){
         if (points[0]==0){
             //because they could kill uniques in rapid succession I need to check that they don't have that point in the database
-            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "points.0": 0}}},{$set: {"players.$.points.0":1}}, function(err, nupdated){
-                if (nupdated>0) {
+            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "points.0": 0}}},{$set: {"players.$.points.0":1}}, function(err, updated){
+                if (updated["n"]>0) {
                     uniqname = milestone.match(/milestone=killed ([^\.]*)\./)[1];
                     bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed '+uniqname+' for 1 point!'));
                 }
