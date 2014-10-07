@@ -192,7 +192,7 @@ function check_csdc_points(name, milestone, week) {
         if (week['players'][0]['tries']==0 && xl<5){
             db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "tries": 0, "alive": true}}},{$set: {"players.$.tries":1}}, function (err, nupdated) {
                 if (nupdated>0) {
-                    bot.say('##csdc', irc.colors.wrap('dark_blue', name+' may have another try at the '+week["week"]+' challenge'));
+                    bot.say('##csdc', irc.colors.wrap('dark_blue', name+' has died at XL<5 and is elegible to redo the '+week["week"]+' challenge'));
                 }
             });
             //console.log(name+" died at xl<5");
