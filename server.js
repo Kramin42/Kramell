@@ -206,7 +206,7 @@ function check_csdc_points(name, milestone, week) {
             //because they could kill uniques in rapid succession I need to check that they don't have that point in the database
             db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "points.0": 0}}},{$set: {"players.$.points.0":1}}, function(err, nupdated){
                 if (nupdated>0) {
-                    uniqname = milestone.match(/milestone=killed (\w*)\./)[1];
+                    uniqname = milestone.match(/milestone=killed ([^\.]*)\./)[1];
                     bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed '+uniqname+' for 1 point!'));
                 }
             });
@@ -216,7 +216,7 @@ function check_csdc_points(name, milestone, week) {
     //2   Enter a multi-level branch of the Dungeon:
     if (milestone.search(/type=br.enter/i)>-1 && !(milestone.search(/br=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove)/i)>-1)){
         if (points[1]==0){
-            branch = milestone.match(/milestone=entered the (\w*)\./)[1];
+            branch = milestone.match(/milestone=entered the ([^\.]*)\./)[1];
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered the '+branch+' for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.1":1}});
         }
@@ -225,7 +225,7 @@ function check_csdc_points(name, milestone, week) {
     //3   Reach the end of any multi-level branch (includes D):
     if (milestone.search(/type=br.end/)>-1){
         if (points[2]==0){
-            branch = milestone.match(/milestone=reached level \d+ of the (\w*)\./)[1];
+            branch = milestone.match(/milestone=reached level \d+ of the ([^\.]*)\./)[1];
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished the '+branch+' for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.2":1}});
         }
