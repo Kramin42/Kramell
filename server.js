@@ -217,7 +217,7 @@ function check_csdc_points(name, milestone, week) {
     if (milestone.search(/type=br.enter/i)>-1 && !(milestone.search(/br=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove)/i)>-1)){
         if (points[1]==0){
             branch = milestone.match(/milestone=entered the (\w*)\./)[1];
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered the '++' for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered the '+branch+' for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.1":1}});
         }
     }
