@@ -139,7 +139,7 @@ function process_milestone(milestone) {
             if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
                 //go through active weeks with the name and return only data for that player (+general data)
                 db.csdc.find({"active":true}, 
-                    {"players": {$elemMatch: {"name":name}},
+                    {"players": {$elemMatch: {"name":name.toLowerCase()}},
                         "char":1,
                         gods:1,
                         bonusqual:1,
@@ -190,14 +190,14 @@ function check_csdc_points(name, milestone, week) {
         //bot.say('##csdc',name+" died at xl: "+xl);
         //one retry if xl<5
         if (player['tries']==0 && xl<5){
-            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "tries": 0, "alive": true}}},{$set: {"players.$.tries":1}}, function (err, updated) {
+            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "tries": 0, "alive": true}}},{$set: {"players.$.tries":1}}, function (err, updated) {
                 if (updated["n"]>0) {
                     bot.say('##csdc', irc.colors.wrap('dark_blue', name+' has died at XL<5 and is elegible to redo the '+week["week"]+' challenge'));
                 }
             });
             //console.log(name+" died at xl<5");
         } else {
-            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "alive": true}}}, {$set: {"players.$.alive":false}}, function(err, updated) {
+            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "alive": true}}}, {$set: {"players.$.alive":false}}, function(err, updated) {
                 if (updated["n"]>0) {
                     bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},0)));
                 }
@@ -210,7 +210,7 @@ function check_csdc_points(name, milestone, week) {
     if (milestone.search(/type=uniq:milestone=killed/i)>-1){
         if (points[0]==0){
             //because they could kill uniques in rapid succession I need to check that they don't have that point in the database
-            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name, "points.0": 0}}},{$set: {"players.$.points.0":1}}, function(err, updated){
+            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "points.0": 0}}},{$set: {"players.$.points.0":1}}, function(err, updated){
                 if (updated["n"]>0) {
                     uniqname = milestone.match(/milestone=killed ([^\.]*)\./)[1];
                     bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed '+uniqname+' for 1 point!'));
@@ -224,7 +224,7 @@ function check_csdc_points(name, milestone, week) {
         if (points[1]==0){
             branch = milestone.match(/milestone=entered the ([^\.]*)\./)[1];
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered the '+branch+' for 1 point!'));
-            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.1":1}});
+            db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.1":1}});
         }
     }
     
@@ -233,7 +233,7 @@ function check_csdc_points(name, milestone, week) {
         if (points[2]==0){
             branch = milestone.match(/milestone=reached level \d+ of the ([^\.]*)\./)[1];
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished the '+branch+' for 1 point!'));
-            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.2":1}});
+            db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.2":1}});
         }
     }
     
@@ -242,23 +242,23 @@ function check_csdc_points(name, milestone, week) {
     if (milestone.search(/type=god.maxpiety/)>-1 && milestone.search(new RegExp("god=("+week["gods"]+")","i"))>-1){
         if (points[3]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
-            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.3":1}});
+            db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.3":1}});
         }
     }
     
     //5   Collect a rune:
     //6   Collect 3 or more runes in a game:
     if (milestone.search(/type=rune/)>-1){
-        db.csdc.update({"players.name":name},{$inc: {"players.$.runes":1}});
+        db.csdc.update({"players.name":name.toLowerCase()},{$inc: {"players.$.runes":1}});
         if (points[4]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has their first rune for 1 point!'));
-            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.4":1}});
+            db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.4":1}});
         }
         //csdcdata[csdcwk]['playerdata'][lowername][4]+=1;
         //have at least 3 runes
         if (milestone.search(/urune=(\d\d|[3456789])/)>-1 && points[5]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found their third rune for 1 point!'));
-            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.5":1}});
+            db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.5":1}});
         }
     }
     
@@ -266,8 +266,8 @@ function check_csdc_points(name, milestone, week) {
     if (milestone.search(/ktyp=winning/)>-1){
         if (points[6]==0){
             bot.say('##csdc', irc.colors.wrap('light_blue', name+' has won a game for 1 point!'));
-            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.points.6":1}});
-            db.csdc.update({"week":week["week"], "players.name":name},{$set: {"players.$.alive":false}});
+            db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.6":1}});
+            db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.alive":false}});
             bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},1)+" points"));//+1 for the win point
         }
     }
@@ -280,7 +280,7 @@ function check_csdc_points(name, milestone, week) {
                 toset = {};
                 toset["players.$.bonusdisqual."+i] = true;
                 toset["players.$.points."+(i+7)] = 0;
-                db.csdc.update({"week":week["week"], "players.name":name},{$set: toset});
+                db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
                 bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier '+(i+1)+' bonus for '+week["week"]));
             }
         }
@@ -289,7 +289,7 @@ function check_csdc_points(name, milestone, week) {
             if (!points[i+7]){
                 toset = {};
                 toset["players.$.points."+(i+7)] = week["bonusworth"][i];
-                db.csdc.update({"week":week["week"], "players.name":name},{$set: toset});
+                db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
                 bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier '+(i+1)+' bonus for '+week["week"]+', 1 point!'));
             }
         }
@@ -303,9 +303,9 @@ function update_aliases(nick) {
 function csdc_enroll(name, week, callback) {
     //csdc_checkdeaths(name, week);
     //check if the alias is in the csdc doc for that week and add otherwise
-    db.csdc.update({"week": week["week"], "players": {$not: {$elemMatch: {"name":name}}}},
+    db.csdc.update({"week": week["week"], "players": {$not: {$elemMatch: {"name":name.toLowerCase()}}}},
         {$addToSet: {"players": {
-            "name": name,
+            "name": name.toLowerCase(),
             "points": [
                 0,
                 0,
@@ -368,7 +368,7 @@ function route_announcement(name, alias, message) {
     db.channels.distinct('channel',{"names":{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
         if (ch=='##csdc' && csdcrunning) {
             db.csdc.find({"active":true}, 
-                {"players": {$elemMatch: {"name":alias}},
+                {"players": {$elemMatch: {"name":alias.toLowerCase()}},
                     "char":1,
                     gods:1,
                     bonusqual:1,
@@ -680,7 +680,7 @@ function handle_message(nick, chan, message) {
             // go through all names in all channels
             db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
                 //get aliases
-                db.nick_aliases.distinct('aliases',{"name":name},function(err, alias){
+                db.nick_aliases.distinct('aliases',{"name":name.toLowerCase()},function(err, alias){
                     alias=alias[0] ? alias[0] : name;
                     //get the actual alias in use and announce
                     if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
@@ -736,8 +736,8 @@ function handle_message(nick, chan, message) {
         }
         if (updateNA) {
             //add new after clearing
-            db.nick_aliases.remove({"name":NAnick},function(err) {
-                db.nick_aliases.insert({"name":NAnick, "aliases":NAaliases});
+            db.nick_aliases.remove({"name":NAnick.toLowerCase()},function(err) {
+                db.nick_aliases.insert({"name":NAnick.toLowerCase(), "aliases":NAaliases});
             });
         }
     }
