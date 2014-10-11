@@ -192,7 +192,7 @@ function check_csdc_points(name, milestone, week) {
         if (player['tries']==0 && xl<5){
             db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "tries": 0, "alive": true}}},{$set: {"players.$.tries":1}}, function (err, updated) {
                 if (updated["n"]>0) {
-                    bot.say('##csdc', irc.colors.wrap('dark_blue', name+' has died at XL<5 and is elegible to redo the '+week["week"]+' challenge'));
+                    bot.say('##csdc', irc.colors.wrap('dark_blue', name+' has died at XL<5 and is eligible to redo the '+week["week"]+' challenge'));
                 }
             });
             //console.log(name+" died at xl<5");
@@ -290,7 +290,7 @@ function check_csdc_points(name, milestone, week) {
                 toset = {};
                 toset["players.$.points."+(i+7)] = week["bonusworth"][i];
                 db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
-                bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier '+(i+1)+' bonus for '+week["week"]+', 1 point!'));
+                bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier '+(i+1)+' bonus for '+week["week"]+', '+week["bonusworth"][i]+(week["bonusworth"][i]==1 ? ' point!' : ' points!')));
             }
         }
     }
