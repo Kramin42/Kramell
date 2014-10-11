@@ -154,8 +154,8 @@ function process_milestone(milestone) {
                     timeStamp = getTimeStamp();
                     //console.log(timeStamp);
                     if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
-                        if (week['players'] && week['players'][0]) {
-                            if (week['players'][0]['alive']) {
+                        if (week['players'] && week['players'][0] &&) {
+                            if (week['players'][0]['alive'] && milestone.search(new RegExp("char="+week["char"],"i"))>-1) {
                                 //csdc_announce(name, milestone, week);
                                 //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
                                 console.log("check csdc points for "+name+" in "+week["week"]);
