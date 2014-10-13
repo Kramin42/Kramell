@@ -182,6 +182,9 @@ function check_csdc_points(name, milestone, week) {
     console.log(milestone);
     player = week["players"][0];
     points = player["points"];
+    xl = parseInt(milestone.match(/xl=(\d+):/i)[1]);
+    ch = milestone.match(/char=(\w\w\w\w):/i)[1];
+    god = milestone.match(/god=(\w+):/i)[1];
     
     //0   Go directly to D:1, do not pass char selection, do not collect points
     if (milestone.search(/ktyp=/i)>-1 && !(milestone.search(/ktyp=winning/i)>-1)) {
@@ -213,7 +216,7 @@ function check_csdc_points(name, milestone, week) {
             db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "points.0": 0}}},{$set: {"players.$.points.0":1}}, function(err, updated){
                 if (updated["n"]>0) {
                     uniqname = milestone.match(/milestone=killed ([^\.]*)\./)[1];
-                    bot.say('##csdc', irc.colors.wrap('dark_green', name+' has killed '+uniqname+' for 1 point!'));
+                    bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') killed '+uniqname+' for 1 point!'));
                 }
             });
         }
@@ -223,7 +226,7 @@ function check_csdc_points(name, milestone, week) {
     if (milestone.search(/type=br.enter/i)>-1 && !(milestone.search(/br=(icecv|volcano|lab|bailey|sewer|bazaar|ossuary|wizlab|trove|temple)/i)>-1)){
         if (points[1]==0){
             branch = milestone.match(/milestone=entered the ([^\.]*)\./)[1];
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has entered the '+branch+' for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') entered the '+branch+' for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.1":1}});
         }
     }
@@ -232,7 +235,7 @@ function check_csdc_points(name, milestone, week) {
     if (milestone.search(/type=br.end/)>-1){
         if (points[2]==0){
             branch = milestone.match(/milestone=reached level \d+ of the ([^\.]*)\./)[1];
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has finished the '+branch+' for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') finished the '+branch+' for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.2":1}});
         }
     }
@@ -241,7 +244,7 @@ function check_csdc_points(name, milestone, week) {
     //console.log(new RegExp("Champion of ("+week["gods"]+")")); // <= correct
     if (milestone.search(/type=god.maxpiety/)>-1 && milestone.search(new RegExp("god=("+week["gods"]+")","i"))>-1){
         if (points[3]==0){
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has championed a weekly god for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') championed a weekly god ('+god+') for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.3":1}});
         }
     }
@@ -251,13 +254,13 @@ function check_csdc_points(name, milestone, week) {
     if (milestone.search(/type=rune/)>-1){
         db.csdc.update({"players.name":name.toLowerCase()},{$inc: {"players.$.runes":1}});
         if (points[4]==0){
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has their first rune for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') found their first rune for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.4":1}});
         }
         //csdcdata[csdcwk]['playerdata'][lowername][4]+=1;
         //have at least 3 runes
         if (milestone.search(/urune=(\d\d|[3456789])/)>-1 && points[5]==0){
-            bot.say('##csdc', irc.colors.wrap('dark_green', name+' has found their third rune for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') found their third rune for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.5":1}});
         }
     }
@@ -265,7 +268,7 @@ function check_csdc_points(name, milestone, week) {
     //7   Win a game
     if (milestone.search(/ktyp=winning/)>-1){
         if (points[6]==0){
-            bot.say('##csdc', irc.colors.wrap('light_blue', name+' has won a game for 1 point!'));
+            bot.say('##csdc', irc.colors.wrap('light_blue', name+' (L'+xl+' '+ch+') has won a game for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.6":1}});
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.alive":false}});
             bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},1)+" points"));//+1 for the win point
@@ -281,7 +284,7 @@ function check_csdc_points(name, milestone, week) {
                 toset["players.$.bonusdisqual."+i] = true;
                 toset["players.$.points."+(i+7)] = 0;
                 db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
-                bot.say('##csdc', irc.colors.wrap('dark_red', name+' can no longer get the tier '+(i+1)+' bonus for '+week["week"]));
+                bot.say('##csdc', irc.colors.wrap('dark_red', name+' (L'+xl+' '+ch+') can no longer get the tier '+(i+1)+' bonus for '+week["week"]));
             }
         }
         //qualify
@@ -290,7 +293,7 @@ function check_csdc_points(name, milestone, week) {
                 toset = {};
                 toset["players.$.points."+(i+7)] = week["bonusworth"][i];
                 db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
-                bot.say('##csdc', irc.colors.wrap('dark_green', name+' has acquired the tier '+(i+1)+' bonus for '+week["week"]+', '+week["bonusworth"][i]+(week["bonusworth"][i]==1 ? ' point!' : ' points!')));
+                bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') has acquired the tier '+(i+1)+' bonus for '+week["week"]+', '+week["bonusworth"][i]+(week["bonusworth"][i]==1 ? ' point!' : ' points!')));
             }
         }
     }
@@ -767,7 +770,7 @@ function handle_message(nick, chan, message) {
             db.csdc.find({},{"players": {$elemMatch: {"name":new RegExp(arg[1], "i")}}, week:1}, function(err, weeks) {
                 weeks.forEach(function(week) {
                         if (week && week["players"] && week["players"][0]) {
-                            if (!first) {pstr+=", ";}
+                            if (!first) {pstr+=" | ";}
                             pstr+=week["week"]+(week["players"][0]["alive"] ? " (in prog.)" : "")+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
                             first=false;
                         }
