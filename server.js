@@ -184,7 +184,7 @@ function check_csdc_points(name, milestone, week) {
     points = player["points"];
     xl = parseInt(milestone.match(/xl=(\d+):/i)[1]);
     ch = milestone.match(/char=(\w\w\w\w):/i)[1];
-    god = milestone.match(/god=(\w+):/i)[1];
+    god = milestone.match(/god=([^:]+):/i)[1];
     
     //0   Go directly to D:1, do not pass char selection, do not collect points
     if (milestone.search(/ktyp=/i)>-1 && !(milestone.search(/ktyp=winning/i)>-1)) {
