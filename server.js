@@ -699,16 +699,21 @@ function handle_message(nick, chan, message) {
     // redirect sequell/chei queries
     // if in a post channel
     db.channels.count({"channel":chan},function(err, count){ if (count) {
-        if (message[0] == '%'){
-            bot.say(chei, message);
-            cheiquerychan = chan;
-        }
-        if (message.indexOf("!tell")>-1) {
-            bot.say(chan, "Can't use !tell from here, sorry");
-        } else if ('!=&.?@^'.indexOf(message[0])>-1){
-            bot.say(sequell, message.replace(/ \./g, ' @'+nick));
-            sequellquerychan = chan;
-            sequellreply = 0;
+        try {
+            if (message[0] == '%'){
+                bot.say(chei, message);
+                cheiquerychan = chan;
+            }
+            if (message.indexOf("!tell")>-1) {
+                bot.say(chan, "Can't use !tell from here, sorry");
+            } else if ('!=&.?@^'.indexOf(message[0])>-1){
+                bot.say(sequell, message.replace(/ \./g, ' @'+nick));
+                sequellquerychan = chan;
+                sequellreply = 0;
+            }
+        } catch(error) {
+            console.log(error);
+            bot.say(chan, "The required ##crawl bot is not online");
         }
     }});
     
