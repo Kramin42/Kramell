@@ -47,7 +47,7 @@ var NAnick;
 var NAaliases;
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
-var sequellreply = 0;
+var sequellreplies = 0;
 
 function pad(n) {
     return (n < 10) ? ("0" + n.toString()) : n.toString();
@@ -720,7 +720,7 @@ function handle_message(nick, chan, message) {
             } else if ('!=&.?@^'.indexOf(message[0])>-1){
                 bot.say(sequell, message.replace(/ \./g, ' @'+nick));
                 sequellquerychan = chan;
-                sequellreply = 0;
+                sequellreplies += 1;
             }
         } catch(error) {
             console.log(error);
@@ -748,12 +748,12 @@ function handle_message(nick, chan, message) {
             updateNA=true;
         } else {
             //truncate long replies, they can pm for these
-            if (sequellreply==0) {
+            if (sequellreplies>0) {
                 bot.say(sequellquerychan, message);
-            } else if (sequellreply==1) {
+                sequellreplies-=1;
+            } else if (sequellreplies<=0) {
                 bot.say(sequellquerychan, "...");
             }
-            sequellreply+=1;
         }
         if (updateNA) {
             //add new after clearing
