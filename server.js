@@ -252,6 +252,13 @@ function check_csdc_points(name, milestone, week) {
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.3":1}});
         }
     }
+    // if they abandon then they lose the point
+    if (milestone.search(/type=god.abandon/)>-1){
+        if (points[3]==1){
+            bot.say('##csdc', irc.colors.wrap('dark_red', name+' (L'+xl+' '+ch+') abandoned a weekly god ('+god+') and lost their point for championing'));
+            db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.3":0}});
+        }
+    }
     
     //5   Collect a rune:
     //6   Collect 3 or more runes in a game:
