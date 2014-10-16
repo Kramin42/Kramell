@@ -247,17 +247,18 @@ function check_csdc_points(name, milestone, week) {
     //4   Champion a listed god (from weekly list):
     //console.log(new RegExp("Champion of ("+week["gods"]+")")); // <= correct
     if (milestone.search(/type=god.maxpiety/)>-1 && milestone.search(new RegExp("god=("+week["gods"]+")","i"))>-1){
-        if (points[3]==0){
+        if (points[3]==0 && !player["godabandon"]){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') championed a weekly god ('+god+') for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.3":1}});
         }
     }
-    // if they abandon then they lose the point
+    // if they abandon then they lose the point, also it must be their first god to get the point
     if (milestone.search(/type=god.abandon/)>-1){
         if (points[3]==1){
             bot.say('##csdc', irc.colors.wrap('dark_red', name+' (L'+xl+' '+ch+') abandoned a weekly god ('+god+') and lost their point for championing'));
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.3":0}});
         }
+        db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.godabandon":true}});
     }
     
     //5   Collect a rune:
@@ -330,6 +331,7 @@ function csdc_enroll(name, week, callback) {
                 0
             ],
             "bonusdisqual":[],
+            "godabandon": false,
             "alive": true,
             "tries": 0
         }}},
