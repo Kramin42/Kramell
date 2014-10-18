@@ -47,8 +47,6 @@ var NAnick;
 var NAaliases;
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
-var sequellreplies = 0;
-var sequellID = 0;
 
 function pad(n) {
     return (n < 10) ? ("0" + n.toString()) : n.toString();
@@ -726,8 +724,7 @@ function handle_message(nick, chan, message) {
             //if (sequellreplies <= 0) {
             //    sequellreplies = 1;
             //}
-            bot.say(sequell, "!RELAY -nick "+nick+" -prefix "+chan+":"+sequellID+":"+" "+message);
-            sequellID+=1;
+            bot.say(sequell, "!RELAY -n 1 -nick "+nick+" -prefix "+chan+":"+" "+message);;
         }
     }});
     
@@ -749,12 +746,12 @@ function handle_message(nick, chan, message) {
                 bot.say(control_channel, "...|"+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n',''));
             }
             updateNA=true;
-        } else if (msgarray.length>2){
-            msgarray[2] = msgarray.slice(2, msgarray.length).join(':');
-            if (msgarray[2].slice(0,3)=="/me") {
-                bot.action(msgarray[0], msgarray[2].slice(3, msgarray[2].length));
+        } else if (msgarray.length>1 && msgarray[0][0]=="#"){
+            msgarray[1] = msgarray.slice(1, msgarray.length).join(':');
+            if (msgarray[1].slice(0,3)=="/me") {
+                bot.action(msgarray[0], msgarray[1].slice(3, msgarray[1].length));
             } else {
-                bot.say(msgarray[0], msgarray[2]);
+                bot.say(msgarray[0], msgarray[1]);
             }
         }
         if (updateNA) {
