@@ -799,7 +799,11 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="scoreboard" || arg[0]=="scorepage") {
-            bot.say("##csdc", "http://rob.pecknology.net/csdc/");
+            bot.say(chan, "http://rob.pecknology.net/csdc/");
+        }
+        
+        if (arg[0]=="slap") {
+            bot.action(chan, "slaps "+arg.slice(1, arg.length).join(' ')+" around a bit with a large trout");
         }
         
         //if (arg[0]=="testpm") {
