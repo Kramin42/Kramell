@@ -48,8 +48,7 @@ var NAaliases;
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 var sequellreplies = 0;
-sequellID = 0;
-sequellwaiting = {};
+var sequellID = 0;
 
 function pad(n) {
     return (n < 10) ? ("0" + n.toString()) : n.toString();
@@ -728,7 +727,6 @@ function handle_message(nick, chan, message) {
             //    sequellreplies = 1;
             //}
             bot.say(sequell, "!RELAY -nick "+nick+" -prefix "+chan+":"+sequellID+":"+" "+message);
-            sequellwaiting[sequellID] = true;
             sequellID+=1;
         }
     }});
@@ -752,16 +750,11 @@ function handle_message(nick, chan, message) {
             }
             updateNA=true;
         } else if (msgarray.length>2){
-            //truncate long replies, they can pm for these
-            sequellreplies-=1;
-            if (sequellwaiting[msgarray[1]]) {
-                delete sequellwaiting[msgarray[1]];
-                msgarray[2] = msgarray.slice(2, msgarray.length).join(':');
-                if (msgarray[2].slice(0,3)=="/me") {
-                    bot.ctcp(msgarray[0], 'action', msgarray[2].slice(3, msgarray[2].length));
-                } else {
-                    bot.say(msgarray[0], msgarray[2]);
-                }
+            msgarray[2] = msgarray.slice(2, msgarray.length).join(':');
+            if (msgarray[2].slice(0,3)=="/me") {
+                bot.action(msgarray[0], msgarray[2].slice(3, msgarray[2].length));
+            } else {
+                bot.say(msgarray[0], msgarray[2]);
             }
         }
         if (updateNA) {
