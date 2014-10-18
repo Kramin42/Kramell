@@ -756,7 +756,12 @@ function handle_message(nick, chan, message) {
             sequellreplies-=1;
             if (sequellwaiting[msgarray[1]]) {
                 delete sequellwaiting[msgarray[1]];
-                bot.say(msgarray[0], msgarray.slice(2, msgarray.length).join(':'));
+                msgarray[2] = msgarray.slice(2, msgarray.length).join(':');
+                if (msgarray[2].slice(0,3)=="/me") {
+                    bot.ctcp(msgarray[0], 'action', msgarray[2].slice(3, msgarray[2].length));
+                } else {
+                    bot.say(msgarray[0], msgarray[2]);
+                }
             }
         }
         if (updateNA) {
