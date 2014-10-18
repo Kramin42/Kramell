@@ -48,6 +48,8 @@ var NAaliases;
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 var sequellreplies = 0;
+sequellID = 0;
+sequellwaiting = {};
 
 function pad(n) {
     return (n < 10) ? ("0" + n.toString()) : n.toString();
@@ -719,12 +721,15 @@ function handle_message(nick, chan, message) {
         if (message.indexOf("!tell")>-1) {
             bot.say(chan, "Can't use !tell from here, sorry");
         } else if ('!=&.?@^'.indexOf(message[0])>-1){
-            bot.say(sequell, message.replace(/ \./g, ' @'+nick));
-            sequellquerychan = chan;
-            sequellreplies += 1;
-            if (sequellreplies <= 0) {
-                sequellreplies = 1;
-            }
+            //bot.say(sequell, message.replace(/ \./g, ' @'+nick));
+            //sequellquerychan = chan;
+            //sequellreplies += 1;
+            //if (sequellreplies <= 0) {
+            //    sequellreplies = 1;
+            //}
+            bot.say(sequell, "!RELAY -prefix "+chan+":"+sequellID+":"+" "+message);
+            sequellwaiting[sequellID] = true;
+            sequellID+=1;
         }
     }});
     
@@ -746,7 +751,7 @@ function handle_message(nick, chan, message) {
                 bot.say(control_channel, "...|"+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n',''));
             }
             updateNA=true;
-        } else {
+        } else if (msgarray.length>2){
             //truncate long replies, they can pm for these
             if (sequellreplies>0) {
                 bot.say(sequellquerychan, message);
@@ -754,6 +759,10 @@ function handle_message(nick, chan, message) {
                 bot.say(sequellquerychan, "...");
             }
             sequellreplies-=1;
+            if (sequellwaiting[msgarray[1]]) {
+                delete sequellwaiting[msgarray[1]];
+                bot.say(msgarray[0], msgarray.slice(2, msgarray.length).join(':'));
+            }
         }
         if (updateNA) {
             //add new after clearing
