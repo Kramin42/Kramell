@@ -748,7 +748,7 @@ function handle_message(nick, chan, message) {
             if (sequellreplies>0) {
                 bot.say(sequellquerychan, message);
                 sequellreplies-=1;
-            } else if (sequellreplies<=0) {
+            } else if (sequellreplies==0) {
                 bot.say(sequellquerychan, "...");
             }
         }
@@ -792,9 +792,13 @@ function handle_message(nick, chan, message) {
             });
         }
         
-        if (arg[0]=="testpm") {
-            bot.say(arg[1], arg.slice(2, arg.length));
+        if (arg[0]=="scoreboard" || arg[0]=="scorepage") {
+            bot.say("##csdc", "http://rob.pecknology.net/csdc/");
         }
+        
+        //if (arg[0]=="testpm") {
+        //    bot.say(arg[1], arg.slice(2, arg.length));
+        //}
     }
 
     if (chan==control_channel && '!$#'.indexOf(message[0])>-1){
