@@ -712,21 +712,16 @@ function handle_message(nick, chan, message) {
     // redirect sequell/chei queries
     // if in a post channel
     db.channels.count({"channel":chan},function(err, count){ if (count) {
-        try {
-            if (message[0] == '%'){
-                bot.say(chei, message);
-                cheiquerychan = chan;
-            }
-            if (message.indexOf("!tell")>-1) {
-                bot.say(chan, "Can't use !tell from here, sorry");
-            } else if ('!=&.?@^'.indexOf(message[0])>-1){
-                bot.say(sequell, message.replace(/ \./g, ' @'+nick));
-                sequellquerychan = chan;
-                sequellreplies += 1;
-            }
-        } catch(error) {
-            console.log(error);
-            bot.say(chan, "The required ##crawl bot is not online");
+        if (message[0] == '%'){
+            bot.say(chei, message);
+            cheiquerychan = chan;
+        }
+        if (message.indexOf("!tell")>-1) {
+            bot.say(chan, "Can't use !tell from here, sorry");
+        } else if ('!=&.?@^'.indexOf(message[0])>-1){
+            bot.say(sequell, message.replace(/ \./g, ' @'+nick));
+            sequellquerychan = chan;
+            sequellreplies += 1;
         }
     }});
     
@@ -796,6 +791,10 @@ function handle_message(nick, chan, message) {
                 bot.say(chan, pstr);
             });
         }
+        
+        if (arg[0]=="testpm") {
+            bot.say(arg[1], arg.slice(2, arg.length));
+        }
     }
 
     if (chan==control_channel && '!$#'.indexOf(message[0])>-1){
@@ -810,6 +809,10 @@ function handle_message(nick, chan, message) {
     }
 }
 
+function handle_error(error) {
+    console.log(error);
+}
+
 //connect to IRC
 db.channels.distinct('channel',function(err, chans) {
     //bot.join(chan,null);
@@ -819,6 +822,7 @@ db.channels.distinct('channel',function(err, chans) {
         debug: true
     });
     bot.addListener('message', handle_message);
+    bot.addListener('error', handle_error);
 });
 
 //end IRC bot
