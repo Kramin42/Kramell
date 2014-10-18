@@ -722,6 +722,9 @@ function handle_message(nick, chan, message) {
             bot.say(sequell, message.replace(/ \./g, ' @'+nick));
             sequellquerychan = chan;
             sequellreplies += 1;
+            if (sequellreplies <= 0) {
+                sequellreplies = 1;
+            }
         }
     }});
     
@@ -747,10 +750,10 @@ function handle_message(nick, chan, message) {
             //truncate long replies, they can pm for these
             if (sequellreplies>0) {
                 bot.say(sequellquerychan, message);
-                sequellreplies-=1;
             } else if (sequellreplies==0) {
                 bot.say(sequellquerychan, "...");
             }
+            sequellreplies-=1;
         }
         if (updateNA) {
             //add new after clearing
