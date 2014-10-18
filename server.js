@@ -727,7 +727,7 @@ function handle_message(nick, chan, message) {
             //if (sequellreplies <= 0) {
             //    sequellreplies = 1;
             //}
-            bot.say(sequell, "!RELAY -prefix "+chan+":"+sequellID+":"+" "+message);
+            bot.say(sequell, "!RELAY -nick "+nick+" -prefix "+chan+":"+sequellID+":"+" "+message);
             sequellwaiting[sequellID] = true;
             sequellID+=1;
         }
@@ -753,11 +753,6 @@ function handle_message(nick, chan, message) {
             updateNA=true;
         } else if (msgarray.length>2){
             //truncate long replies, they can pm for these
-            if (sequellreplies>0) {
-                bot.say(sequellquerychan, message);
-            } else if (sequellreplies==0) {
-                bot.say(sequellquerychan, "...");
-            }
             sequellreplies-=1;
             if (sequellwaiting[msgarray[1]]) {
                 delete sequellwaiting[msgarray[1]];
