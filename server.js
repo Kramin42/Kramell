@@ -61,6 +61,8 @@ function byteCount(s) {
     return encodeURI(s).split(/%..|./).length - 1;
 }
 
+
+
 function get_logfile_offset(announcer, url) {
     //curl -sI http://crawl.akrasiac.org/milestones-git | grep Content-Length  | awk '{print $2}'
     var child = exec("curl -sI "+url+" | grep Content-Length  | awk '{print $2}'");
@@ -195,21 +197,23 @@ function check_csdc_points(name, milestone, week) {
         xl = parseInt(milestone.match(/xl=(\d+):/i)[1]);
         //bot.say('##csdc',name+" died at xl: "+xl);
         //one retry if xl<5
-        if (player['tries']==0 && xl<5){
-            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "tries": 0, "alive": true}}},{$set: {"players.$.tries":1}}, function (err, updated) {
-                if (updated["n"]>0) {
-                    bot.say('##csdc', irc.colors.wrap('dark_blue', name+' has died at XL<5 and is eligible to redo the '+week["week"]+' challenge'));
-                }
-            });
-            //console.log(name+" died at xl<5");
-        } else {
-            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "alive": true}}}, {$set: {"players.$.alive":false}}, function(err, updated) {
-                if (updated["n"]>0) {
-                    bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},0)));
-                }
-            });
-            //console.log(name+" is out");
-        }
+        db.csdc.findOne({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "tries": 0}}}, function(err, found) {
+            if (found && xl<5){
+                db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "tries": 0, "alive": true}}},{$set: {"players.$.tries":1}}, function (err, updated) {
+                    if (updated["n"]>0) {
+                        bot.say('##csdc', irc.colors.wrap('dark_blue', name+' has died at XL<5 and is eligible to redo the '+week["week"]+' challenge'));
+                    }
+                });
+                //console.log(name+" died at xl<5");
+            } else {
+                db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "alive": true}}}, {$set: {"players.$.alive":false}}, function(err, updated) {
+                    if (updated["n"]>0) {
+                        bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},0)));
+                    }
+                });
+                //console.log(name+" is out");
+            }
+        });
     }
     
     //1   Kill a unique:
