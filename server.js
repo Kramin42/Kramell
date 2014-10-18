@@ -748,8 +748,8 @@ function handle_message(nick, chan, message) {
             updateNA=true;
         } else if (msgarray.length>1 && msgarray[0][0]=="#"){
             msgarray[1] = msgarray.slice(1, msgarray.length).join(':');
-            if (msgarray[1].slice(0,3)=="/me") {
-                bot.action(msgarray[0], msgarray[1].slice(3, msgarray[1].length));
+            if (msgarray[1].slice(0,3)=="/me ") {
+                bot.action(msgarray[0], msgarray[1].slice(4, msgarray[1].length));
             } else {
                 bot.say(msgarray[0], msgarray[1]);
             }
