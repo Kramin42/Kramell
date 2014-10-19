@@ -719,15 +719,10 @@ function handle_message(nick, chan, message) {
             bot.say(chei, message);
             cheiquerychan = chan;
         }
-        if (message.indexOf("!tell")>-1) {
+        /*if (message.indexOf("!tell")>-1) {
             bot.say(chan, "Can't use !tell from here, sorry");
-        } else if ('!=&.?@^'.indexOf(message[0])>-1){
-            //bot.say(sequell, message.replace(/ \./g, ' @'+nick));
-            //sequellquerychan = chan;
-            //sequellreplies += 1;
-            //if (sequellreplies <= 0) {
-            //    sequellreplies = 1;
-            //}
+        } else */
+        if ('!=&.?@^'.indexOf(message[0])>-1){
             bot.say(sequell, "!RELAY -n 1 -nick "+nick+" -prefix "+chan+":"+" "+message);;
         }
     }});
