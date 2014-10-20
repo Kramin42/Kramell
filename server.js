@@ -779,17 +779,22 @@ function handle_message(nick, chan, message) {
         
         if (arg[0]=="points") {
             //build pstr backwards
-            var pstr = "";
+            var pstr = "Points for "+arg[1]+": ";
+            var s = [];
             var first=true;
             db.csdc.find({},{"players": {$elemMatch: {"name":new RegExp(arg[1], "i")}}, week:1}, function(err, weeks) {
                 weeks.forEach(function(week) {
-                        if (week && week["players"] && week["players"][0]) {
-                            if (!first) {pstr = " | " + pstr;}
-                            pstr = week["week"]+(week["players"][0]["alive"] ? " (in prog.)" : "")+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0) + pstr;
-                            first=false;
+                        if (week && week["players"] && week["players"][0] && week["week"].match(/(\d+)/)) {
+                            s[week["week"].match(/(\d+)/)[1]] = week["week"]+(week["players"][0]["alive"] ? " (in prog.)" : "")+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
                         }
                 });
-                pstr = "Points for "+arg[1]+": " + pstr;
+                for (i=0; i<s.length; i++) {
+                    if (s[i]) {
+                        if (!first) {pstr += " | ";}
+                        pstr+=s[i];
+                        first=false;
+                    }
+                }
                 bot.say(chan, pstr);
             });
         }
