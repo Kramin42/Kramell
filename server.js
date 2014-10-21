@@ -811,7 +811,7 @@ function handle_message(nick, chan, message) {
             bot.say(chan, ":D-<");
             setTimeout(function(){bot.say(chan, ":D|-<");}, 300);
             setTimeout(function(){bot.say(chan, ":D/-<");}, 500);
-            setTimeout(function(){bot.say(chan, ":D\-<");}, 700);
+            setTimeout(function(){bot.say(chan, ":D\\-<");}, 700);
             setTimeout(function(){bot.say(chan, ":D|-<");}, 900);
         }
         
