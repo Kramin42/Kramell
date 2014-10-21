@@ -807,6 +807,14 @@ function handle_message(nick, chan, message) {
             bot.action(chan, "slaps "+arg.slice(1, arg.length).join(' ')+" around a bit with a large trout");
         }
         
+        if (arg[0]=="dance") {
+            bot.say(chan, ":D-<");
+            setTimeout(function(){bot.say(chan, ":D|-<");}, 300);
+            setTimeout(function(){bot.say(chan, ":D/-<");}, 500);
+            setTimeout(function(){bot.say(chan, ":D\-<");}, 700);
+            setTimeout(function(){bot.say(chan, ":D|-<");}, 900);
+        }
+        
         //if (arg[0]=="testpm") {
         //    bot.say(arg[1], arg.slice(2, arg.length));
         //}
