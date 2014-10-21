@@ -808,11 +808,10 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="dance") {
-            bot.say(chan, ":D-<");
-            setTimeout(function(){bot.say(chan, ":D|-<");}, 300);
+            bot.say(chan, ":D|-<");
+            setTimeout(function(){bot.say(chan, ":D\\-<");}, 300);
             setTimeout(function(){bot.say(chan, ":D/-<");}, 500);
             setTimeout(function(){bot.say(chan, ":D\\-<");}, 700);
-            setTimeout(function(){bot.say(chan, ":D|-<");}, 900);
         }
         
         //if (arg[0]=="testpm") {
