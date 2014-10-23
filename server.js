@@ -214,6 +214,13 @@ function check_csdc_points(name, milestone, week) {
                 //console.log(name+" is out");
             }
         });
+        if (xl>4) {
+            db.csdc.update({"week":week["week"], "players": {$elemMatch: {"name":name.toLowerCase(), "alive": true}}}, {$set: {"players.$.alive":false}}, function(err, updated) {
+                if (updated["n"]>0) {
+                    bot.say('##csdc', irc.colors.wrap('light_blue', name+'\'s final score for '+week["week"]+': '+points.reduce(function(a,b,i){return a+b;},0)));
+                }
+            });
+        }
     }
     
     //1   Kill a unique:
