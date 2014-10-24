@@ -274,7 +274,7 @@ function check_csdc_points(name, milestone, week) {
     //5   Collect a rune:
     //6   Collect 3 or more runes in a game:
     if (milestone.search(/type=rune/)>-1){
-        db.csdc.update({"players.name":name.toLowerCase()},{$inc: {"players.$.runes":1}});
+        //db.csdc.update({"players.name":name.toLowerCase()},{$inc: {"players.$.runes":1}});
         if (points[4]==0){
             bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') found their first rune for 1 point!'));
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.4":1}});
