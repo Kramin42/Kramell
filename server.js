@@ -842,6 +842,10 @@ function handle_error(error) {
     console.log(error);
 }
 
+function handle_quit(nick, reason, channels, message) {
+	console.log("QUIT: "+nick+"; "+reason+"; "+channels+"; "+message);
+}
+
 //connect to IRC
 db.channels.distinct('channel',function(err, chans) {
     //bot.join(chan,null);
@@ -852,6 +856,7 @@ db.channels.distinct('channel',function(err, chans) {
     });
     bot.addListener('message', handle_message);
     bot.addListener('error', handle_error);
+    bot.addListener('quit', handle_quit);
 });
 
 //end IRC bot
