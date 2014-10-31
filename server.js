@@ -61,8 +61,6 @@ function byteCount(s) {
     return encodeURI(s).split(/%..|./).length - 1;
 }
 
-
-
 function get_logfile_offset(announcer, url) {
     //curl -sI http://crawl.akrasiac.org/milestones-git | grep Content-Length  | awk '{print $2}'
     var child = exec("curl -sI "+url+" | grep Content-Length  | awk '{print $2}'");
@@ -629,6 +627,7 @@ function do_command(arg) {
                         db.csdc.insert({
                             "week": arg[1],
                             "active": false,
+                            "announced": false,
                             "start": 20141002,
                             "end": 20141025,
                             "char": "^$",
@@ -636,7 +635,8 @@ function do_command(arg) {
                             "players": [],
                             "bonusqual":[],
                             "bonusdisqual":[],
-                            "bonusworth":[]
+                            "bonusworth":[],
+                            "bonustext":[]
                         }, function(err,inserted) {
                             bot.say(control_channel, arg[1]+" Added");
                         });
@@ -666,6 +666,17 @@ function do_command(arg) {
                     bot.say(control_channel, arg[2]+" "+arg[1]+": "+arg[3]);
                 }
             });
+        } else if (arg.length>4 && arg[1]=="bonustext") {
+        	toset={};
+        	toset["bonustext."+arg[3]] = arg[4];
+        	db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
+                if (err) {
+                    bot.say(control_channel, err);
+                }
+                if (updated["n"]>0) {
+                    bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]+": "+arg[4]);
+                }
+            });
         } else if (arg.length>6 && arg[1]=="bonus") {
             toset={};
             toset["bonusworth."+arg[3]] = parseInt(arg[4]);
@@ -680,7 +691,7 @@ function do_command(arg) {
                 }
             });
         } else {
-            bot.say(control_channel, "Usage: !csdcset <char|gods|start|end|bonus> <week name> <[char]|[god regex]|[start]|[end](YYYYMMDD)|[num] [worth] [qual] [disqual]>");
+            bot.say(control_channel, "Usage: !csdcset <char|gods|start|end|bonus|bonustext> <week name> <[char]|[god regex]|[start]|[end](YYYYMMDD)|[num] [worth] [qual] [disqual]|[num] [text]>");
         }
     }
     
@@ -699,6 +710,20 @@ function handle_message(nick, chan, message) {
 
     // get announcements
     if (chan == observe_channel || chan == control_channel){//remove control_channel when all working
+    	//do CSDC weekly combo announcement
+    	db.csdc.find({"announced": false}).forEach(function(week) {
+    		if (week && getTimeStamp() >= week["start"]) {
+				db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
+				bot.say('##csdc', irc.colors.wrap('magenta', week["week"]+" has begun!"));
+				bot.say('##csdc', irc.colors.wrap('magenta', "Char: "+week["char"]));
+				bot.say('##csdc', irc.colors.wrap('magenta', "Gods: "+week["gods"].replace(/\|/g,', ')));
+				bot.say('##csdc', irc.colors.wrap('magenta', "Char: "+week["char"]));
+				for (i=0; i<week["bonustext"].length; i++) {
+					bot.say('##csdc', irc.colors.wrap('magenta', "Tier "+(i+1)+" bonus:"+week["bonustext"][i]));
+				}
+    		}
+    	});
+    	
         //check if from announcer
         db.announcers.count({"name":nick},function(err, count){ if (count) {
             get_server_logs(nick);
@@ -756,7 +781,7 @@ function handle_message(nick, chan, message) {
             if (msgarray[1].slice(0,4)=="/me ") {
                 bot.action(msgarray[0], msgarray[1].slice(4, msgarray[1].length));
             } else {
-                bot.say(msgarray[0], msgarray[1]);
+                bot.say(msgarray[0], msgarray[1].replace("This command cannot be used in PM", "This Sequell command cannot be used in here"));
             }
         }
         if (updateNA) {
