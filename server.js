@@ -714,15 +714,16 @@ function handle_message(nick, chan, message) {
         db.announcers.count({"name":nick},function(err, count){ if (count) {
         	//do CSDC weekly combo announcement
 			db.csdc.find({"announced": false}, function(err, weeks) {weeks.forEach(function(week) {
-				if (week) console.log("checking date for"+week["week"]+", "+getTimeStamp()+">="+week["start"]);
+				//if (week) console.log("checking date for "+week["week"]+", "+getTimeStamp()+">="+week["start"]);
 				if (week && getTimeStamp() >= week["start"]) {
-					console.log("announcing"+week["week"]);
+					//console.log("announcing "+week["week"]);
 					db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
 					bot.say('##csdc', irc.colors.wrap('magenta', week["week"]+" has begun!"));
 					bot.say('##csdc', irc.colors.wrap('magenta', "Char: "+week["char"]));
 					bot.say('##csdc', irc.colors.wrap('magenta', "Gods: "+week["gods"].replace(/\|/g,', ')));
-					bot.say('##csdc', irc.colors.wrap('magenta', "Char: "+week["char"]));
+					console.log((week["bonustext"].length-1)+" bonusses: "+week["bonustext"]);
 					for (i=0; i<week["bonustext"].length; i++) {
+						console.log("announcing bonus "+i);
 						bot.say('##csdc', irc.colors.wrap('magenta', "Tier "+(i+1)+" bonus:"+week["bonustext"][i]));
 					}
 				}
