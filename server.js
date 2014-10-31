@@ -702,8 +702,22 @@ function do_command(arg) {
     }
 }
 
+function announce_week(week) {
+	//console.log(JSON.stringify(week));
+	//console.log("announcing "+week["week"]);
+	db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
+	bot.say('##csdc', irc.colors.wrap('magenta', week["week"]+" has begun!"));
+	bot.say('##csdc', irc.colors.wrap('magenta', "Char: "+week["char"]));
+	bot.say('##csdc', irc.colors.wrap('magenta', "Gods: "+week["gods"].replace(/\|/g,', ')));
+	//console.log(week["bonustext"].length+" bonusses: "+JSON.stringify(week["bonustext"]));
+	for (i=0; i<week["bonustext"].length; i++) {
+		//console.log("announcing bonus "+i);
+		bot.say('##csdc', irc.colors.wrap('magenta', "Tier "+(i+1)+" bonus: "+week["bonustext"][i]));
+	}
+}
+
 function handle_message(nick, chan, message) {
-	if (chan==botnick) {chan=nick;}
+	if (chan==botnick && chan!=chei && channel!=sequell) {chan=nick;}
 	
     if(  message.indexOf('Hello '+botnick) > -1
     ) {
@@ -718,17 +732,7 @@ function handle_message(nick, chan, message) {
 			db.csdc.findOne({"announced": false}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
 				//if (week) console.log("checking date for "+week["week"]+", "+getTimeStamp()+">="+week["start"]);
 				if (week && getTimeStamp() >= week["start"]) {
-					console.log(JSON.stringify(week));
-					//console.log("announcing "+week["week"]);
-					db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
-					bot.say('##csdc', irc.colors.wrap('magenta', week["week"]+" has begun!"));
-					bot.say('##csdc', irc.colors.wrap('magenta', "Char: "+week["char"]));
-					bot.say('##csdc', irc.colors.wrap('magenta', "Gods: "+week["gods"].replace(/\|/g,', ')));
-					console.log(week["bonustext"].length+" bonusses: "+JSON.stringify(week["bonustext"]));
-					for (i=0; i<week["bonustext"].length; i++) {
-						console.log("announcing bonus "+i);
-						bot.say('##csdc', irc.colors.wrap('magenta', "Tier "+(i+1)+" bonus:"+week["bonustext"][i]));
-					}
+					announce_week(week);
 				}
 			});
 			
@@ -813,7 +817,7 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="help") {
-            bot.say(chan, "commands: #points <player>");
+            bot.say(chan, "commands: $points <player>");
         }
         
         if (arg[0]=="points") {
@@ -840,6 +844,12 @@ function handle_message(nick, chan, message) {
         
         if (arg[0]=="scoreboard" || arg[0]=="scorepage") {
             bot.say(chan, "http://rob.pecknology.net/csdc/");
+        }
+        
+        if (arg[0]=="info" || arg[0]=="week") {
+        	db.csdc.findOne({"week": new RegExp(arg.slice(1,arg.length),"i")}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
+        		announce_week(week);
+        	}
         }
         
         if (arg[0]=="slap") {
