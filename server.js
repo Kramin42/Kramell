@@ -715,7 +715,7 @@ function announce_week(week) {
 }
 
 function handle_message(nick, chan, message) {
-	if (chan==botnick && chan!=chei && channel!=sequell) {chan=nick;}
+	if (chan==botnick && chan!=chei && chan!=sequell) {chan=nick;}
 	
     if(  message.indexOf('Hello '+botnick) > -1
     ) {
@@ -847,11 +847,9 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="info" || arg[0]=="week") {
-        	if (week && getTimeStamp() >= week["start"]) {
-        		db.csdc.findOne({"week": new RegExp(arg.slice(1,arg.length),"i")}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
-        			announce_week(week);
-        		});
-        	}
+			db.csdc.findOne({"week": new RegExp(arg.slice(1,arg.length),"i"), "start": {$lte: getTimeStamp()}}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
+				announce_week(week);
+			});
         }
         
         if (arg[0]=="slap") {
