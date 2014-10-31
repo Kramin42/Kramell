@@ -713,7 +713,7 @@ function handle_message(nick, chan, message) {
         //check if from announcer
         db.announcers.count({"name":nick},function(err, count){ if (count) {
         	//do CSDC weekly combo announcement
-			db.csdc.find({"announced": false}).forEach(function(week) {
+			db.csdc.find({"announced": false}, function(err, weeks) {weeks.forEach(function(week) {
 				if (week) console.log("checking date for"+week["week"]+", "+getTimeStamp()+">="+week["start"]);
 				if (week && getTimeStamp() >= week["start"]) {
 					console.log("announcing"+week["week"]);
@@ -726,7 +726,7 @@ function handle_message(nick, chan, message) {
 						bot.say('##csdc', irc.colors.wrap('magenta', "Tier "+(i+1)+" bonus:"+week["bonustext"][i]));
 					}
 				}
-			});
+			});});
 			
             get_server_logs(nick);
             
