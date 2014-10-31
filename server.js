@@ -702,15 +702,15 @@ function do_command(arg) {
     }
 }
 
-function announce_week(week) {
+function announce_week(week, chan) {
 	//console.log(JSON.stringify(week));
 	//console.log("announcing "+week["week"]);
-	bot.say('##csdc', irc.colors.wrap('magenta', "Char: "+week["char"]));
-	bot.say('##csdc', irc.colors.wrap('magenta', "Gods: "+week["gods"].replace(/\|/g,', ')));
+	bot.say(chan, irc.colors.wrap('magenta', "Char: "+week["char"]));
+	bot.say(chan, irc.colors.wrap('magenta', "Gods: "+week["gods"].replace(/\|/g,', ')));
 	//console.log(week["bonustext"].length+" bonusses: "+JSON.stringify(week["bonustext"]));
 	for (i=0; i<week["bonustext"].length; i++) {
 		//console.log("announcing bonus "+i);
-		bot.say('##csdc', irc.colors.wrap('magenta', "Tier "+(i+1)+" bonus: "+week["bonustext"][i]));
+		bot.say(chan, irc.colors.wrap('magenta', "Tier "+(i+1)+" bonus: "+week["bonustext"][i]));
 	}
 }
 
@@ -732,7 +732,7 @@ function handle_message(nick, chan, message) {
 				if (week && getTimeStamp() >= week["start"]) {
 					db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
 					bot.say('##csdc', irc.colors.wrap('magenta', week["week"]+" has begun!"));
-					announce_week(week);
+					announce_week(week, '##csdc');
 				}
 			});
 			
@@ -848,7 +848,10 @@ function handle_message(nick, chan, message) {
         
         if (arg[0]=="info" || arg[0]=="week") {
 			db.csdc.findOne({"week": new RegExp(arg.slice(1,arg.length),"i"), "start": {$lte: getTimeStamp()}}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
-				if (week) announce_week(week);
+				if (week) {
+					//bot.say(chan, irc.colors.wrap('magenta', "CSDC "+week["week"]);
+					announce_week(week, chan);
+				}
 			});
         }
         
