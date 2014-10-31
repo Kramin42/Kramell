@@ -715,7 +715,7 @@ function handle_message(nick, chan, message) {
         //check if from announcer
         db.announcers.count({"name":nick},function(err, count){ if (count) {
         	//do CSDC weekly combo announcement
-			db.csdc.findOne({"announced": false}, function(err, week) {
+			db.csdc.findOne({"announced": false}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
 				//if (week) console.log("checking date for "+week["week"]+", "+getTimeStamp()+">="+week["start"]);
 				if (week && getTimeStamp() >= week["start"]) {
 					//console.log("announcing "+week["week"]);
