@@ -817,7 +817,7 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="help") {
-            bot.say(chan, "commands: $points <player>");
+            bot.say(chan, "commands: $points <player>, $week <week num>");
         }
         
         if (arg[0]=="points") {
@@ -849,7 +849,7 @@ function handle_message(nick, chan, message) {
         if (arg[0]=="info" || arg[0]=="week") {
         	db.csdc.findOne({"week": new RegExp(arg.slice(1,arg.length),"i")}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
         		announce_week(week);
-        	}
+        	});
         }
         
         if (arg[0]=="slap") {
