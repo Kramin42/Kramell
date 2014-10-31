@@ -714,7 +714,7 @@ function handle_message(nick, chan, message) {
         db.announcers.count({"name":nick},function(err, count){ if (count) {
         	//do CSDC weekly combo announcement
 			db.csdc.find({"announced": false}).forEach(function(week) {
-				console.log("checking date for"+week["week"]);
+				if (week) console.log("checking date for"+week["week"]+", "+getTimeStamp()+">="+week["start"]);
 				if (week && getTimeStamp() >= week["start"]) {
 					console.log("announcing"+week["week"]);
 					db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
