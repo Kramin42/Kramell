@@ -778,10 +778,11 @@ function handle_message(nick, chan, message) {
             bot.say(chei, message);
             cheiquerychan = chan;
         }
-        if (message.indexOf("!tell")==0 || message.indexOf("!messages")==0) {
-            bot.say(chan, "Can't use this command in here, sorry");
-        } else if ('!=&.?@^'.indexOf(message[0])>-1){
-            bot.say(sequell, "!RELAY -n 1 -nick "+nick+" -prefix "+chan+":"+" "+message);;
+//         if (message.indexOf("!tell")==0 || message.indexOf("!messages")==0) {
+//             bot.say(chan, "Can't use this command in here, sorry");
+//         } else 
+        if ('!=&.?@^'.indexOf(message[0])>-1){
+            bot.say(sequell, "!RELAY -n 1 -channel ##crawl -nick "+nick+" -prefix "+chan+":"+" "+message);;
         }
     }});
     
@@ -909,6 +910,7 @@ function handle_quit(nick, reason, channels, message) {
 
 //connect to IRC
 db.channels.distinct('channel',function(err, chans) {
+	console.log("Logging in with nick: "+botnick+", pass: "+password);
     //bot.join(chan,null);
     bot = new irc.Client('chat.freenode.net', botnick, {
         channels: [control_channel,observe_channel].concat(chans),
