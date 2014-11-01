@@ -43,6 +43,7 @@ var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 var csdcrunning = true;
 
+var timers = {};
 var NAnick;
 var NAaliases;
 var cheiquerychan = control_channel;
@@ -109,6 +110,10 @@ function get_server_logs(announcer) {
             });
         }
     });});
+    if (timers[announcer]) {
+    	clearTimeout(timers[announcer]);
+    }
+    timers[announcer] = setTimeout(function(){get_server_logs(announcer)}, 120*1000);
 }
 
 function process_milestone(milestone) {
@@ -464,7 +469,7 @@ function do_command(arg) {
                 get_logfile_offset(arg[1], arg[2]);
             }
         } else {
-            bot.say(control_channel, "Usage: !logfile [-rm] <announcer name> <url> [offset if adding]");
+            bot.say(control_channel, "Usage: !logfile [-rm] <announcer name> <url>");
         }
     }
 
