@@ -10,12 +10,17 @@ var exec = require('child_process').exec;
 
 // IRC bot
 var botnick = 'Kramell';
+var password;
 var chei = 'Cheibriados';
 var sequell = 'Sequell';
 var irc = require('irc');
 var observe_channel = "##crawl";
 var bot;
 
+fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/password', function (err, data) {
+    if (err) throw err;
+    password = data;
+});
 
 //mongoDB stuff
 var ip_addr = process.env.OPENSHIFT_NODEJS_IP   || '127.0.0.1';
@@ -908,7 +913,10 @@ db.channels.distinct('channel',function(err, chans) {
     bot = new irc.Client('chat.freenode.net', botnick, {
         channels: [control_channel,observe_channel].concat(chans),
         port: 8001,
-        debug: true
+        debug: true,
+        sasl: true,
+        userName: botnick,
+        pasword: password
     });
     bot.addListener('message', handle_message);
     bot.addListener('error', handle_error);
