@@ -918,7 +918,7 @@ db.channels.distinct('channel',function(err, chans) {
         debug: true,
         sasl: true,
         userName: botnick,
-        pasword: password
+        password: password
     });
     bot.addListener('message', handle_message);
     bot.addListener('error', handle_error);
