@@ -908,21 +908,27 @@ function handle_quit(nick, reason, channels, message) {
 	console.log("QUIT: "+nick+"; "+reason+"; "+channels+"; "+message);
 }
 
+function handle_connect(message) {
+    console.log(message);
+    console.log("Logging in with nick: "+botnick+", pass: "+password);
+    bot.say("NickServ", "identify "+password);
+}
+
 //connect to IRC
 db.channels.distinct('channel',function(err, chans) {
-	console.log("Logging in with nick: "+botnick+", pass: "+password);
     //bot.join(chan,null);
     bot = new irc.Client('chat.freenode.net', botnick, {
         channels: [control_channel,observe_channel].concat(chans),
         port: 8001,
         debug: true,
-        sasl: true,
-        userName: botnick,
-        password: password
+//        sasl: true,
+        userName: botnick
+//        password: password
     });
     bot.addListener('message', handle_message);
     bot.addListener('error', handle_error);
     bot.addListener('quit', handle_quit);
+    bot.addListener('registered', handle_connect);
 });
 
 //end IRC bot
