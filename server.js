@@ -97,7 +97,7 @@ function get_server_logs(announcer) {
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
                 } else {
                     //console.log("no new content");
-                    console.log("no new milestones for "+announcer);
+                    //console.log("no new milestones for "+announcer);
                 }
             });
 
@@ -113,7 +113,13 @@ function get_server_logs(announcer) {
     if (timers[announcer]) {
     	clearTimeout(timers[announcer]);
     }
-    timers[announcer] = setTimeout(function(){get_server_logs(announcer)}, 120*1000);
+    timers[announcer] = setTimeout(
+		function(){
+    		console.log("checking "+announcer+" logs (2 min timer)");
+    		get_server_logs(announcer)
+    	},
+    	120*1000
+    );
 }
 
 function process_milestone(milestone) {
