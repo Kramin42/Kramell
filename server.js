@@ -445,7 +445,7 @@ function route_announcement(name, alias, message) {
 function do_command(arg, chan, nick, admin) {
     // commands
     if (arg[0]=="help" || arg[0]=="commands"){
-        bot.say(control_channel, "Kramell commands:");
+        bot.say(chan, "Kramell commands:");
         if (admin) bot.say(chan, "  $announcer [-rm] <announcer name>");
         if (admin) bot.say(chan, "  $channel [-rm] <channel name>");
         bot.say(chan, "  $name [-rm] <channel name> <user name>");
