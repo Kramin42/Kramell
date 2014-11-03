@@ -442,36 +442,37 @@ function route_announcement(name, alias, message) {
     });});
 }
 
-function do_command(arg) {
+function do_command(arg, chan, nick, admin) {
     // commands
     if (arg[0]=="help" || arg[0]=="commands"){
-        bot.say(control_channel, "commands:");
-        bot.say(control_channel, "  !state");
-        bot.say(control_channel, "  !announcer [-rm] <announcer name>");
-        bot.say(control_channel, "  !channel [-rm] <channel name>");
-        bot.say(control_channel, "  !name [-rm] <channel name> <user name>");
-        bot.say(control_channel, "  !filter [-rm] <channel name> <regex filter>");
-        bot.say(control_channel, "  !colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
+        bot.say(control_channel, "Kramell commands:");
+        if (admin) bot.say(chan, "  $announcer [-rm] <announcer name>");
+        if (admin) bot.say(chan, "  $channel [-rm] <channel name>");
+        bot.say(chan, "  $name [-rm] <channel name> <user name>");
+        bot.say(chan, "  $filter [-rm] <channel name> <regex filter>");
+        bot.say(chan, "  $colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
     }
 
-    if (arg[0]=="announcer" || arg[0]=="announcers"){
+    if (admin && (arg[0]=="announcer" || arg[0]=="announcers")){
         //get announcers
         db.announcers.distinct('name', function(err, ann){
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){// arg[2] is the announcer to remove
                     db.announcers.remove({'name':arg[2]});
+                    bot.say(control_channel, "announcer removed ("+chan+"/"+nick+"): "+arg[2]);
                 } else if (ann.indexOf(arg[1])==-1){// arg[1] is the announcer to add
                     db.announcers.insert({"name":arg[1], "files": []});
+                    bot.say(control_channel, "announcer added ("+chan+"/"+nick+"): "+arg[2]);
                 } 
             } else if (arg.length==1) {
-                bot.say(control_channel, "announcers: "+ann.join(', '));
+                bot.say(chan, "announcers: "+ann.join(', '));
             } else {
-                bot.say(control_channel, "Usage: !announcer [-rm] <announcer name>");
+                bot.say(chan, "Usage: !announcer [-rm] <announcer name>");
             }
         });
     }
     
-    if (arg[0]=="logfile") {
+    if (admin && arg[0]=="logfile") {
         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
                 db.announcers.update({"name": arg[2]}, {$pull: {"files": {"url": arg[3]}}});
@@ -484,7 +485,7 @@ function do_command(arg) {
         }
     }
 
-    if (arg[0]=="channel" || arg[0]=="channels"){
+    if (admin && (arg[0]=="channel" || arg[0]=="channels")){
         db.channels.distinct('channel', function(err, chans){
             if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
                 if (arg[1]=="-rm"){
@@ -492,7 +493,7 @@ function do_command(arg) {
                         bot.part(arg[2],'',null);
                         db.channels.remove({'channel':arg[2]});
                     } else {
-                        bot.say(control_channel, "No such channel");
+                        bot.say(chan, "No such channel");
                     }
                 } else if (forbidden.indexOf(arg[1])==-1) {
                     if (chans.indexOf(arg[1])>-1){
@@ -501,12 +502,12 @@ function do_command(arg) {
                         bot.join(arg[1],null);
                     }
                 } else {
-                    bot.say(control_channel, "Sorry, I don't allow that channel");
+                    bot.say(chan, "Sorry, I don't allow that channel");
                 }
             } else if (arg.length==1) {
-                bot.say(control_channel, "channels: "+chans.join(', '));
+                bot.say(chan, "channels: "+chans.join(', '));
             } else {
-                bot.say(control_channel, "Usage: !channel [-rm] <channel name>");
+                bot.say(chan, "Usage: !channel [-rm] <channel name>");
             }
         });
     }
@@ -518,18 +519,20 @@ function do_command(arg) {
                 argchan = arg[2];
                 argname = arg[3];
                 db.channels.update({"channel":argchan},{$pull: {"names":argname}});
+                bot.say(control_channel, "name removed ("+chan+"/"+nick+"): "+argname+" from "+argchan);
             } else {
                 argchan = arg[1];
                 argname = arg[2];
                 db.channels.update({"channel":argchan},{$addToSet: {"names":argname}});
                 update_aliases(argname);
+                bot.say(control_channel, "name added ("+chan+"/"+nick+"): "+argname+" to "+argchan);
             }
         } else if (arg.length==2) {
             db.channels.distinct('names', {'channel':arg[1]}, function(err, names) {
-                bot.say(control_channel, "Names in "+arg[1]+": "+names.join(', '));
+                bot.say(chan, "Names in "+arg[1]+": "+names.join(', '));
             });
         } else {
-            bot.say(control_channel, "Usage: !name [-rm] <channel name> <user name>");
+            bot.say(chan, "Usage: !name [-rm] <channel name> <user name>");
         }
     }
 
@@ -540,18 +543,20 @@ function do_command(arg) {
                 argchan = arg[2];
                 argfilter = arg[3];
                 db.channels.update({"channel":argchan},{$pull: {"filters":argfilter}});
+                bot.say(control_channel, "filter removed ("+chan+"/"+nick+"): "+argfilter+" from "+argchan);
             } else {
                 //arg[2] = arg.slice(2, arg.length).join(' ');
                 argchan = arg[1];
                 argfilter = arg[2];
                 db.channels.update({"channel":argchan},{$addToSet: {"filters":argfilter}});
+                bot.say(control_channel, "filter added ("+chan+"/"+nick+"): "+argfilter+" to "+argchan);
             }
         } else if (arg.length==2) {
             db.channels.distinct('filters', {'channel':arg[1]}, function(err, filters) {
-                bot.say(control_channel, "Filters for "+arg[1]+": "+filters.join(', '));
+                bot.say(chan, "Filters for "+arg[1]+": "+filters.join(', '));
             });
         } else {
-            bot.say(control_channel, "Usage: !filter [-rm] <channel name> <regex filter>");
+            bot.say(chan, "Usage: !filter [-rm] <channel name> <regex filter>");
         }
     }
   
@@ -578,67 +583,67 @@ function do_command(arg) {
             }
         } else if (arg.length==2) {
             db.channels.distinct('colourmap', {'channel':arg[1]}, function(err, colourmap) {
-                bot.say(control_channel, "Colouring filters for "+arg[1]+": "+JSON.stringify(colourmap));
+                bot.say(chan, "Colouring filters for "+arg[1]+": "+JSON.stringify(colourmap));
             });
         } else {
-            bot.say(control_channel, "Usage: !colour [-rm] <channel name> <colour> <regex filter>");
+            bot.say(chan, "Usage: !colour [-rm] <channel name> <colour> <regex filter>");
         }
     }
     
     if ((arg[0]=="colors" || arg[0]=="colours") && arg.length==1) {
-        bot.say(control_channel, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
+        bot.say(chan, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
     }
     
-    if (arg[0]=="csdcon") {
+    if (admin && arg[0]=="csdcon") {
         if (arg.length>1) {
             //arg[1] = arg.slice(1, arg.length).join(' ');
             db.csdc.update({"week":arg[1]},{$set: {"active":true}}, function(err, updated) {
                 //console.log(updated);
                 if (updated["n"]>0) {
-                    bot.say(control_channel, arg[1]+' on');
+                    bot.say(chan, arg[1]+' on');
                 }
             });
         } else {
             csdcrunning = true;
-            bot.say(control_channel, 'csdc on');
+            bot.say(chan, 'csdc on');
         }
     }
     
-    if (arg[0]=="csdcoff") {
+    if (admin && arg[0]=="csdcoff") {
         if (arg.length>1) {
             //arg[1] = arg.slice(1, arg.length).join(' ');
             db.csdc.update({"week":arg[1]},{$set: {"active":false}}, function(err, updated) {
                 if (updated["n"]>0) {
-                    bot.say(control_channel, arg[1]+' off');
+                    bot.say(chan, arg[1]+' off');
                 }
             });
         } else {
             csdcrunning = false;
-            bot.say(control_channel, 'csdc off');
+            bot.say(chan, 'csdc off');
         }
     }
     
-    if (arg[0]=="csdcweek") {
+    if (admin && arg[0]=="csdcweek") {
         if (arg.length>2 || (arg.length==2 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
                 //arg[2] = arg.slice(2, arg.length).join(' ');
                 db.csdc.remove({"week":arg[2]}, function(err, numberRemoved) {
                     //console.log(numberRemoved);
                     if (numberRemoved["n"]>0) {
-                        bot.say(control_channel, arg[2]+" Removed");
+                        bot.say(chan, arg[2]+" Removed");
                     }
                 });
             } else {
                 //arg[1] = arg.slice(1, arg.length).join(' ');
                 db.csdc.findOne({"week":arg[1]}, function(err,week) { 
                     if (week) {
-                        bot.say(control_channel, week["week"] +" active: "+week["active"]+(week["active"] ? " (from "+week["start"]+" to "+week["end"]+")" : ""));
-                        bot.say(control_channel, week["week"] +" char: "+week["char"]);
-                        bot.say(control_channel, week["week"] +" gods: "+week["gods"]);
-                        //bot.say(control_channel, "Week "+week["week"] +" t1qual: "+week["t1qual"]);
-                        //bot.say(control_channel, "Week "+week["week"] +" t1disqual: "+week["t1disqual"]);
-                        //bot.say(control_channel, "Week "+week["week"] +" t2qual: "+week["t2qual"]);
-                        //bot.say(control_channel, "Week "+week["week"] +" t2disqual: "+week["t2disqual"]);
+                        bot.say(chan, week["week"] +" active: "+week["active"]+(week["active"] ? " (from "+week["start"]+" to "+week["end"]+")" : ""));
+                        bot.say(chan, week["week"] +" char: "+week["char"]);
+                        bot.say(chan, week["week"] +" gods: "+week["gods"]);
+                        //bot.say(chan, "Week "+week["week"] +" t1qual: "+week["t1qual"]);
+                        //bot.say(chan, "Week "+week["week"] +" t1disqual: "+week["t1disqual"]);
+                        //bot.say(chan, "Week "+week["week"] +" t2qual: "+week["t2qual"]);
+                        //bot.say(chan, "Week "+week["week"] +" t2disqual: "+week["t2disqual"]);
                     } else {
                         db.csdc.insert({
                             "week": arg[1],
@@ -654,17 +659,17 @@ function do_command(arg) {
                             "bonusworth":[],
                             "bonustext":[]
                         }, function(err,inserted) {
-                            bot.say(control_channel, arg[1]+" Added");
+                            bot.say(chan, arg[1]+" Added");
                         });
                     }
                 });
             }
         } else {
-            bot.say(control_channel, "Usage: !csdcweek [-rm] <week name>");
+            bot.say(chan, "Usage: !csdcweek [-rm] <week name>");
         }
     }
     
-    if (arg[0]=="csdcset") {
+    if (admin && arg[0]=="csdcset") {
         if (arg.length>3 && (arg[1]=="char" || arg[1]=="gods" || arg[1]=="start" || arg[1]=="end")) {
             //arg[3] = arg.slice(3, arg.length).join(' ');
             //arg[2] = arg[2].replace(/_/g,' ');
@@ -676,10 +681,10 @@ function do_command(arg) {
             db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
                 //console.log(updated);
                 if (err) {
-                    bot.say(control_channel, err);
+                    bot.say(chan, err);
                 }
                 if (updated["n"]>0) {
-                    bot.say(control_channel, arg[2]+" "+arg[1]+": "+arg[3]);
+                    bot.say(chan, arg[2]+" "+arg[1]+": "+arg[3]);
                 }
             });
         } else if (arg.length>4 && arg[1]=="bonustext") {
@@ -687,10 +692,10 @@ function do_command(arg) {
         	toset["bonustext."+arg[3]] = arg[4];
         	db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
                 if (err) {
-                    bot.say(control_channel, err);
+                    bot.say(chan, err);
                 }
                 if (updated["n"]>0) {
-                    bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]+": "+arg[4]);
+                    bot.say(chan, arg[2]+" "+arg[1]+" "+arg[3]+": "+arg[4]);
                 }
             });
         } else if (arg.length>6 && arg[1]=="bonus") {
@@ -700,18 +705,18 @@ function do_command(arg) {
             toset["bonusdisqual."+arg[3]] = arg[6];
             db.csdc.update({"week":arg[2]},{$set: toset}, function(err, updated) {
                 if (err) {
-                    bot.say(control_channel, err);
+                    bot.say(chan, err);
                 }
                 if (updated["n"]>0) {
-                    bot.say(control_channel, arg[2]+" "+arg[1]+" "+arg[3]+" points: "+arg[4]+", qual: "+arg[5]+", disqual: "+arg[6]);
+                    bot.say(chan, arg[2]+" "+arg[1]+" "+arg[3]+" points: "+arg[4]+", qual: "+arg[5]+", disqual: "+arg[6]);
                 }
             });
         } else {
-            bot.say(control_channel, "Usage: !csdcset <char|gods|start|end|bonus|bonustext> <week name> <[char]|[god regex]|[start]|[end](YYYYMMDD)|[num] [worth] [qual] [disqual]|[num] [text]>");
+            bot.say(chan, "Usage: !csdcset <char|gods|start|end|bonus|bonustext> <week name> <[char]|[god regex]|[start]|[end](YYYYMMDD)|[num] [worth] [qual] [disqual]|[num] [text]>");
         }
     }
     
-    if (arg[0]=="rejoin") {
+    if (admin && arg[0]=="rejoin") {
         db.channels.distinct('channel',function(err, chans) {chans.forEach(function(chan){
             bot.join(chan,null);
         });});
@@ -834,7 +839,7 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="help") {
-            bot.say(chan, "commands: $points <player>, $week <week num>");
+            bot.say(chan, "csdc commands: $points <player>, $week <week num>");
         }
         
         if (arg[0]=="points") {
@@ -888,7 +893,7 @@ function handle_message(nick, chan, message) {
         //}
     }
 
-    if (chan==control_channel && '!$#'.indexOf(message[0])>-1){
+    if (chan!=observe_channel && '$#'.indexOf(message[0])>-1){
         //remove prefix and handle " "
         arg = message.slice(1, message.length).trim().split('\"');
         arg = arg.map(function(val,index) {return index%2==0 ? val : val.replace(/ /g, 'SPCSPCSPC');});
@@ -896,7 +901,8 @@ function handle_message(nick, chan, message) {
         arg = arg.map(function(val,index) {return val.replace(/SPCSPCSPC/g, ' ');});
         //arg = [].concat.apply([], arg);
         console.log(arg);
-        do_command(arg);
+        admin = chan==control_channel;
+        do_command(arg, chan, nick, admin);
     }
 }
 
