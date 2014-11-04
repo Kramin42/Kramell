@@ -17,6 +17,8 @@ var irc = require('irc');
 var observe_channel = "##crawl";
 var bot;
 
+var adminlist = ["Kramin","WalkerBoh","moose"];
+
 fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/password', function (err, data) {
     if (err) throw err;
     password = data;
@@ -901,7 +903,7 @@ function handle_message(nick, chan, message) {
         arg = arg.map(function(val,index) {return val.replace(/SPCSPCSPC/g, ' ');});
         //arg = [].concat.apply([], arg);
         console.log(arg);
-        admin = chan==control_channel;
+        admin = chan==control_channel || adminlist.indexOf(nick)>-1;
         do_command(arg, chan, nick, admin);
     }
 }
