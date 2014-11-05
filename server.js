@@ -719,7 +719,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     if (admin && arg[0]=="reconnect") {
-        connect();
+    	bot.disconnect("reconnecting...", function() {connect();});
     }
 }
 
