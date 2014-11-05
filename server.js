@@ -920,7 +920,7 @@ function handle_connect(message) {
     console.log(message);
     console.log("Logging in with nick: "+botnick+", pass: "+password);
     bot.say("NickServ", "identify "+password);
-    db.announcers.distinct('name', function(err, announcers) {announcers.forEach(announcer) {
+    db.announcers.distinct('name', function(err, announcers) {announcers.forEach(function(announcer) {
 		timers[announcer] = setTimeout(
 			function(){
 				console.log("checking "+announcer+" logs (2 min timer)");
@@ -928,7 +928,7 @@ function handle_connect(message) {
 			},
 			120*1000
 		);
-    };});
+    });});
 }
 
 //connect to IRC
