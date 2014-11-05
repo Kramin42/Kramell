@@ -464,7 +464,7 @@ function do_command(arg, chan, nick, admin) {
                     bot.say(control_channel, "announcer removed ("+chan+"/"+nick+"): "+arg[2]);
                 } else if (ann.indexOf(arg[1])==-1){// arg[1] is the announcer to add
                     db.announcers.insert({"name":arg[1], "files": []});
-                    bot.say(control_channel, "announcer added ("+chan+"/"+nick+"): "+arg[2]);
+                    bot.say(control_channel, "announcer added ("+chan+"/"+nick+"): "+arg[1]);
                 } 
             } else if (arg.length==1) {
                 bot.say(chan, "announcers: "+ann.join(', '));
@@ -920,6 +920,15 @@ function handle_connect(message) {
     console.log(message);
     console.log("Logging in with nick: "+botnick+", pass: "+password);
     bot.say("NickServ", "identify "+password);
+    db.announcers.distinct('name', function(err, announcers) {announcers.forEach(announcer) {
+		timers[announcer] = setTimeout(
+			function(){
+				console.log("checking "+announcer+" logs (2 min timer)");
+				get_server_logs(announcer)
+			},
+			120*1000
+		);
+    };});
 }
 
 //connect to IRC
