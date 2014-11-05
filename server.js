@@ -718,10 +718,8 @@ function do_command(arg, chan, nick, admin) {
         }
     }
     
-    if (admin && arg[0]=="rejoin") {
-        db.channels.distinct('channel',function(err, chans) {chans.forEach(function(chan){
-            bot.join(chan,null);
-        });});
+    if (admin && arg[0]=="reconnect") {
+        connect();
     }
 }
 
@@ -931,22 +929,26 @@ function handle_connect(message) {
     });});
 }
 
-//connect to IRC
-db.channels.distinct('channel',function(err, chans) {
-    //bot.join(chan,null);
-    bot = new irc.Client('chat.freenode.net', botnick, {
-        channels: [control_channel,observe_channel].concat(chans),
-        port: 8001,
-        debug: true,
-//        sasl: true,
-        userName: botnick
-//        password: password
-    });
-    bot.addListener('message', handle_message);
-    bot.addListener('error', handle_error);
-    bot.addListener('quit', handle_quit);
-    bot.addListener('registered', handle_connect);
-});
+function connect() {
+	//connect to IRC
+	db.channels.distinct('channel',function(err, chans) {
+		//bot.join(chan,null);
+		bot = new irc.Client('chat.freenode.net', botnick, {
+			channels: [control_channel,observe_channel].concat(chans),
+			port: 8001,
+			debug: true,
+	//        sasl: true,
+			userName: botnick
+	//        password: password
+		});
+		bot.addListener('message', handle_message);
+		bot.addListener('error', handle_error);
+		bot.addListener('quit', handle_quit);
+		bot.addListener('registered', handle_connect);
+	});
+}
+
+connect();
 
 //end IRC bot
 
