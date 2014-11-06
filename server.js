@@ -787,7 +787,7 @@ function handle_message(nick, chan, message) {
 //             bot.say(chan, "Can't use this command in here, sorry");
 //         } else 
         if ('!=&.?@^'.indexOf(message[0])>-1){
-            bot.say(sequell, "!RELAY -n 1 -channel ##crawl -nick "+nick+" -prefix "+chan+":"+" "+message);;
+            bot.say(sequell, "!RELAY -n 1 -channel "+chan+" -nick "+nick+" -prefix "+chan+":"+" "+message);
         }
     }});
     
