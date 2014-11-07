@@ -870,7 +870,8 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="info" || arg[0]=="week") {
-        	regex = arg.length>1 ? new RegExp(arg.slice(1,arg.length),"i") : /.*/;
+        	regex = arg.length>1 ? new RegExp(arg.slice(1,arg.length).join(' '),"i") : /.*/;
+        	console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
 			db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1, function(err, weeks) {
 				week = weeks[0];
 				if (week) {
