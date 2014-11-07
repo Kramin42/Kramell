@@ -882,6 +882,9 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="slap") {
+        	if (arg.length==1){
+            	arg[1]=nick;
+        	}
             bot.action(chan, "slaps "+arg.slice(1, arg.length).join(' ')+" around a bit with a large trout");
         }
         
