@@ -810,7 +810,7 @@ function handle_message(nick, chan, message) {
                 bot.say(control_channel, "...|"+msgarray[i].replace(/ NAJNR/g,'|').replace(/NAJNR/g,'').replace('\r\n',''));
             }
             updateNA=true;
-        } else if (msgarray.length>1 && msgarray[0][0]=="#"){
+        } else if (msgarray.length>1){
             msgarray[1] = msgarray.slice(1, msgarray.length).join(':');
             if (msgarray[1].slice(0,4)=="/me ") {
                 bot.action(msgarray[0], msgarray[1].slice(4, msgarray[1].length));
