@@ -831,8 +831,8 @@ function handle_message(nick, chan, message) {
         bot.say(cheiquerychan, message);
     }
     
-    //kramell csdc queries (use $ or #)
-    if ('$#'.indexOf(message[0])>-1) {
+    //kramell csdc queries (use $)
+    if ('$'.indexOf(message[0])>-1) {
         //remove prefix and add username as first arg if there is none
         var arg = message.slice(1, message.length).replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
         
@@ -900,7 +900,7 @@ function handle_message(nick, chan, message) {
         //}
     }
 
-    if (chan!=observe_channel && '$#'.indexOf(message[0])>-1){
+    if (chan!=observe_channel && '$'.indexOf(message[0])>-1){
         //remove prefix and handle " "
         arg = message.slice(1, message.length).trim().split('\"');
         arg = arg.map(function(val,index) {return index%2==0 ? val : val.replace(/ /g, 'SPCSPCSPC');});
