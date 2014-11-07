@@ -870,7 +870,9 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="info" || arg[0]=="week") {
-			db.csdc.find({"week": new RegExp(arg.slice(1,arg.length),"i"), "start": {$lte: getTimeStamp()}}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1).first(function(err, week) {
+        	regex = arg.length>1 ? new RegExp(arg.slice(1,arg.length),"i") : /.*/;
+			db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1, function(err, weeks) {
+				week = weeks[0];
 				if (week) {
 					//bot.say(chan, irc.colors.wrap('magenta', "CSDC "+week["week"]);
 					announce_week(week, chan);
