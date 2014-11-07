@@ -736,7 +736,8 @@ function announce_week(week, chan) {
 }
 
 function handle_message(nick, chan, message) {
-	if (chan==botnick && nick!=chei && nick!=sequell) {chan=nick;}
+	pm = false;
+	if (chan==botnick) {chan=nick; pm=true;}
 	
     if(  message.indexOf('Hello '+botnick) > -1
     ) {
@@ -778,7 +779,7 @@ function handle_message(nick, chan, message) {
     
     // redirect sequell/chei queries
     // if in a post channel
-    db.channels.count({"channel":chan},function(err, count){ if (count) {
+    db.channels.count({"channel":chan},function(err, count){ if (pm || count) {
         if (message[0] == '%'){
             bot.say(chei, message);
             cheiquerychan = chan;
@@ -787,12 +788,12 @@ function handle_message(nick, chan, message) {
 //             bot.say(chan, "Can't use this command in here, sorry");
 //         } else 
         if ('!=&.?@^'.indexOf(message[0])>-1){
-            bot.say(sequell, "!RELAY -n 1 -channel "+chan+" -nick "+nick+" -prefix "+chan+":"+" "+message);
+            bot.say(sequell, "!RELAY -n 1 -channel "+(pm ? "msg" : chan)+" -nick "+nick+" -prefix "+chan+":"+" "+message);
         }
     }});
     
     // post sequell answers
-    if (chan == botnick && nick == sequell){
+    if (chan == sequell){
         msgarray = message.split(':');
         var updateNA = false;
         if (msgarray.length>2 && msgarray[0]=="nick-alias"){
@@ -826,7 +827,7 @@ function handle_message(nick, chan, message) {
     }
     
     //post chei answers
-    if (chan == botnick && nick == chei){
+    if (chan == chei){
         bot.say(cheiquerychan, message);
     }
     
@@ -869,7 +870,7 @@ function handle_message(nick, chan, message) {
         }
         
         if (arg[0]=="info" || arg[0]=="week") {
-			db.csdc.findOne({"week": new RegExp(arg.slice(1,arg.length),"i"), "start": {$lte: getTimeStamp()}}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
+			db.csdc.find({"week": new RegExp(arg.slice(1,arg.length),"i"), "start": {$lte: getTimeStamp()}}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1).first(function(err, week) {
 				if (week) {
 					//bot.say(chan, irc.colors.wrap('magenta', "CSDC "+week["week"]);
 					announce_week(week, chan);
