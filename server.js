@@ -835,15 +835,15 @@ function handle_message(nick, chan, message) {
     if ('$#'.indexOf(message[0])>-1) {
         //remove prefix and add username as first arg if there is none
         var arg = message.slice(1, message.length).replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
-        if (arg.length==1){
-            arg[1]=nick;
-        }
         
         if (arg[0]=="help") {
             bot.say(chan, "csdc commands: $points <player>, $week <week num>");
         }
         
         if (arg[0]=="points") {
+        	if (arg.length==1){
+            	arg[1]=nick;
+        	}
             //build pstr backwards
             var pstr = "Points for "+arg[1]+": ";
             var s = [];
@@ -871,7 +871,7 @@ function handle_message(nick, chan, message) {
         
         if (arg[0]=="info" || arg[0]=="week") {
         	regex = arg.length>1 ? new RegExp(arg.slice(1,arg.length).join(' '),"i") : /.*/;
-        	console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
+        	//console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
 			db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1, function(err, weeks) {
 				week = weeks[0];
 				if (week) {
