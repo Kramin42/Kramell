@@ -816,7 +816,7 @@ function handle_message(nick, chan, message) {
         //check if from announcer
         db.announcers.count({"name":nick},function(err, count){ if (count) {
         	//do CSDC weekly combo announcement
-			db.csdc.findOne({"announced": false}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
+			db.csdc.findOne({"announced": false, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
 				//if (week) console.log("checking date for "+week["week"]+", "+getTimeStamp()+">="+week["start"]);
 				if (week && getTimeStamp() >= week["start"]) {
 					db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
@@ -939,7 +939,7 @@ function handle_message(nick, chan, message) {
         if (arg[0]=="info" || arg[0]=="week") {
         	regex = arg.length>1 ? new RegExp(arg.slice(1,arg.length).join(' '),"i") : /.*/;
         	//console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
-			db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1, function(err, weeks) {
+			db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1, function(err, weeks) {
 				week = weeks[0];
 				if (week) {
 					//bot.say(chan, irc.colors.wrap('magenta', "CSDC "+week["week"]);
