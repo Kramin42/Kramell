@@ -417,7 +417,7 @@ function check_csdc_points(name, milestone, week) {
         	qualify = false;
         	// && milestone.search(week["bonusqual"][i])>-1
         	if (week["bonusqual"][i] instanceof Array) {
-				for (j=0;j<week["bonusqual"][i].length) {
+				for (j=0;j<week["bonusqual"][i].length;j++) {
 					if (milestone.search(week["bonusqual"][i][j])>-1) {
 						player["bonusqual"][i][j]=true;
 						toset = {};
