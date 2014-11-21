@@ -229,6 +229,7 @@ function process_milestone(milestone) {
                         bonusqual:1,
                         bonusdisqual:1,
                         bonusworth:1,
+                        bonusdisqualresetqual:1,
                         week:1,
                         start:1,
                         end:1
@@ -382,24 +383,65 @@ function check_csdc_points(name, milestone, week) {
     
     //8,9,etc tier bonus points
     for (i=0;i<week["bonusworth"].length;i++) {
-        //disqualify (only if not already obtained)
+        //disqualify (only if not already obtained) or reset qualifiers
         if (!points[i+7] && milestone.search(week["bonusdisqual"][i])>-1){
-            if (!player["bonusdisqual"][i]){
+        	if (week["bonusdisqualresetqual"] && week["bonusdisqualresetqual"][i]) {//only reset qualifiers
+        		player["bonusqual"][i] = [];
+        		toset = {};
+                toset["players.$.bonusqual."+i] = [];
+                toset["players.$.points."+(i+7)] = 0;
+                db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
+        	} else {
+        		if (!player["bonusdisqual"][i]){
                 toset = {};
                 toset["players.$.bonusdisqual."+i] = true;
                 toset["players.$.points."+(i+7)] = 0;
                 db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
                 bot.say('##csdc', irc.colors.wrap('dark_red', name+' (L'+xl+' '+ch+') can no longer get the tier '+(i+1)+' bonus for '+week["week"]));
-            }
+        	}
+        }
+        if (!player["bonusqual"]) {
+        	player["bonusqual"] = [];
+        }
+        if (!player["bonusqual"][i]) {
+        	player["bonusqual"][i] = [];
+        }
+        if (player["bonusqual"][i].length != week["bonusqual"][i].length) {
+        	player["bonusqual"][i][week["bonusqual"][i].length-1] = false;
+        	toset = {};
+        	toset["players.$.bonusqual."+i] = player["bonusqual"][i];
+        	db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()}, {$set: toset});
         }
         //qualify
-        if ((player["bonusdisqual"]==[] || !player["bonusdisqual"][i]) && milestone.search(week["bonusqual"][i])>-1){
-            if (!points[i+7]){
-                toset = {};
-                toset["players.$.points."+(i+7)] = week["bonusworth"][i];
-                db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
-                bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') has acquired the tier '+(i+1)+' bonus for '+week["week"]+', '+week["bonusworth"][i]+(week["bonusworth"][i]==1 ? ' point!' : ' points!')));
-            }
+        if ((player["bonusdisqual"]==[] || !player["bonusdisqual"][i])){
+        	qualify = false;
+        	// && milestone.search(week["bonusqual"][i])>-1
+        	if (week["bonusqual"][i] instanceof Array) {
+				for (j=0;j<week["bonusqual"][i].length) {
+					if (milestone.search(week["bonusqual"][i][j])>-1) {
+						player["bonusqual"][i][j]=true;
+						toset = {};
+                		toset["players.$.bonusqual."+i+"."+j] = true;
+						db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
+						break;
+					}
+				}
+				if (player["bonusqual"][i].every(Boolean)) {
+					qualify=true;
+				}
+			} else {
+				if (milestone.search(week["bonusqual"][i])>-1) {
+					qualify = true;
+				}
+			}
+			if (qualify) {
+				if (!points[i+7]){
+            		toset = {};
+            		toset["players.$.points."+(i+7)] = week["bonusworth"][i];
+                	db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
+                	bot.say('##csdc', irc.colors.wrap('dark_green', name+' (L'+xl+' '+ch+') has acquired the tier '+(i+1)+' bonus for '+week["week"]+', '+week["bonusworth"][i]+(week["bonusworth"][i]==1 ? ' point!' : ' points!')));
+            	}
+			}
         }
     }
 }
