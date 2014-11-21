@@ -393,11 +393,12 @@ function check_csdc_points(name, milestone, week) {
                 db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
         	} else {
         		if (!player["bonusdisqual"][i]){
-                toset = {};
-                toset["players.$.bonusdisqual."+i] = true;
-                toset["players.$.points."+(i+7)] = 0;
-                db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
-                bot.say('##csdc', irc.colors.wrap('dark_red', name+' (L'+xl+' '+ch+') can no longer get the tier '+(i+1)+' bonus for '+week["week"]));
+                	toset = {};
+                	toset["players.$.bonusdisqual."+i] = true;
+                	toset["players.$.points."+(i+7)] = 0;
+                	db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: toset});
+                	bot.say('##csdc', irc.colors.wrap('dark_red', name+' (L'+xl+' '+ch+') can no longer get the tier '+(i+1)+' bonus for '+week["week"]));
+                }
         	}
         }
         if (!player["bonusqual"]) {
