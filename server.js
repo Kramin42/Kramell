@@ -202,7 +202,7 @@ function process_milestone(milestone) {
     try {
         var name = milestone.match(/name=(\w*):/)[1];
         var version = milestone.match(/v=(.*):vlong/)[1];
-        var mtext = milestone.match(/milestone=(.*)/)[1];
+        var mtext = milestone.match(/(milestone|tmsg)=(.*)/)[1];
 //         var xl = milestone.match(/xl=(\d+):/)[1];
 //         var combo = milestone.match(/char=(\w\w\w\w):/)[1];
 //         var text = milestone.match(/milestone=(\w*)/)[1];
