@@ -55,6 +55,7 @@ var NAnick;
 var NAaliases;
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
+var logacc = {};
 
 function pad(n) {
     return (n < 10) ? ("0" + n.toString()) : n.toString();
@@ -153,19 +154,27 @@ function get_logfile_offset(announcer, url) {
 }
 
 function get_server_logs(announcer) {
+	if (!logacc[announcer]) {
+		logacc[announcer] = {};
+	}
     //get the array of files and iterate through
     db.announcers.findOne({"name": announcer}, function(err, server) {server["files"].forEach(function(file) {
         if (file["offset"]) {
+        	if (!logacc[announcer][file["url"]]) {
+				logacc[announcer][file["url"]] = "";
+			}
             var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
             child.stdout.on('data', function (data) {
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
                     //console.log(announcer+': ' + data);
                     //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
-                    datalength = countUtf8(data);
-                    if (datalength != byteCount(data)) console.log("differing byte counts: old: "+byteCount(data)+", new: "+datalength);
-                    data.replace(/^\s+|\s+$/g, '').split(/\n(?=v=)/).forEach(process_milestone);
+                    datalength = byteCount(data);
+                    //if (datalength != byteCount(data)) console.log("differing byte counts: old: "+byteCount(data)+", new: "+datalength);
+                    logacc[announcer][file["url"]] += data;
+                    logacc[announcer][file["url"]].split(/\n(?=v=)/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
                     console.log(announcer+' data size: '+datalength+' bytes');
+                    console.log("leftovers in logacc["+announcer+"]["file["url"]"]: "+logacc[announcer][file["url"]]);
                     //console.log(data);
                     //offset+=datalength;
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
@@ -196,13 +205,20 @@ function get_server_logs(announcer) {
     );
 }
 
-function process_milestone(milestone) {
+function process_milestone(milestone, announcer, url) {
     milestone = milestone.replace("\n","");//for very long milestones that were split
-    //if (!milestone.match(/name=(\w*):/)) {return;}// make sure it's a milestone
+    
+    // make sure it's a complete milestone
+    if (!milestone.match(/v=.*:vlong=.*(milestone=.*|tmsg=.*|type=crash)/)) {
+    	console.log("appending to logacc: "+milestone);
+    	logacc[announcer][url] += milestone + "\n";
+    	return;
+    }
+    
     try {
         var name = milestone.match(/name=(\w*):/)[1];
         var version = milestone.match(/v=(.*):vlong/)[1];
-        var mtext = milestone.match(/(milestone|tmsg)=(.*)/)[1];
+        //var mtext = milestone.match(/(milestone|tmsg)=(.*)/)[1];
 //         var xl = milestone.match(/xl=(\d+):/)[1];
 //         var combo = milestone.match(/char=(\w\w\w\w):/)[1];
 //         var text = milestone.match(/milestone=(\w*)/)[1];
