@@ -889,7 +889,7 @@ function handle_message(nick, chan, message) {
     
     // redirect sequell/chei queries
     // if in a post channel
-    db.channels.count({"channel":chan},function(err, count){ if (pm || count) {
+    db.channels.count({"channel":chan},function(err, count){ if (chan == control_channel || pm || count) {
         if (message[0] == '%'){
             bot.say(chei, message);
             cheiquerychan = chan;
