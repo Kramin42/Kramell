@@ -156,7 +156,7 @@ function get_server_logs(announcer) {
     //get the array of files and iterate through
     db.announcers.findOne({"name": announcer}, function(err, server) {server["files"].forEach(function(file) {
         if (file["offset"]) {
-            var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
+            var child = exec('curl -sr '+file["offset"]+'- '+file["url"]+' | dd');
 
             child.stdout.on('data', function (data) {
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
@@ -202,6 +202,7 @@ function process_milestone(milestone) {
     try {
         var name = milestone.match(/name=(\w*):/)[1];
         var version = milestone.match(/v=(.*):vlong/)[1];
+        var mtext = milestone.match(/milestone=(.*)/)[1];
 //         var xl = milestone.match(/xl=(\d+):/)[1];
 //         var combo = milestone.match(/char=(\w\w\w\w):/)[1];
 //         var text = milestone.match(/milestone=(\w*)/)[1];
