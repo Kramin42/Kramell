@@ -215,6 +215,7 @@ function process_milestone(milestone, announcer, url) {
     milestone = milestone.replace(/\n/g,"");//for very long milestones that were split
     // make sure it's a complete milestone
     if (!milestone.match(/<<<:v=.*:>>>/)) {
+    	milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
     	console.log("appending to logacc: "+milestone);
     	logacc[announcer][url] += milestone;
     	return;
