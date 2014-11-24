@@ -176,7 +176,7 @@ function get_server_logs(announcer) {
                     logacc[announcer][file["url"]] = "";
                     console.log(announcer+' data size: '+datalength+' bytes');
                     data = data.replace(/\n/g,"");
-                    data = data.replace(/(?=.+)v=(?=\d\.\d\d)/g,":>>>&&&<<<:v=");
+                    data = data.replace(/(?<=.+)v=(?=\d\.\d\d)/g,":>>>&&&<<<:v=");
                     data = data.replace(/^(?=v=\d\.\d\d)/g,"<<<:");
                     console.log(data);
                     data.split(/&&&/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
@@ -216,7 +216,7 @@ function process_milestone(milestone, announcer, url) {
     // make sure it's a complete milestone
     if (!milestone.match(/<<<:v=.*:>>>/)) {
     	console.log("appending to logacc: "+milestone);
-    	logacc[announcer][url] += milestone + "&&&";
+    	logacc[announcer][url] += milestone;
     	return;
     }
     
