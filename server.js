@@ -175,9 +175,9 @@ function get_server_logs(announcer) {
                     data = logacc[announcer][file["url"]];
                     logacc[announcer][file["url"]] = "";
                     console.log(announcer+' data size: '+datalength+' bytes');
-                    console.log(data);
                     data.replace(/v=/g,":>>>&&&<<<:v=");
                     data.replace(/\n/g,"");
+                    console.log(data);
                     data.split(/&&&/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
@@ -215,7 +215,7 @@ function process_milestone(milestone, announcer, url) {
     // make sure it's a complete milestone
     if (!milestone.match(/<<<:v=.*:.*(milestone=.*|tmsg=.*|type=crash):>>>/)) {
     	console.log("appending to logacc: "+milestone);
-    	logacc[announcer][url] += milestone + "\n";
+    	logacc[announcer][url] += milestone + "&&&";
     	return;
     }
     
