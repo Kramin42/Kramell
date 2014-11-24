@@ -156,7 +156,7 @@ function get_server_logs(announcer) {
     //get the array of files and iterate through
     db.announcers.findOne({"name": announcer}, function(err, server) {server["files"].forEach(function(file) {
         if (file["offset"]) {
-            var child = exec('curl -sr '+file["offset"]+'- '+file["url"]+' | dd');
+            var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
             child.stdout.on('data', function (data) {
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
