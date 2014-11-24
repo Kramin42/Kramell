@@ -174,7 +174,7 @@ function get_server_logs(announcer) {
                     logacc[announcer][file["url"]] += data;
                     logacc[announcer][file["url"]].split(/\n(?=v=)/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
                     console.log(announcer+' data size: '+datalength+' bytes');
-                    console.log("leftovers in logacc["+announcer+"]["file["url"]"]: "+logacc[announcer][file["url"]]);
+                    console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);
                     //console.log(data);
                     //offset+=datalength;
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
