@@ -174,8 +174,8 @@ function get_server_logs(announcer) {
                     logacc[announcer][file["url"]] += data;
                     data = logacc[announcer][file["url"]];
                     logacc[announcer][file["url"]] = "";
-                    data.split(/\n(?=v=)/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
                     console.log(announcer+' data size: '+datalength+' bytes');
+                    data.split(/\n(?=v=)/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
                     //offset+=datalength;
@@ -209,13 +209,14 @@ function get_server_logs(announcer) {
 
 function process_milestone(milestone, announcer, url) {
     milestone = milestone.replace("\n","");//for very long milestones that were split
-    
     // make sure it's a complete milestone
     if (!milestone.match(/v=.*:vlong=.*(milestone=.*|tmsg=.*|type=crash)/)) {
     	console.log("appending to logacc: "+milestone);
     	logacc[announcer][url] += milestone + "\n";
     	return;
     }
+    
+    console.log("milestone: "+milestone);
     
     try {
         var name = milestone.match(/name=(\w*):/)[1];
