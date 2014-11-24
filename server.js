@@ -167,7 +167,7 @@ function get_server_logs(announcer) {
 
             child.stdout.on('data', function (data) {
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
-                	console.log(JSON.stringify(data.split(/\n/)));
+                	//console.log(JSON.stringify(data.split(/\n/)));
                     //console.log(announcer+': ' + data);
                     //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
                     datalength = byteCount(data);
@@ -176,12 +176,12 @@ function get_server_logs(announcer) {
                     data = logacc[announcer][file["url"]];
                     logacc[announcer][file["url"]] = "";
                     console.log(announcer+' data size: '+datalength+' bytes');
-                    data = data.replace(/\n/g,"");
-                    data = data.replace(/(.)v=(\d\.\d\d)/g,"$1:>>>&&&<<<:v=$2");
-                    data = data.replace(/^(v=\d\.\d\d)/g,"<<<:$1");
+                    //data = data.replace(/\n/g,"");
+                    //data = data.replace(/(.)v=(\d\.\d\d)/g,"$1:>>>&&&<<<:v=$2");
+                    //data = data.replace(/^(v=\d\.\d\d)/g,"<<<:$1");
                     //console.log(data);
-                    data.split(/&&&/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
-                    //if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
+                    data.split(/\n/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
+                    if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
                     //offset+=datalength;
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
@@ -213,11 +213,11 @@ function get_server_logs(announcer) {
 }
 
 function process_milestone(milestone, announcer, url) {
-    milestone = milestone.replace(/\n/g,"");//for very long milestones that were split
+    //milestone = milestone.replace(/\n/g,"");
     // make sure it's a complete milestone
-    if (!milestone.match(/<<<:v=.*:>>>/)) {
-    	milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
-    	//console.log("appending to logacc: "+milestone);
+    if (!milestone.match(/^(v=\d\.\d\d).*\n$/)) {
+    	//milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
+    	console.log("appending to logacc: "+milestone);
     	logacc[announcer][url] += milestone;
     	return;
     }
