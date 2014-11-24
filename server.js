@@ -180,7 +180,8 @@ function get_server_logs(announcer) {
                     //data = data.replace(/(.)v=(\d\.\d\d)/g,"$1:>>>&&&<<<:v=$2");
                     //data = data.replace(/^(v=\d\.\d\d)/g,"<<<:$1");
                     //console.log(data);
-                    data.split(/(?=\n)/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
+                    data = data.replace(/\n\n/g,"\n");
+                    data.split(/^/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
                     //offset+=datalength;
@@ -214,6 +215,7 @@ function get_server_logs(announcer) {
 
 function process_milestone(milestone, announcer, url) {
     //milestone = milestone.replace(/\n/g,"");
+    
     // make sure it's a complete milestone
     if (!milestone.match(/^v=.*:vlong=.*\n/)) {
     	//milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
