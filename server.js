@@ -175,9 +175,9 @@ function get_server_logs(announcer) {
                     data = logacc[announcer][file["url"]];
                     logacc[announcer][file["url"]] = "";
                     console.log(announcer+' data size: '+datalength+' bytes');
-                    data.replace(/\n/g,"");
-                    data.replace(/(?=.+)v=(?=\d\.\d\d)/g,":>>>&&&<<<:v=");
-                    data.replace(/^(?=v=\d\.\d\d)/g,"<<<:");
+                    data = data.replace(/\n/g,"");
+                    data = data.replace(/(?=.+)v=(?=\d\.\d\d)/g,":>>>&&&<<<:v=");
+                    data = data.replace(/^(?=v=\d\.\d\d)/g,"<<<:");
                     console.log(data);
                     data.split(/&&&/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
