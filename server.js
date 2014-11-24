@@ -172,7 +172,9 @@ function get_server_logs(announcer) {
                     datalength = byteCount(data);
                     //if (datalength != byteCount(data)) console.log("differing byte counts: old: "+byteCount(data)+", new: "+datalength);
                     logacc[announcer][file["url"]] += data;
-                    logacc[announcer][file["url"]].split(/\n(?=v=)/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
+                    data = logacc[announcer][file["url"]];
+                    logacc[announcer][file["url"]] = "";
+                    data.split(/\n(?=v=)/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
                     console.log(announcer+' data size: '+datalength+' bytes');
                     console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);
                     //console.log(data);
