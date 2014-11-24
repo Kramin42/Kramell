@@ -215,7 +215,7 @@ function get_server_logs(announcer) {
 function process_milestone(milestone, announcer, url) {
     //milestone = milestone.replace(/\n/g,"");
     // make sure it's a complete milestone
-    if (!milestone.match(/^(v=\d\.\d\d).*\n$/)) {
+    if (!milestone.match(/^(v=.+:vlong=.*\n/)) {
     	//milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
     	console.log("appending to logacc: "+milestone);
     	logacc[announcer][url] += milestone;
