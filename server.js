@@ -167,6 +167,7 @@ function get_server_logs(announcer) {
 
             child.stdout.on('data', function (data) {
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
+                	console.log(JSON.stringify(data.split(/\n/)));
                     //console.log(announcer+': ' + data);
                     //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
                     datalength = byteCount(data);
@@ -178,9 +179,9 @@ function get_server_logs(announcer) {
                     data = data.replace(/\n/g,"");
                     data = data.replace(/(.)v=(\d\.\d\d)/g,"$1:>>>&&&<<<:v=$2");
                     data = data.replace(/^(v=\d\.\d\d)/g,"<<<:$1");
-                    console.log(data);
+                    //console.log(data);
                     data.split(/&&&/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
-                    if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
+                    //if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
                     //offset+=datalength;
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
@@ -216,7 +217,7 @@ function process_milestone(milestone, announcer, url) {
     // make sure it's a complete milestone
     if (!milestone.match(/<<<:v=.*:>>>/)) {
     	milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
-    	console.log("appending to logacc: "+milestone);
+    	//console.log("appending to logacc: "+milestone);
     	logacc[announcer][url] += milestone;
     	return;
     }
