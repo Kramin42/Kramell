@@ -755,10 +755,11 @@ function do_command(arg, chan, nick, admin) {
                 argname = arg[3];
                 db.dieselrobin.update({"team":argteam},{$pull: {"players":argname}},show);
                 bot.say(control_channel, "player removed ("+chan+"/"+nick+"): "+argname+" from "+argteam);
+                db.dieselrobin.remove({"players":[]});
             } else {
                 argteam = arg[1];
                 argname = arg[2];
-                db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},show);
+                db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},{upsert:true},show);
                 bot.say(control_channel, "player added ("+chan+"/"+nick+"): "+argname+" to "+argteam);
             }
         } else if (arg.length==2) {
