@@ -137,6 +137,13 @@ function countUtf8(str) {
     return result;
 }
 
+//+ Jonas Raoni Soares Silva
+//@ http://jsfromhell.com/array/shuffle [v1.0]
+function shuffle(o){ //v1.0
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+};
+
 function get_logfile_offset(announcer, url) {
     //curl -sI http://crawl.akrasiac.org/milestones-git | grep Content-Length  | awk '{print $2}'
     var child = exec("curl -sI "+url+" | grep Content-Length  | awk '{print $2}'");
@@ -595,12 +602,18 @@ function route_announcement(name, alias, message) {
 function do_command(arg, chan, nick, admin) {
     // commands
     if (arg[0]=="help" || arg[0]=="commands"){
-        bot.say(chan, "Kramell commands:");
-        if (admin) bot.say(chan, "  $announcer [-rm] <announcer name>");
-        if (admin) bot.say(chan, "  $channel [-rm] <channel name>");
-        bot.say(chan, "  $name [-rm] <channel name> <user name>");
-        bot.say(chan, "  $filter [-rm] <channel name> <regex filter>");
-        bot.say(chan, "  $colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
+    	if (chan=="##csdc") {
+    		
+    	} else if (chan=="##dieselrobin") {
+    		
+    	} else {
+			bot.say(chan, "Kramell commands:");
+			if (admin) bot.say(chan, "  $announcer [-rm] <announcer name>");
+			if (admin) bot.say(chan, "  $channel [-rm] <channel name>");
+			bot.say(chan, "  $name [-rm] <channel name> <user name>");
+			bot.say(chan, "  $filter [-rm] <channel name> <regex filter>");
+			bot.say(chan, "  $colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
+        }
     }
 
     if (admin && (arg[0]=="announcer" || arg[0]=="announcers")){
@@ -803,13 +816,18 @@ function do_command(arg, chan, nick, admin) {
     }
     
     if ((arg[0]=="nominate" || arg[0]=="nominated")  && chan=="##dieselrobin") {
+    	if (arg.length==1) {
+    		db.dieselrobin.findOne({"players": nick}, function(err, team) {
+    			arg[1] = team["team"];
+    		});
+    	}
     	if (arg.length==2) {
     		db.dieselrobin.findOne({"team": arg[1]}, function(err, team) {
     			if (team) {
     				nom = "";
     				for (i=0; i<team["nominated"].length; i++) {
     					if (team["nominated"][i]) {
-    						nom += team["nominated"][i]+" ("+team["players"][i]+") ";
+    						nom = [nom, team["nominated"][i]+" ("+team["players"][i]+") "].join(", ");
     					}
     				}
     				if (nom!="") {
@@ -834,6 +852,29 @@ function do_command(arg, chan, nick, admin) {
     			}
     		});
     	}
+    }
+    
+    if (admin && arg[0]=="shufflechars" && chan=="##dieselrobin") {
+    	db.dieselrobin.distinct('nominated', function(err, chars) {
+    		db.dieselrobin.distinct('team', {'nominated.2': {exists: false}}, function(err, unnomteams) {
+    			if (unnomteams.length>0) {
+    				bot.say(chan, 'Some teams have not finished nominating: '+unnomteams.join(', ');
+    			} else {
+    				charcount = chars.length;
+    				chars = shuffle(chars);
+    				db.dieselrobin.distinct('team', function(err, teams){
+    					teams.forEach(function (team) {
+    						toset = {}
+    						for (i=0; i<3; i++) {
+    							toset["assigned"][i] = chars.pop();
+    						}
+    						db.dieselrobin.update({'team': team}, {$set: toset});
+    					});
+    					bot.say(chan, charcount+" chars assigned to "+teams.length+" teams, randomly");
+    				});
+    			}
+    		});
+    	});
     }
     
     //CSDC commands
@@ -1159,7 +1200,7 @@ function handle_error(error) {
 }
 
 function handle_quit(nick, reason, channels, message) {
-	console.log("QUIT: "+nick+"; "+reason+"; "+channels+"; "+message);
+	//console.log("QUIT: "+nick+"; "+reason+"; "+channels+"; "+message);
 }
 
 function handle_connect(message) {
