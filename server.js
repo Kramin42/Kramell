@@ -145,6 +145,16 @@ function shuffle(o){ //v1.0
     return o;
 };
 
+Array.prototype.toLowerCase = function() {
+    var i = this.length;
+    while ( --i >= 0 ) {
+        if ( typeof this[i] === "string" ) {
+            this[i] = this[i].toLowerCase();
+        }
+    }
+    return this;
+};
+
 function get_logfile_offset(announcer, url) {
     //curl -sI http://crawl.akrasiac.org/milestones-git | grep Content-Length  | awk '{print $2}'
     var child = exec("curl -sI "+url+" | grep Content-Length  | awk '{print $2}'");
