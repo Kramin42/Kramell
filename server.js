@@ -181,8 +181,12 @@ function get_server_logs(announcer) {
                     //data = data.replace(/^(v=\d\.\d\d)/g,"<<<:$1");
                     //console.log(data);
                     data = data.replace(/\n\n/g,"\n");
-                    console.log(JSON.stringify(data.split(/^/)));
-                    data.split(/^/).forEach(function(text) {process_milestone(text,announcer,file["url"])});
+                    datasplit = data.split(/\n/);
+                    for (i=0; i<datasplit.length-1; i++) {
+                    	datasplit[i]+="\n";
+                    }
+                    console.log(JSON.stringify(datasplit));
+                    datasplit.forEach(function(text) {process_milestone(text,announcer,file["url"])});
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
                     //offset+=datalength;
