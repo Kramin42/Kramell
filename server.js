@@ -747,14 +747,17 @@ function do_command(arg, chan, nick, admin) {
     //dieselrobin commands
     if (arg[0]=="signup" && chan=="##dieselrobin") {
     	argteam = "";
-    	show = function() {db.dieselrobin.distinct('players', {'team':argteam}, function(err, players) {
+    	callback = function(err, updated) {
+    		db.dieselrobin.distinct('players', {'team':argteam}, function(err, players) {
+                console.log(JSON.stringify(updated));
                 bot.say(chan, "Players in team "+argteam+": "+players.join(', '));
-        });};
+        	});
+        };
     	if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
                 argteam = arg[2];
                 argname = arg[3];
-                db.dieselrobin.update({"team":argteam},{$pull: {"players":argname}},show);
+                db.dieselrobin.update({"team":argteam},{$pull: {"players":argname}},callback);
                 bot.say(control_channel, "player removed ("+chan+"/"+nick+"): "+argname+" from "+argteam);
                 db.dieselrobin.remove({"players":[]});
             } else {
@@ -762,7 +765,7 @@ function do_command(arg, chan, nick, admin) {
                 argname = arg[2];
                 db.dieselrobin.findOne({"team":argteam}, function(err,team) {
                 	if (!team || !team["players"] || team["players"].length<3) {
-                		db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},{upsert:true},show);
+                		db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},{upsert:true},callback);
                 		bot.say(control_channel, "player added ("+chan+"/"+nick+"): "+argname+" to "+argteam);
                 	} else {
                 		bot.say(chan, "team "+argteam+" is already full");
@@ -772,7 +775,7 @@ function do_command(arg, chan, nick, admin) {
         } else if (arg.length==2) {
         	argteam = arg[1];
         	argname = nick;
-        	db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},{upsert:true},show);
+        	db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},{upsert:true},callback);
             bot.say(control_channel, "player added ("+chan+"/"+nick+"): "+argname+" to "+argteam);
         } else {
             bot.say(chan, "Usage: $signup [-rm] <team name> [player nick]");
@@ -796,14 +799,14 @@ function do_command(arg, chan, nick, admin) {
     	}
     }
     
-    if (arg[0]=="nominate"  && chan=="##dieselrobin") {
+    if ((arg[0]=="nominate" || arg[0]=="nominated")  && chan=="##dieselrobin") {
     	if (arg.length==2) {
     		db.dieselrobin.findOne({"team": arg[1]}, function(err, team) {
     			if (team) {
-    				nom = ""
+    				nom = "";
     				for (i=0; i<team["nominated"].length; i++) {
     					if (team["nominated"][i]) {
-    						nom += team["nominated"][i]+" ("+team["players"][i]+") "
+    						nom += team["nominated"][i]+" ("+team["players"][i]+") ";
     					}
     				}
     				if (nom!="") {
