@@ -224,7 +224,7 @@ function process_milestone(milestone, announcer, url) {
     // make sure it's a complete milestone
     if (!milestone.match(/^v=.*:vlong=.*\n/)) {
     	//milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
-    	if (milestone.match(/\n/) {
+    	if (milestone.match(/\n/)) {
     		console.log("broken milestone: "+milestone);
     	} else {
     		//console.log("appending to logacc: "+milestone);
