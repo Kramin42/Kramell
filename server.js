@@ -762,9 +762,9 @@ function do_command(arg, chan, nick, admin) {
     	argteam = "";
     	callback = function(err, updated) {
     		if (!updated["updatedExisting"]) {
-                db.dieselrobin.update({"team":argteam}, {$set: {"accounts": [], "assigned": [], "bonuspoints": [], "bonusqual": [], "nominated": []}});
+                db.dieselrobin.update({"team":new RegExp(argteam,'i')}, {$set: {"accounts": [], "assigned": [], "bonuspoints": [], "bonusqual": [], "nominated": []}});
             }
-    		db.dieselrobin.distinct('players', {'team':argteam}, function(err, players) {
+    		db.dieselrobin.distinct('players', {'team':new RegExp(argteam,'i')}, function(err, players) {
                 //console.log(JSON.stringify(updated));
                 bot.say(chan, "Players in team "+argteam+": "+players.join(', '));
         	});
@@ -773,15 +773,15 @@ function do_command(arg, chan, nick, admin) {
             if (arg[1]=="-rm"){
                 argteam = arg[2];
                 argname = arg[3];
-                db.dieselrobin.update({"team":argteam},{$pull: {"players":argname}},callback);
+                db.dieselrobin.update({"team":new RegExp(argteam,'i')},{$pull: {"players": new RegExp(argname,'i')}},callback);
                 bot.say(control_channel, "player removed ("+chan+"/"+nick+"): "+argname+" from "+argteam);
                 db.dieselrobin.remove({"players":[]});
             } else {
                 argteam = arg[1];
                 argname = arg[2];
-                db.dieselrobin.findOne({"team":argteam}, function(err,team) {
+                db.dieselrobin.findOne({"team":new RegExp(argteam,'i')}, function(err,team) {
                 	if (!team || !team["players"] || team["players"].length<3) {
-                		db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},{upsert:true},callback);
+                		db.dieselrobin.update({"team":new RegExp(argteam,'i')},{$addToSet: {"players":argname}},{upsert:true},callback);
                 		bot.say(control_channel, "player added ("+chan+"/"+nick+"): "+argname+" to "+argteam);
                 	} else {
                 		bot.say(chan, "team "+argteam+" is already full");
@@ -820,12 +820,17 @@ function do_command(arg, chan, nick, admin) {
     		arg[1] = nick;
     	}
     	if (arg.length==2) {
-    		db.dieselrobin.findOne({$or: [{'team': arg[1]}, {'players': arg[1]}]}, function(err, team) {
+    		db.dieselrobin.findOne({$or: [{'team': new RegExp(arg[1],'i')}, {'players': new RegExp(arg[1],'i')}]}, function(err, team) {
     			if (team) {
     				nom = "";
     				for (i=0; i<team["nominated"].length; i++) {
     					if (team["nominated"][i]) {
-    						nom = [nom, team["nominated"][i]+" ("+team["players"][i]+") "].join(", ");
+    						newbit = team["nominated"][i]+" ("+team["players"][i]+") ";
+    						if (nom!="") {
+    							nom = [nom, newbit].join(", ");
+    						} else {
+    							nom = newbit;
+    						}
     					}
     				}
     				if (nom!="") {
@@ -834,7 +839,7 @@ function do_command(arg, chan, nick, admin) {
     					bot.say(chan, "No chars nominated by team "+team["team"]);
     				}
     			} else {
-    				db.dieselrobin.findOne({"nominated": arg[1]}, function(err, found) {
+    				db.dieselrobin.findOne({"nominated": new RegExp(arg[1],'i')}, function(err, found) {
     					if (found) {
     						bot.say(chan, arg[1]+" has already been nominated");
     					} else {
@@ -856,7 +861,11 @@ function do_command(arg, chan, nick, admin) {
     	db.dieselrobin.find({'team': {$exists: true}}, function(err, teams) {
     		teamlist = '';
     		teams.forEach(function(team) {
-    			teamlist = [teamlist, team['team']].join(', ');
+    			if (teamlist!='') {
+    				teamlist = [nom, team['team']].join(', ');
+    			} else {
+    				teamlist = team['team'];
+    			}
     		});
     		bot.say(chan, "Teams: "+teamlist);
     	});
@@ -867,7 +876,7 @@ function do_command(arg, chan, nick, admin) {
     		arg[1] = nick;
     	}
     	if (arg.length==2) {
-    		db.dieselrobin.findOne({$or: [{'team': arg[1]}, {'players': arg[1]}]}, function(err, team) {
+    		db.dieselrobin.findOne({$or: [{'team': new RegExp(arg[1],'i')}, {'players': new RegExp(arg[1],'i')}]}, function(err, team) {
     			if (team) {
     				bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', '));
     			} else {
