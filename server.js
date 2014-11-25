@@ -184,8 +184,8 @@ function get_server_logs(announcer) {
     	120*1000
     );
     if (fetching[announcer]) {return;}//don't want simultaneous fetches breaking things
-    console.log('fetching from '+announcer);
 	fetching[announcer] = true;
+	console.log('fetching from '+announcer+': '+fetching[announcer]);
 	if (!logacc[announcer]) {
 		logacc[announcer] = {};
 	}
@@ -199,11 +199,11 @@ function get_server_logs(announcer) {
 
             child.stdout.on('data', function (data) {
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
+                	fetching[announcer] = true;
                 	//console.log(JSON.stringify(data.split(/\n/)));
                     //console.log(announcer+': ' + data);
                     //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
                     datalength = byteCount(data);
-                    db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
                     //if (datalength != byteCount(data)) console.log("differing byte counts: old: "+byteCount(data)+", new: "+datalength);
                     data = logacc[announcer][file["url"]] + data;
                     logacc[announcer][file["url"]] = "";
@@ -222,6 +222,10 @@ function get_server_logs(announcer) {
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
                     //offset+=datalength;
+                    db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
+                    	fetching[announcer] = false;
+                		console.log('fetching from '+announcer+': '+fetching[announcer]);
+                    });
                 } else {
                     //console.log("no new content");
                     //console.log("no new milestones for "+announcer);
@@ -234,8 +238,6 @@ function get_server_logs(announcer) {
 
             child.on('close', function (code) {
                 if (code>0) {console.log('logfile fetch for '+file["url"]+' exited with code ' + code);}
-                console.log('done fetching from '+announcer);
-                fetching[announcer] = false;
             });
         }
     });});
