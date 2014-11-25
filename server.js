@@ -747,7 +747,7 @@ function do_command(arg, chan, nick, admin) {
     if (arg[0]=="signup" && chan=="##dieselrobin") {
     	argteam = "";
     	show = function() {db.dieselrobin.distinct('players', {'team':argteam}, function(err, players) {
-                bot.say(chan, "Players in "+argteam+": "+players.join(', '));
+                bot.say(chan, "Players in team "+argteam+": "+players.join(', '));
         });};
     	if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
@@ -783,11 +783,11 @@ function do_command(arg, chan, nick, admin) {
     		if (arg[1]=="list") {
     			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
     				for (i=1; i<=challenge["missiontext"].length; i++) {
-    					bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i]+". New places: "+challenge["locations"][i]);
+    					bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i-1]+". New places: "+challenge["locations"][i-1]);
     				}
     			});
     		} else {
-    			i = parseInt(arg[1])+1;
+    			i = parseInt(arg[1]);
     			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
     				bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i]+". New places: "+challenge["locations"][i]);
     			});
