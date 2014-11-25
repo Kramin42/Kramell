@@ -772,7 +772,7 @@ function do_command(arg, chan, nick, admin) {
             if (arg[1]=="-rm"){
                 argteam = arg[2];
                 argname = arg[3];
-                db.dieselrobin.update({"team":new RegExp(argteam,'i')},{$pull: {"players": new RegExp(argname,'i')}},callback);
+                db.dieselrobin.update({"team":new RegExp(argteam,'i')},{$pull: {"players": {$regex: argname, $options: 'i'}}},callback);
                 bot.say(control_channel, "player removed ("+chan+"/"+nick+"): "+argname+" from "+argteam);
                 db.dieselrobin.remove({"players":[]});
             } else {
