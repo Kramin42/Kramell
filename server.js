@@ -185,7 +185,7 @@ function get_server_logs(announcer) {
     );
     if (fetching[announcer]) {return;}//don't want simultaneous fetches breaking things
 	fetching[announcer] = true;
-	console.log('fetching from '+announcer+': '+fetching[announcer]);
+	//console.log('fetching from '+announcer+': '+fetching[announcer]);
 	if (!logacc[announcer]) {
 		logacc[announcer] = {};
 	}
@@ -200,6 +200,7 @@ function get_server_logs(announcer) {
             child.stdout.on('data', function (data) {
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
                 	fetching[announcer] = true;
+                	//console.log('fetching from '+announcer+': '+fetching[announcer]);
                 	//console.log(JSON.stringify(data.split(/\n/)));
                     //console.log(announcer+': ' + data);
                     //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
@@ -224,11 +225,12 @@ function get_server_logs(announcer) {
                     //offset+=datalength;
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
                     	fetching[announcer] = false;
-                		console.log('fetching from '+announcer+': '+fetching[announcer]);
+                		//console.log('fetching from '+announcer+': '+fetching[announcer]);
                     });
                 } else {
                     //console.log("no new content");
                     //console.log("no new milestones for "+announcer);
+                    fetching[announcer] = false;
                 }
             });
 
