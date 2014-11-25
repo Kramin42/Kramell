@@ -748,8 +748,11 @@ function do_command(arg, chan, nick, admin) {
     if (arg[0]=="signup" && chan=="##dieselrobin") {
     	argteam = "";
     	callback = function(err, updated) {
+    		if (!updated["updatedExisting"]) {
+                db.dieselrobin.update({"team":argteam}, {$set: {"accounts": [], "assigned": [], "bonuspoints": [], "bonusqual": [], "nominated": []}});
+            }
     		db.dieselrobin.distinct('players', {'team':argteam}, function(err, players) {
-                console.log(JSON.stringify(updated));
+                //console.log(JSON.stringify(updated));
                 bot.say(chan, "Players in team "+argteam+": "+players.join(', '));
         	});
         };
