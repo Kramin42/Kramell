@@ -789,7 +789,7 @@ function do_command(arg, chan, nick, admin) {
     		} else {
     			i = parseInt(arg[1]);
     			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
-    				bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i]+". New places: "+challenge["locations"][i]);
+    				bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i-1]+". New places: "+challenge["locations"][i-1]);
     			});
     		}
     	}
