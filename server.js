@@ -45,6 +45,7 @@ var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
 var dieselrobin = db.collection('dieselrobin');
+var dr=dieselrobin;
 
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
@@ -744,6 +745,7 @@ function do_command(arg, chan, nick, admin) {
         bot.say(chan, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
     }
     
+    //dieselrobin commands
     if (arg[0]=="signup" && chan=="##dieselrobin") {
     	argteam = "";
     	show = function() {db.dieselrobin.distinct('players', {'team':argteam}, function(err, players) {
@@ -795,6 +797,41 @@ function do_command(arg, chan, nick, admin) {
     	}
     }
     
+    if (arg[0]=="nominate"  && chan=="##dieselrobin") {
+    	if (arg.length==2) {
+    		db.dr.findOne({"team": arg[1]}, function(err, team) {
+    			if (team) {
+    				nom = ""
+    				for (i=0; i<team["nominated"].length; i++) {
+    					if (team["nominated"][i]) {
+    						nom += team["nominated"][i]+" ("+team["players"][i]+") "
+    					}
+    				}
+    				if (nom!="") {
+    					bot.say(chan, "Chars nominated by team "+team["team"]+": "+nom);
+    				} else {
+    					bot.say(chan, "No chars nominated by team "+team["team"]);
+    				}
+    			} else {
+    				db.dr.findOne({"nominated": arg[1]}, function(err, found) {
+    					if (found) {
+    						bot.say(chan, arg[1]+" has already been nominated");
+    					} else {
+							db.dr.findAndModify({query: {"players": nick}, update: {$set: {"nominated.$": arg[1]}}}, function(err, updated) {
+								if (updated) {
+									bot.say(chan, nick+" (team "+updated["team"]+") has nominated "+arg[1]);
+								} else {
+									bot.say(chan, "Join a team first");
+								}
+							});
+						}
+    				});
+    			}
+    		});
+    	}
+    }
+    
+    //CSDC commands
     if (admin && arg[0]=="csdcon") {
         if (arg.length>1) {
             //arg[1] = arg.slice(1, arg.length).join(' ');
