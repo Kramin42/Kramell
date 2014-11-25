@@ -782,7 +782,7 @@ function do_command(arg, chan, nick, admin) {
                 	if (!team || !team["players"] || team["players"].length<3) {
                 		db.dieselrobin.update({"team":new RegExp(argteam,'i')}, {$addToSet: {"players":argname}}, function(err, updated) {
                 			if (updated['n']==0) {
-                				db.dieselrobin.insert({"team": argteam, "players": argname, "accounts": [], "assigned": [], "bonuspoints": [], "bonusqual": [], "nominated": []}, callback);
+                				db.dieselrobin.insert({"team": argteam, "players": [argname], "accounts": [], "assigned": [], "bonuspoints": [], "bonusqual": [], "nominated": []}, callback);
                 			} else {
                 				callback();
                 			}
