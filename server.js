@@ -759,8 +759,14 @@ function do_command(arg, chan, nick, admin) {
             } else {
                 argteam = arg[1];
                 argname = arg[2];
-                db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},{upsert:true},show);
-                bot.say(control_channel, "player added ("+chan+"/"+nick+"): "+argname+" to "+argteam);
+                db.dieselrobin.findOne({"team":argteam}, function(err,team) {
+                	if (!team || !team["players"] || team["players"].length<3) {
+                		db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},{upsert:true},show);
+                		bot.say(control_channel, "player added ("+chan+"/"+nick+"): "+argname+" to "+argteam);
+                	} else {
+                		bot.say(chan, "team "+argteam+" is already full");
+                	}
+                });
             }
         } else if (arg.length==2) {
         	argteam = arg[1];
@@ -770,6 +776,23 @@ function do_command(arg, chan, nick, admin) {
         } else {
             bot.say(chan, "Usage: $signup [-rm] <team name> [player nick]");
         }
+    }
+    
+    if (arg[0]=="mission" && chan=="##dieselrobin") {
+    	if (arg.length>1) {
+    		if (arg[1]=="list") {
+    			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
+    				for (i=1; i<=challenge["missiontext"].length; i++) {
+    					bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i]+". New places: "+challenge["locations"][i]);
+    				}
+    			});
+    		} else {
+    			i = parseInt(arg[1])+1;
+    			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
+    				bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i]+". New places: "+challenge["locations"][i]);
+    			});
+    		}
+    	}
     }
     
     if (admin && arg[0]=="csdcon") {
