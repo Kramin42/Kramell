@@ -858,7 +858,7 @@ function do_command(arg, chan, nick, admin) {
     	db.dieselrobin.distinct('nominated', function(err, chars) {
     		db.dieselrobin.distinct('team', {'nominated.2': {exists: false}}, function(err, unnomteams) {
     			if (unnomteams.length>0) {
-    				bot.say(chan, 'Some teams have not finished nominating: '+unnomteams.join(', ');
+    				bot.say(chan, 'Some teams have not finished nominating: '+unnomteams.join(', '));
     			} else {
     				charcount = chars.length;
     				chars = shuffle(chars);
