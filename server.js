@@ -869,7 +869,7 @@ function do_command(arg, chan, nick, admin) {
     	if (arg.length==2) {
     		db.dieselrobin.findOne({$or: [{'team': arg[1]}, {'players': arg[1]}]}, function(err, team) {
     			if (team) {
-    				bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', ');
+    				bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', '));
     			} else {
     				bot.say(chan, 'No team or player '+arg[1]+' signed up');
     			}
