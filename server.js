@@ -17,7 +17,7 @@ var irc = require('irc');
 var observe_channel = "##crawl";
 var bot;
 
-var adminlist = ["Kramin","WalkerBoh","moose"];
+var adminlist = ["Kramin"];
 
 fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/password', function (err, data) {
     if (err) throw err;
@@ -184,7 +184,8 @@ function get_server_logs(announcer) {
     	120*1000
     );
     if (fetching[announcer]) {return;}//don't want simultaneous fetches breaking things
-	fetching[announcer] = true;
+    console.log('fetching from '+announcer);
+	//fetching[announcer] = true;
 	if (!logacc[announcer]) {
 		logacc[announcer] = {};
 	}
@@ -220,7 +221,7 @@ function get_server_logs(announcer) {
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
                     //offset+=datalength;
-                    db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function () {fetching[announcer] = false;});
+                    db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {console.log('done fetching from '+announcer); fetching[announcer] = false;});
                 } else {
                     //console.log("no new content");
                     //console.log("no new milestones for "+announcer);
