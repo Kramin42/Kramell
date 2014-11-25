@@ -913,11 +913,11 @@ function do_command(arg, chan, nick, admin) {
     		combo = arg[1];
     		account = arg[2];
     		name = arg[3];
-    		db.dieselrobin.findOne({'players': new RegExp(name,'i'), 'assigned': combo}, function (err, team) {
+    		db.dieselrobin.findOne({'players': new RegExp(name,'i'), 'assigned': new RegExp(combo,'i')}, function (err, team) {
     			if (team) {
     				playerorder = [];
     				for (i=0; i<3; i++) {
-    					playerorder[i] = team['players'][(team['players'].indexOf(name) + i) % 3]
+    					playerorder[i] = team['players'][(team['players'].toLowerCase().indexOf(name.toLowerCase()) + i) % 3]
     				}
     				db.dieselrobin.update({'account': account}, 
     					{$set: 
@@ -931,7 +931,7 @@ function do_command(arg, chan, nick, admin) {
     						'missionpoints': [],
     						'missionqual': []}}, {upsert:true});
     				toset = {};
-    				toset['accounts.'+team['assigned'].indexOf(combo)] = account;
+    				toset['accounts.'+team['assigned'].toLowerCase().indexOf(combo.toLowerCase())] = account;
     				db.dieselrobin.update({'team': team['team']}, {$set: toset});
     				bot.say(chan, 'Team '+team['team']+' will play '+combo+' on the account '+account+', starting with '+name);
     			} else {
