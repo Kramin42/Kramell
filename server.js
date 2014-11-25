@@ -57,6 +57,7 @@ var NAaliases;
 var cheiquerychan = control_channel;
 var sequellquerychan = control_channel;
 var logacc = {};
+var fetching = {};
 
 function pad(n) {
     return (n < 10) ? ("0" + n.toString()) : n.toString();
@@ -162,6 +163,18 @@ function get_logfile_offset(announcer, url) {
 }
 
 function get_server_logs(announcer) {
+	if (timers[announcer]) {
+    	clearTimeout(timers[announcer]);
+    }
+    timers[announcer] = setTimeout(
+		function(){
+    		console.log("checking "+announcer+" logs (2 min timer)");
+    		get_server_logs(announcer)
+    	},
+    	120*1000
+    );
+    if (fetching[announcer]) {return;}//don't want simultaneous fetches breaking things
+	fetching[announcer] = true;
 	if (!logacc[announcer]) {
 		logacc[announcer] = {};
 	}
@@ -180,8 +193,7 @@ function get_server_logs(announcer) {
                     //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
                     datalength = byteCount(data);
                     //if (datalength != byteCount(data)) console.log("differing byte counts: old: "+byteCount(data)+", new: "+datalength);
-                    logacc[announcer][file["url"]] += data;
-                    data = logacc[announcer][file["url"]];
+                    data = logacc[announcer][file["url"]] + data;
                     logacc[announcer][file["url"]] = "";
                     console.log(announcer+' data size: '+datalength+' bytes');
                     //data = data.replace(/\n/g,"");
@@ -198,7 +210,7 @@ function get_server_logs(announcer) {
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
                     //offset+=datalength;
-                    db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}});
+                    db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function () {fetching[announcer] = false;});
                 } else {
                     //console.log("no new content");
                     //console.log("no new milestones for "+announcer);
@@ -214,16 +226,6 @@ function get_server_logs(announcer) {
             });
         }
     });});
-    if (timers[announcer]) {
-    	clearTimeout(timers[announcer]);
-    }
-    timers[announcer] = setTimeout(
-		function(){
-    		console.log("checking "+announcer+" logs (2 min timer)");
-    		get_server_logs(announcer)
-    	},
-    	120*1000
-    );
 }
 
 function process_milestone(milestone, announcer, url) {
@@ -825,7 +827,7 @@ function do_command(arg, chan, nick, admin) {
     				nom = "";
     				for (i=0; i<team["nominated"].length; i++) {
     					if (team["nominated"][i]) {
-    						newbit = team["nominated"][i]+" ("+team["players"][i]+") ";
+    						newbit = team["nominated"][i]+" ("+team["players"][i]+")";
     						if (nom!="") {
     							nom = [nom, newbit].join(", ");
     						} else {
