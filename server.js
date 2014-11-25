@@ -45,7 +45,6 @@ var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
 var dieselrobin = db.collection('dieselrobin');
-var dr=dieselrobin;
 
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
@@ -799,7 +798,7 @@ function do_command(arg, chan, nick, admin) {
     
     if (arg[0]=="nominate"  && chan=="##dieselrobin") {
     	if (arg.length==2) {
-    		db.dr.findOne({"team": arg[1]}, function(err, team) {
+    		db.dieselrobin.findOne({"team": arg[1]}, function(err, team) {
     			if (team) {
     				nom = ""
     				for (i=0; i<team["nominated"].length; i++) {
@@ -813,11 +812,11 @@ function do_command(arg, chan, nick, admin) {
     					bot.say(chan, "No chars nominated by team "+team["team"]);
     				}
     			} else {
-    				db.dr.findOne({"nominated": arg[1]}, function(err, found) {
+    				db.dieselrobin.findOne({"nominated": arg[1]}, function(err, found) {
     					if (found) {
     						bot.say(chan, arg[1]+" has already been nominated");
     					} else {
-							db.dr.findAndModify({query: {"players": nick}, update: {$set: {"nominated.$": arg[1]}}}, function(err, updated) {
+							db.dieselrobin.findAndModify({query: {"players": nick}, update: {$set: {"nominated.$": arg[1]}}}, function(err, updated) {
 								if (updated) {
 									bot.say(chan, nick+" (team "+updated["team"]+") has nominated "+arg[1]);
 								} else {
