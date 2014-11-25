@@ -873,7 +873,7 @@ function do_command(arg, chan, nick, admin) {
     			} else {
     				bot.say(chan, 'No team or player '+arg[1]+' signed up');
     			}
-    		}
+    		});
     	}
     }
     
