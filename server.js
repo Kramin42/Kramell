@@ -862,7 +862,7 @@ function do_command(arg, chan, nick, admin) {
     		teamlist = '';
     		teams.forEach(function(team) {
     			if (teamlist!='') {
-    				teamlist = [nom, team['team']].join(', ');
+    				teamlist = [teamlist, team['team']].join(', ');
     			} else {
     				teamlist = team['team'];
     			}
