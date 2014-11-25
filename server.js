@@ -929,7 +929,7 @@ function do_command(arg, chan, nick, admin) {
     						'currentmission': 0,
     						'currentmissiongroup': 0,
     						'missionpoints': [],
-    						'missionqual': []}});
+    						'missionqual': []}}, {upsert:true});
     				toset = {};
     				toset['accounts.'+team['assigned'].indexOf(combo)] = account;
     				db.dieselrobin.update({'team': team['team']}, {$set: toset});
