@@ -760,6 +760,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //dieselrobin commands
+    //$signup [-rm] <team> [name]
     if (arg[0]=="signup" && chan=="##dieselrobin") {
     	argteam = "";
     	callback = function() {
@@ -803,6 +804,7 @@ function do_command(arg, chan, nick, admin) {
         }
     }
     
+    //$mission <num|"list">
     if (arg[0]=="mission" && chan=="##dieselrobin") {
     	if (arg.length>1) {
     		if (arg[1]=="list") {
@@ -820,6 +822,7 @@ function do_command(arg, chan, nick, admin) {
     	}
     }
     
+    //$nominate <combo>
     if ((arg[0]=="nominate" || arg[0]=="nominated")  && chan=="##dieselrobin") {
     	if (arg.length==1) {
     		arg[1] = nick;
@@ -862,6 +865,7 @@ function do_command(arg, chan, nick, admin) {
     	}
     }
     
+    //$teams
     if (arg[0]=='teams' && chan=="##dieselrobin") {
     	db.dieselrobin.find({'team': {$exists: true}}, function(err, teams) {
     		teamlist = '';
@@ -876,6 +880,7 @@ function do_command(arg, chan, nick, admin) {
     	});
     }
     
+    //$team [team name|player name]
     if (arg[0]=='team' && chan=="##dieselrobin") {
     	if (arg.length==1) {
     		arg[1] = nick;
@@ -891,7 +896,39 @@ function do_command(arg, chan, nick, admin) {
     	}
     }
     
-    
+    //$assign <combo> <account> [player name]
+    if (arg[0]=='assign' && chan=="##dieselrobin") {
+    	if (arg.length == 3) {
+    		arg[3] = nick;
+    	}
+    	if (arg.length > 3) {
+    		combo = arg[1];
+    		account = arg[2];
+    		name = arg[3];
+    		db.dieselrobin.findOne({'players': new RegExp(name,'i'), 'assigned': combo}, function (err, team) {
+    			if (team) {
+    				playerorder = [];
+    				for (i=0; i<3; i++) {
+    					playerorder[i] = team['players'][(team['players'].indexOf(name) + i) % 3]
+    				}
+    				db.dieselrobin.update({'account': account}, 
+    					{$set: 
+    						{'char': combo,
+    						'playerorder': playerorder,
+    						'retries': 0,
+    						'comments': [],
+    						'newcomments': [],
+    						'currentmission': 0,
+    						'currentmissiongroup': 0,
+    						'missionpoints': [],
+    						'missionqual': []}});
+    				bot.say(chan, 'Team '+team['team']+' will play '+combo+' on the account '+account+', starting with '+name);
+    			} else {
+    				bot.say(chan, combo+' has not been assigned to '+name+"'s team");
+    			}
+    		});
+    	}
+    }
     
     if (admin && arg[0]=="shufflechars" && chan=="##dieselrobin") {
     	db.dieselrobin.distinct('nominated', function(err, chars) {
