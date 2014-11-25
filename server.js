@@ -39,11 +39,12 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 }
 console.log("connection_string: "+connection_string);
 var mongojs = require('mongojs');
-var db = mongojs(connection_string, ['announcers','channels','csdc','nick_aliases']);
+var db = mongojs(connection_string, ['announcers','channels','csdc','nick_aliases','dieselrobin']);
 var announcers = db.collection('announcers');
 var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
+var dieselrobin = db.collection('dieselrobin');
 
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
@@ -616,7 +617,7 @@ function do_command(arg, chan, nick, admin) {
             } else if (arg.length==1) {
                 bot.say(chan, "announcers: "+ann.join(', '));
             } else {
-                bot.say(chan, "Usage: !announcer [-rm] <announcer name>");
+                bot.say(chan, "Usage: $announcer [-rm] <announcer name>");
             }
         });
     }
@@ -630,7 +631,7 @@ function do_command(arg, chan, nick, admin) {
                 get_logfile_offset(arg[1], arg[2]);
             }
         } else {
-            bot.say(control_channel, "Usage: !logfile [-rm] <announcer name> <url>");
+            bot.say(control_channel, "Usage: $logfile [-rm] <announcer name> <url>");
         }
     }
 
@@ -656,7 +657,7 @@ function do_command(arg, chan, nick, admin) {
             } else if (arg.length==1) {
                 bot.say(chan, "channels: "+chans.join(', '));
             } else {
-                bot.say(chan, "Usage: !channel [-rm] <channel name>");
+                bot.say(chan, "Usage: $channel [-rm] <channel name>");
             }
         });
     }
@@ -681,7 +682,7 @@ function do_command(arg, chan, nick, admin) {
                 bot.say(chan, "Names in "+arg[1]+": "+names.join(', '));
             });
         } else {
-            bot.say(chan, "Usage: !name [-rm] <channel name> <user name>");
+            bot.say(chan, "Usage: $name [-rm] <channel name> <user name>");
         }
     }
 
@@ -741,6 +742,31 @@ function do_command(arg, chan, nick, admin) {
     
     if ((arg[0]=="colors" || arg[0]=="colours") && arg.length==1) {
         bot.say(chan, "Allowed colours: white, black, dark_blue, dark_green, light_red, dark_red, magenta, orange, yellow, light_green, cyan, light_cyan, light_blue, light_magenta, gray, light_gray");
+    }
+    
+    if (arg[0]=="signup" && chan=="##dieselrobin") {
+    	argteam = "";
+    	show = function() {db.dieselrobin.distinct('players', {'team':arg[1]}, function(err, players) {
+                bot.say(chan, "Players in "+argteam+": "+players.join(', '));
+        });};
+    	if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
+            if (arg[1]=="-rm"){
+                argteam = arg[2];
+                argname = arg[3];
+                db.dieselrobin.update({"team":argteam},{$pull: {"players":argname}},show);
+                bot.say(control_channel, "player removed ("+chan+"/"+nick+"): "+argname+" from "+argteam);
+            } else {
+                argteam = arg[1];
+                argname = arg[2];
+                db.dieselrobin.update({"team":argteam},{$addToSet: {"names":argname}},show);
+                bot.say(control_channel, "player added ("+chan+"/"+nick+"): "+argname+" to "+argteam);
+            }
+        } else if (arg.length==2) {
+        	argteam = arg[1];
+            show();
+        } else {
+            bot.say(chan, "Usage: $signup [-rm] <team name> <player nick>");
+        }
     }
     
     if (admin && arg[0]=="csdcon") {
