@@ -764,9 +764,11 @@ function do_command(arg, chan, nick, admin) {
             }
         } else if (arg.length==2) {
         	argteam = arg[1];
-            show();
+        	argname = nick;
+        	db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},{upsert:true},show);
+            bot.say(control_channel, "player added ("+chan+"/"+nick+"): "+argname+" to "+argteam);
         } else {
-            bot.say(chan, "Usage: $signup [-rm] <team name> <player nick>");
+            bot.say(chan, "Usage: $signup [-rm] <team name> [player nick]");
         }
     }
     
