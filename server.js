@@ -185,7 +185,7 @@ function get_server_logs(announcer) {
                     for (i=0; i<datasplit.length-1; i++) {
                     	datasplit[i]+="\n";
                     }
-                    console.log(JSON.stringify(datasplit));
+                    //console.log(JSON.stringify(datasplit));
                     datasplit.forEach(function(text) {process_milestone(text,announcer,file["url"])});
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
@@ -224,8 +224,12 @@ function process_milestone(milestone, announcer, url) {
     // make sure it's a complete milestone
     if (!milestone.match(/^v=.*:vlong=.*\n/)) {
     	//milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
-    	console.log("appending to logacc: "+milestone);
-    	logacc[announcer][url] += milestone;
+    	if (milestone.match(/\n/) {
+    		console.log("broken milestone: "+milestone);
+    	} else {
+    		//console.log("appending to logacc: "+milestone);
+    		logacc[announcer][url] += milestone;
+    	}
     	return;
     }
     
