@@ -817,12 +817,10 @@ function do_command(arg, chan, nick, admin) {
     
     if ((arg[0]=="nominate" || arg[0]=="nominated")  && chan=="##dieselrobin") {
     	if (arg.length==1) {
-    		db.dieselrobin.findOne({"players": nick}, function(err, team) {
-    			arg[1] = team["team"];
-    		});
+    		arg[1] = nick;
     	}
     	if (arg.length==2) {
-    		db.dieselrobin.findOne({"team": arg[1]}, function(err, team) {
+    		db.dieselrobin.findOne({$or: [{'team': arg[1]}, {'players': arg[1]}]}, function(err, team) {
     			if (team) {
     				nom = "";
     				for (i=0; i<team["nominated"].length; i++) {
@@ -851,6 +849,31 @@ function do_command(arg, chan, nick, admin) {
     				});
     			}
     		});
+    	}
+    }
+    
+    if (arg[0]=='teams' && chan=="##dieselrobin") {
+    	db.dieselrobin.find({'team': {$exists: true}}, function(err, teams) {
+    		teamlist = '';
+    		teams.forEach(function(team) {
+    			teamlist = [teamlist, team['team']].join(', ');
+    		});
+    		bot.say(chan, "Teams: "+teamlist);
+    	});
+    }
+    
+    if (arg[0]=='team' && chan=="##dieselrobin") {
+    	if (arg.length==1) {
+    		arg[1] = nick;
+    	}
+    	if (arg.length==2) {
+    		db.dieselrobin.findOne({$or: [{'team': arg[1]}, {'players': arg[1]}]}, function(err, team) {
+    			if (team) {
+    				bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', ');
+    			} else {
+    				bot.say(chan, 'No team or player '+arg[1]+' signed up');
+    			}
+    		}
     	}
     }
     
