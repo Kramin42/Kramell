@@ -746,7 +746,7 @@ function do_command(arg, chan, nick, admin) {
     
     if (arg[0]=="signup" && chan=="##dieselrobin") {
     	argteam = "";
-    	show = function() {db.dieselrobin.distinct('players', {'team':arg[1]}, function(err, players) {
+    	show = function() {db.dieselrobin.distinct('players', {'team':argteam}, function(err, players) {
                 bot.say(chan, "Players in "+argteam+": "+players.join(', '));
         });};
     	if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
@@ -758,7 +758,7 @@ function do_command(arg, chan, nick, admin) {
             } else {
                 argteam = arg[1];
                 argname = arg[2];
-                db.dieselrobin.update({"team":argteam},{$addToSet: {"names":argname}},show);
+                db.dieselrobin.update({"team":argteam},{$addToSet: {"players":argname}},show);
                 bot.say(control_channel, "player added ("+chan+"/"+nick+"): "+argname+" to "+argteam);
             }
         } else if (arg.length==2) {
