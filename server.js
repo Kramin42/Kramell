@@ -780,11 +780,12 @@ function do_command(arg, chan, nick, admin) {
                 argname = arg[2];
                 db.dieselrobin.findOne({"team":new RegExp(argteam,'i')}, function(err,team) {
                 	if (!team || !team["players"] || team["players"].length<3) {
-                		db.dieselrobin.update({"team":new RegExp(argteam,'i')},{$addToSet: {"players":argname}}, function(err, updated) {
+                		db.dieselrobin.update({"team":new RegExp(argteam,'i')}, {$addToSet: {"players":argname}}, function(err, updated) {
                 			if (updated['n']==0) {
-                				db.dieselrobin.insert({$set: {"team": argteam, "players": argname, "accounts": [], "assigned": [], "bonuspoints": [], "bonusqual": [], "nominated": []}});
+                				db.dieselrobin.insert({"team": argteam, "players": argname, "accounts": [], "assigned": [], "bonuspoints": [], "bonusqual": [], "nominated": []}, callback);
+                			} else {
+                				callback();
                 			}
-                			callback();
                 		});
                 		bot.say(control_channel, "player added ("+chan+"/"+nick+"): "+argname+" to "+argteam);
                 	} else {
