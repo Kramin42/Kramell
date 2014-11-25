@@ -856,7 +856,8 @@ function do_command(arg, chan, nick, admin) {
     
     if (admin && arg[0]=="shufflechars" && chan=="##dieselrobin") {
     	db.dieselrobin.distinct('nominated', function(err, chars) {
-    		db.dieselrobin.distinct('team', {'nominated.2': {exists: false}}, function(err, unnomteams) {
+    		db.dieselrobin.distinct('team', {$or: [{nominated: {$exists: false}}, {nominated: {$size: 0}}, {nominated: {$size: 1}}, {nominated: {$size: 2}}]}, function(err, unnomteams) {
+    			console.log(JSON.stringify(unnomteams));
     			if (unnomteams.length>0) {
     				bot.say(chan, 'Some teams have not finished nominating: '+unnomteams.join(', '));
     			} else {
