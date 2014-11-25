@@ -229,7 +229,7 @@ function process_milestone(milestone, announcer, url) {
     	return;
     }
     
-    console.log("milestone: "+milestone);
+    //console.log("milestone: "+milestone);
     
     try {
         var name = milestone.match(/name=(\w*):/)[1];
