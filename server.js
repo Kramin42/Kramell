@@ -864,9 +864,9 @@ function do_command(arg, chan, nick, admin) {
     				chars = shuffle(chars);
     				db.dieselrobin.distinct('team', function(err, teams){
     					teams.forEach(function (team) {
-    						toset = {}
+    						toset = {};
     						for (i=0; i<3; i++) {
-    							toset["assigned"][i] = chars.pop();
+    							toset["assigned."+i] = chars.pop();
     						}
     						db.dieselrobin.update({'team': team}, {$set: toset});
     					});
