@@ -888,7 +888,15 @@ function do_command(arg, chan, nick, admin) {
     	if (arg.length==2) {
     		db.dieselrobin.findOne({$or: [{'team': new RegExp(arg[1],'i')}, {'players': new RegExp(arg[1],'i')}]}, function(err, team) {
     			if (team) {
-    				bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', '));
+    				charlist = '';
+    				for (i=0; i<3; i++) {
+    					charlist+=team['assigned'][i];
+    					if (team['accounts'][i]) {
+    						charlist+=' on '+team['accounts'][i];
+    					}
+    					if (i<2) {charlist+=', ';}
+    				}
+    				bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', ')+'; '+charlist);
     			} else {
     				bot.say(chan, 'No team or player '+arg[1]+' signed up');
     			}
@@ -922,6 +930,9 @@ function do_command(arg, chan, nick, admin) {
     						'currentmissiongroup': 0,
     						'missionpoints': [],
     						'missionqual': []}});
+    				toset = {};
+    				toset['accounts.'+team['assigned'].indexOf(combo)] = account;
+    				db.dieselrobin.update({'team': team['team']}, {$set: toset});
     				bot.say(chan, 'Team '+team['team']+' will play '+combo+' on the account '+account+', starting with '+name);
     			} else {
     				bot.say(chan, combo+' has not been assigned to '+name+"'s team");
