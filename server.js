@@ -178,7 +178,8 @@ function get_server_logs(announcer) {
     }
     timers[announcer] = setTimeout(
 		function() {
-    		get_server_logs(announcer)
+			console.log("checking "+announcer+" logs (1 min timer)");
+    		get_server_logs(announcer);
     	},
     	60*1000
     );
@@ -189,9 +190,13 @@ function get_server_logs(announcer) {
 		logacc[announcer] = {};
 	}
     //get the array of files and iterate through
-    db.announcers.findOne({"name": announcer}, function(err, server) {server["files"].forEach(function(file) {
+    db.announcers.findOne({"name": announcer}, function(err, server) {
+    if (!server || !server["files"]) {
+    	console.log(announcer+" not found");
+    }
+    server["files"].forEach(function(file) {
         if (file["offset"]) {
-        	console.log("checking "+announcer+" logs");
+        	//console.log("checking "+announcer+" logs");
         	if (!logacc[announcer][file["url"]]) {
 				logacc[announcer][file["url"]] = "";
 			}
@@ -241,6 +246,8 @@ function get_server_logs(announcer) {
             child.on('close', function (code) {
                 if (code>0) {console.log('logfile fetch for '+file["url"]+' exited with code ' + code);}
             });
+        } else {
+        	console.log(announcer+" log not found "+JSON.stringify(file));
         }
     });});
 }
@@ -608,7 +615,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			toset = {};
         	toset['missionpoints.'+mission] = points;
 			db.dieselrobin.update({'account': account['account']},{$set: toset});
-			bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has completed mission '+(mission+1)+': '+challenge['missiontext'][mission]));
+			bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed mission '+(mission+1)+': '+challenge['missiontext'][mission]));
 			
 			var newmissions = get_available_dieselrobin_missions(challenge, account);
 			console.log('new available missions: '+newmissions);
