@@ -228,8 +228,10 @@ function get_server_logs(announcer) {
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
                     //offset+=datalength;
+                    console.("before announcer update");
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
                     	fetching[announcer] = false;
+                    	console.("after announcer update");
                 		//console.log('fetching from '+announcer+': '+fetching[announcer]);
                     });
                 } else {
