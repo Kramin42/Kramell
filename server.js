@@ -565,7 +565,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			if (!account['retries']) {account['retries']=0;}
 			account['retries']++;
 			if (account['retries']<20) {
-				bot.say('dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during mission 1 '+account['retries']+'time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
+				bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during mission 1 '+account['retries']+'time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
 			} else {
 				gameover = true;
 			}
@@ -577,12 +577,12 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 		gameover = true;
 		account['missionpoints'][14] = 3;
 		db.dieselrobin.update({'account': account['account']},{$set: {'missionpoints.14': 3}});
-		bot.say('dieselrobin', irc.colors.wrap('dark_green', account['account']+' (Team '+team['team']+') has won for 3 points!'));
+		bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' (Team '+team['team']+') has won for 3 points!'));
 	}
 	if (gameover) {
 		add = function(prev,current){return current + prev;}
 		var score = account['missionpoints'].reduce(add, 0) + account['bonuspoints'].reduce(add, 0);
-		bot.say('dieselrobin', irc.colors.wrap('light_blue', 'Team '+team['team']+"'s final score for "+account['char']+' (on '+account['account']+'): '+score));
+		bot.say('##dieselrobin', irc.colors.wrap('light_blue', 'Team '+team['team']+"'s final score for "+account['char']+' (on '+account['account']+'): '+score));
 		db.dieselrobin.update({'account': account['account']},{$set: {'alive': false}});
 	}
 	
