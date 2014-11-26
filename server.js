@@ -200,9 +200,12 @@ function get_server_logs(announcer) {
         	if (!logacc[announcer][file["url"]]) {
 				logacc[announcer][file["url"]] = "";
 			}
-            var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
+            // var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
-            child.stdout.on('data', function (data) {
+            //child.stdout.on('data', function (data) {
+            exec('curl -sr '+file["offset"]+'- '+file["url"], function (error, data, stderr) {
+            	if (error) {console.log('Error: '+error);}
+            	if (stderr) {console.log('STDERR: '+error);}
             	if (announcer=='Prequell') {console.log('Prequell data: '+data);}
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
                 	fetching[announcer] = true;
@@ -243,18 +246,18 @@ function get_server_logs(announcer) {
                     if (announcer=='Prequell') {console.log('Prequell fetch finished (nothing found)');}
                 }
             });
-
-            child.stderr.on('data', function (data) {
-              console.log('stderr: ' + data);
-            });
-
-            child.on('close', function (code) {
-                if (code>0) {console.log('logfile fetch for '+file["url"]+' exited with code ' + code);}
-            });
-            
-            child.on('message', function (message) {
-                console.log(announcer+': '+message);
-            });
+// 
+//             child.stderr.on('data', function (data) {
+//               console.log('stderr: ' + data);
+//             });
+// 
+//             child.on('close', function (code) {
+//                 if (code>0) {console.log('logfile fetch for '+file["url"]+' exited with code ' + code);}
+//             });
+//             
+//             child.on('message', function (message) {
+//                 console.log(announcer+': '+message);
+//             });
         } else {
         	console.log(announcer+" log not found "+JSON.stringify(file));
         }
