@@ -331,6 +331,7 @@ function process_milestone(milestone, announcer, url) {
     db.dieselrobin.findOne({"accounts": name.toUpperCase()}, function(err, team) {
     	db.dieselrobin.findOne({"account": name.toUpperCase()}, function(err, account) {
     		if (team && account) {
+    			console.log("found dieselrobin milestone: "+account['account']);
     			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
     				check_dieselrobin_points(challenge, team, account, milestone);
     			});
@@ -545,8 +546,9 @@ function get_available_dieselrobin_missions(challenge, account) {
 }
 
 function check_dieselrobin_points(challenge, team, account, milestone) {
+	console.log(milestone);
 	var availablemissions = get_available_dieselrobin_missions(challenge, account);
-	
+	console.log('available missions: '+availablemissions);
 	var gameover = false
 	if (milestone.search(/ktyp=/i)>-1 && !(milestone.search(/ktyp=winning/i)>-1)) {//RIP
 		if (availablemissions[0]==0) {//still on first mission
@@ -588,6 +590,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
         }
         for (j=0;j<challenge['missionqual'][mission].length;j++) {
 			if (!account['missionqual'][mission][j] && milestone.search(challenge['missionqual'][mission][j])>-1) {
+				console.log('qualified for: '+mission+' ('+j+')');
 				account['missionqual'][mission][j]=true;
 				toset = {};
         		toset['missionqual.'+mission+'.'+j] = true;
@@ -605,6 +608,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has completed mission '+(mission+1)+': '+challenge['missiontext'][mission]));
 			
 			var newmissions = get_available_dieselrobin_missions(challenge, account);
+			console.log('new available missions: '+newmissions);
 			if (newmissions.length>0) {
 				account['playerorder'].push(account['playerorder'].shift());//rotate
 				db.dieselrobin.update({'account': account['account']},{$set: {'playerorder': account['playerorder']}});
