@@ -181,7 +181,7 @@ function get_server_logs(announcer) {
 			console.log("checking "+announcer+" logs (1 min timer)");
     		get_server_logs(announcer);
     	},
-    	60*1000
+    	120*1000
     );
     if (fetching[announcer]) {console.log("preventing simultaneous fetch for "+announcer); return;}//don't want simultaneous fetches breaking things
 	fetching[announcer] = true;
@@ -200,7 +200,6 @@ function get_server_logs(announcer) {
         	if (!logacc[announcer][file["url"]]) {
 				logacc[announcer][file["url"]] = "";
 			}
-			if (announcer == 'Prequell') {console.log('curl -sr '+file["offset"]+'- '+file["url"]);}
             var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
             child.stdout.on('data', function (data) {
@@ -545,7 +544,7 @@ function get_available_dieselrobin_missions(challenge, account) {
 			//console.log('found uncompleted mission: '+i);
 			var prereq = true;
 			for (j=0; j<challenge['missionprereq'][i].length; j++) {
-				if (!account['missionqual'][challenge['missionprereq'][i][j]].every(Boolean)) {
+				if (!account['missionqual'][challenge['missionprereq'][i][j]] || !account['missionqual'][challenge['missionprereq'][i][j]].every(Boolean)) {
 					prereq = false;
 					break;
 				}
