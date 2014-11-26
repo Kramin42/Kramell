@@ -183,7 +183,7 @@ function get_server_logs(announcer) {
     	},
     	60*1000
     );
-    if (fetching[announcer]) {return;}//don't want simultaneous fetches breaking things
+    if (fetching[announcer]) {console.log("preventing simultaneous fetch for "+announcer); return;}//don't want simultaneous fetches breaking things
 	fetching[announcer] = true;
 	//console.log('fetching from '+announcer+': '+fetching[announcer]);
 	if (!logacc[announcer]) {
@@ -1439,7 +1439,7 @@ function handle_connect(message) {
 		timers[announcer] = setTimeout(
 			function(){
 				console.log("checking "+announcer+" logs (1 min timer)");
-				get_server_logs(announcer)
+				get_server_logs(announcer);
 			},
 			60*1000
 		);
