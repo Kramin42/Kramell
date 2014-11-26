@@ -206,7 +206,7 @@ function get_server_logs(announcer) {
             exec('curl -sr '+file["offset"]+'- '+file["url"], function (error, data, stderr) {
             	if (error) {console.log('Error: '+error);}
             	if (stderr) {console.log('STDERR: '+error);}
-            	if (announcer=='Prequell') {console.log('Prequell data: '+data);}
+            	//if (announcer=='Prequell') {console.log('Prequell data: '+data);}
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
                 	fetching[announcer] = true;
                 	//console.log('fetching from '+announcer+': '+fetching[announcer]);
@@ -235,7 +235,7 @@ function get_server_logs(announcer) {
                     //console.log("before announcer update");
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
                     	fetching[announcer] = false;
-                    	if (announcer=='Prequell') {console.log('Prequell fetch finished');}
+                    	//if (announcer=='Prequell') {console.log('Prequell fetch finished');}
                     	//console.log("after announcer update");
                 		//console.log('fetching from '+announcer+': '+fetching[announcer]);
                     });
@@ -243,7 +243,7 @@ function get_server_logs(announcer) {
                     //console.log("no new content");
                     //console.log("no new milestones for "+announcer);
                     fetching[announcer] = false;
-                    if (announcer=='Prequell') {console.log('Prequell fetch finished (nothing found)');}
+                    //if (announcer=='Prequell') {console.log('Prequell fetch finished (nothing found)');}
                 }
             });
 // 
