@@ -178,7 +178,7 @@ function get_server_logs(announcer) {
     }
     timers[announcer] = setTimeout(
 		function() {
-			console.log("checking "+announcer+" logs (1 min timer)");
+			console.log("checking "+announcer+" logs (2 min timer)");
     		get_server_logs(announcer);
     	},
     	120*1000
@@ -567,7 +567,8 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			if (!account['retries']) {account['retries']=0;}
 			account['retries']++;
 			if (account['retries']<20) {
-				bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during mission 1 '+account['retries']+'time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
+				db.dieselrobin.update({'account': account['account']},{$set: {'retries': account['retries']}});
+				bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+')  during the first mission '+account['retries']+' time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
 			} else {
 				gameover = true;
 			}
