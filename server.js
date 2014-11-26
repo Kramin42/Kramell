@@ -325,6 +325,18 @@ function process_milestone(milestone, announcer, url) {
             }
         });
     }
+    
+    //dieselrobin
+    //get the associated team and account
+    db.dieselrobin.findOne({"accounts": name.toUpperCase()}, function(err, team) {
+    	db.dieselrobin.findOne({"account": name.toUpperCase()}, function(err, account) {
+    		if (team && account) {
+    			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
+    				check_dieselrobin_points(challenge, team, account, milestone);
+    			});
+    		}
+    	});
+    });
 }
 
 function check_csdc_points(name, milestone, week) {
@@ -511,6 +523,100 @@ function check_csdc_points(name, milestone, week) {
     }
 }
 
+function get_available_dieselrobin_missions(challenge, account) {
+	var availablemissions = [];
+	//get uncompleted, available missions
+	for (i=0; i<challenge['missiontext']; i++) {
+		if (!account['missionqual'][i].every(Boolean)) {//not completed
+			//check prerequisites
+			var prereq = true;
+			for (j=0; j<challenge['missionprereq'][i].length; j++) {
+				if (!account['missionpoints'][challenge['missionprereq'][i][j]]) {
+					prereq = false;
+					break;
+				}
+			}
+			if (prereq) {
+				availablemissions.push(i);
+			}
+		}
+	}
+	return availablemissions;
+}
+
+function check_dieselrobin_points(challenge, team, account, milestone) {
+	var availablemissions = get_available_dieselrobin_missions(challenge, account);
+	
+	var gameover = false
+	if (milestone.search(/ktyp=/i)>-1 && !(milestone.search(/ktyp=winning/i)>-1)) {//RIP
+		if (availablemissions[0]==0) {//still on first mission
+			if (!account['retries']) {account['retries']=0;}
+			account['retries']++;
+			if (account['retries']<20) {
+				bot.say('dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during mission 1 '+account['retries']+'time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's'));
+			} else {
+				gameover = true;
+			}
+		} else {
+			gameover = true;
+		}
+	}
+	if (milestone.search(/ktyp=winning/i)>-1) {
+		gameover = true;
+		account['missionpoints'][14] = 3;
+		db.dieselrobin.update({'account': account['account']},{$set: {'missionpoints.14': 3}});
+		bot.say('dieselrobin', irc.colors.wrap('dark_green', account['account']+' (Team '+team['team']+') has won for 3 points!'));
+	}
+	if (gameover) {
+		add = function(prev,current){return current + prev;}
+		var score = account['missionpoints'].reduce(add, 0) + account['bonuspoints'].reduce(add, 0);
+		bot.say('dieselrobin', irc.colors.wrap('light_blue', 'Team '+team['team']+"'s final score for "+account['char']+' (on '+account['account']+'): '+score));
+		db.dieselrobin.update({'account': account['account']},{$set: {'alive': false}});
+	}
+	
+	//go through available missions and check if newly completed
+	for (i=0; i<availablemissions.length; i++) {
+		var mission = availablemissions[i];
+		if (!account['missionqual'][mission]) {
+			account['missionqual'][mission] = [];
+		}
+		if (account['missionqual'][mission].length != challenge['missionqual'][mission].length) {
+        	account['missionqual'][mission][challenge['missionqual'].length-1] = false;
+        	toset = {};
+        	toset['missionqual.'+mission] = account['missionqual'][mission];
+        	db.dieselrobin.update({'account':account['account']}, {$set: toset});
+        }
+        for (j=0;j<challenge['missionqual'][mission].length;j++) {
+			if (!account['missionqual'][mission][j] && milestone.search(challenge['missionqual'][mission][j])>-1) {
+				account['missionqual'][mission][j]=true;
+				toset = {};
+        		toset['missionqual.'+mission+'.'+j] = true;
+				db.dieselrobin.update({'account': account['account']},{$set: toset});
+				break;
+			}
+		}
+		if (account['missionqual'][mission].every(Boolean)) {//fully qualified
+			account['missionpoints'][mission] = 1;
+			toset = {};
+        	toset['missionpoints.'+mission] = 1;
+			db.dieselrobin.update({'account': account['account']},{$set: toset});
+			bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has completed mission '+(mission+1)+': '+challenge['missiontext'][mission]));
+			
+			var newmissions = get_available_dieselrobin_missions(challenge, account);
+			if (newmissions.length>0) {
+				account['playerorder'].push(account['playerorder'].shift());//rotate
+				db.dieselrobin.update({'account': account['account']},{$set: {'playerorder': account['playerorder']}});
+			}
+			if (newmissions.length>1) {
+				for (n=0; n<newmissions.length; n++) {newmissions[n]++;}//count from 0 for display
+				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Possible next missions for 'account['account']+', to be played by '+account['playerorder'][0]+': '+newmissions.join(', ')+' (use $mission <num> to see them)'));
+			} else if (newmissions.length==1) {
+				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Next mission for 'account['account']+', to be played by '+account['playerorder'][0]+': '+challenge["missiontext"][newmissions[0]]+". New places: "+challenge["locations"][newmissions[0]]));
+			}
+		}
+	}
+}
+
 function update_aliases(nick) {
     bot.say(sequell, ".echo nick-alias:"+nick+":$(join ' NAJNR' (split ' ' (nick-aliases "+nick+")))");
 }
@@ -663,7 +769,7 @@ function do_command(arg, chan, nick, admin) {
                 get_logfile_offset(arg[1], arg[2]);
             }
         } else {
-            bot.say(control_channel, "Usage: $logfile [-rm] <announcer name> <url>");
+            bot.say(chan, "Usage: $logfile [-rm] <announcer name> <url>");
         }
     }
 
@@ -927,7 +1033,7 @@ function do_command(arg, chan, nick, admin) {
     	}
     	if (arg.length > 3) {
     		combo = arg[1];
-    		account = arg[2];
+    		account = arg[2].toUpperCase();
     		name = arg[3];
     		db.dieselrobin.findOne({'players': new RegExp(name,'i'), 'assigned': new RegExp(combo,'i')}, function (err, team) {
     			if (team) {
@@ -945,7 +1051,9 @@ function do_command(arg, chan, nick, admin) {
     						'currentmission': 0,
     						'currentmissiongroup': 0,
     						'missionpoints': [],
-    						'missionqual': []}}, {upsert:true});
+    						'missionqual': [],
+    						'bonuspoints': [],
+    						'bonusqual': []}}, {upsert:true});
     				toset = {};
     				toset['accounts.'+team['assigned'].toLowerCase().indexOf(combo.toLowerCase())] = account;
     				db.dieselrobin.update({'team': team['team']}, {$set: toset});
