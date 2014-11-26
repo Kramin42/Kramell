@@ -530,9 +530,10 @@ function get_available_dieselrobin_missions(challenge, account) {
 	for (i=0; i<challenge['missiontext']; i++) {
 		if (!account['missionqual'][i].every(Boolean)) {//not completed
 			//check prerequisites
+			console.log('found uncompleted mission: '+i);
 			var prereq = true;
 			for (j=0; j<challenge['missionprereq'][i].length; j++) {
-				if (!account['missionpoints'][challenge['missionprereq'][i][j]]) {
+				if (!account['missionqual'][challenge['missionprereq'][i][j]].every(Boolean)) {
 					prereq = false;
 					break;
 				}
