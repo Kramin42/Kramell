@@ -178,10 +178,10 @@ function get_server_logs(announcer) {
     }
     timers[announcer] = setTimeout(
 		function() {
-			console.log("checking "+announcer+" logs (2 min timer)");
+			console.log("checking "+announcer+" logs (1 min timer)");
     		get_server_logs(announcer);
     	},
-    	120*1000
+    	60*1000
     );
     if (fetching[announcer]) {console.log("preventing simultaneous fetch for "+announcer); return;}//don't want simultaneous fetches breaking things
 	fetching[announcer] = true;
@@ -231,6 +231,7 @@ function get_server_logs(announcer) {
                     //console.log("before announcer update");
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
                     	fetching[announcer] = false;
+                    	if (announcer=='Prequell') {console.log('Prequell fetch finished');}
                     	//console.log("after announcer update");
                 		//console.log('fetching from '+announcer+': '+fetching[announcer]);
                     });
@@ -568,7 +569,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			account['retries']++;
 			if (account['retries']<20) {
 				db.dieselrobin.update({'account': account['account']},{$set: {'retries': account['retries']}});
-				bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+')  during the first mission '+account['retries']+' time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
+				bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during the first mission '+account['retries']+' time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
 			} else {
 				gameover = true;
 			}
