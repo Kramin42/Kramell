@@ -593,7 +593,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			account['missionqual'][mission] = [];
 		}
 		if (account['missionqual'][mission].length != challenge['missionqual'][mission].length) {
-        	account['missionqual'][mission][challenge['missionqual'].length-1] = false;
+        	account['missionqual'][mission][challenge['missionqual'][mission].length-1] = false;
         	toset = {};
         	toset['missionqual.'+mission] = account['missionqual'][mission];
         	db.dieselrobin.update({'account':account['account']}, {$set: toset});
