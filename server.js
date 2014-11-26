@@ -203,6 +203,7 @@ function get_server_logs(announcer) {
             var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
             child.stdout.on('data', function (data) {
+            	if (announcer=='Prequell') {console.log('Prequell data: '+data);}
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
                 	fetching[announcer] = true;
                 	//console.log('fetching from '+announcer+': '+fetching[announcer]);
