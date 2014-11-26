@@ -250,6 +250,10 @@ function get_server_logs(announcer) {
             child.on('close', function (code) {
                 if (code>0) {console.log('logfile fetch for '+file["url"]+' exited with code ' + code);}
             });
+            
+            child.on('message', function (message) {
+                console.log(announcer+': '+message);
+            });
         } else {
         	console.log(announcer+" log not found "+JSON.stringify(file));
         }
