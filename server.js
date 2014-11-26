@@ -553,7 +553,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			if (!account['retries']) {account['retries']=0;}
 			account['retries']++;
 			if (account['retries']<20) {
-				bot.say('dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during mission 1 '+account['retries']+'time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's'));
+				bot.say('dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during mission 1 '+account['retries']+'time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
 			} else {
 				gameover = true;
 			}
