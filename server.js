@@ -6,7 +6,7 @@
 var express = require('express');
 var fs      = require('fs');
 
-var exec = require('child_process').exec;
+var exec = require('child_process').spawn;
 
 // IRC bot
 var botnick = 'Kramell';
