@@ -239,6 +239,7 @@ function get_server_logs(announcer) {
                     //console.log("no new content");
                     //console.log("no new milestones for "+announcer);
                     fetching[announcer] = false;
+                    if (announcer=='Prequell') {console.log('Prequell fetch finished (nothing found)');}
                 }
             });
 
