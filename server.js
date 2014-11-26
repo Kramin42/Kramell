@@ -203,6 +203,7 @@ function get_server_logs(announcer) {
             var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
             child.stdout.on('data', function (data) {
+            	if (announcer == 'Prequell') {console.log(data);}
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
                 	fetching[announcer] = true;
                 	//console.log('fetching from '+announcer+': '+fetching[announcer]);
@@ -228,10 +229,10 @@ function get_server_logs(announcer) {
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
                     //console.log(data);
                     //offset+=datalength;
-                    console.log("before announcer update");
+                    //console.log("before announcer update");
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
                     	fetching[announcer] = false;
-                    	console.log("after announcer update");
+                    	//console.log("after announcer update");
                 		//console.log('fetching from '+announcer+': '+fetching[announcer]);
                     });
                 } else {
