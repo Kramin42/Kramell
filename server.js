@@ -596,9 +596,11 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			}
 		}
 		if (account['missionqual'][mission].every(Boolean)) {//fully qualified
-			account['missionpoints'][mission] = 1;
+			var points = 1;
+			if (mission == 0 && account['retries']>0) {points = 0;}
+			account['missionpoints'][mission] = points;
 			toset = {};
-        	toset['missionpoints.'+mission] = 1;
+        	toset['missionpoints.'+mission] = points;
 			db.dieselrobin.update({'account': account['account']},{$set: toset});
 			bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has completed mission '+(mission+1)+': '+challenge['missiontext'][mission]));
 			
@@ -609,9 +611,9 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			}
 			if (newmissions.length>1) {
 				for (n=0; n<newmissions.length; n++) {newmissions[n]++;}//count from 0 for display
-				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Possible next missions for 'account['account']+', to be played by '+account['playerorder'][0]+': '+newmissions.join(', ')+' (use $mission <num> to see them)'));
+				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Possible next missions for '+account['account']+', to be played by '+account['playerorder'][0]+': '+newmissions.join(', ')+' (use $mission <num> to see them)'));
 			} else if (newmissions.length==1) {
-				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Next mission for 'account['account']+', to be played by '+account['playerorder'][0]+': '+challenge["missiontext"][newmissions[0]]+". New places: "+challenge["locations"][newmissions[0]]));
+				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Next mission for '+account['account']+', to be played by '+account['playerorder'][0]+': '+challenge['missiontext'][newmissions[0]]+'. New places: '+challenge['locations'][newmissions[0]]));
 			}
 		}
 	}
