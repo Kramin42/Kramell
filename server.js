@@ -177,8 +177,7 @@ function get_server_logs(announcer) {
     	clearTimeout(timers[announcer]);
     }
     timers[announcer] = setTimeout(
-		function(){
-    		console.log("checking "+announcer+" logs (1 min timer)");
+		function() {
     		get_server_logs(announcer)
     	},
     	60*1000
@@ -192,6 +191,7 @@ function get_server_logs(announcer) {
     //get the array of files and iterate through
     db.announcers.findOne({"name": announcer}, function(err, server) {server["files"].forEach(function(file) {
         if (file["offset"]) {
+        	console.log("checking "+announcer+" logs");
         	if (!logacc[announcer][file["url"]]) {
 				logacc[announcer][file["url"]] = "";
 			}
@@ -525,14 +525,14 @@ function check_csdc_points(name, milestone, week) {
 }
 
 function get_available_dieselrobin_missions(challenge, account) {
-	console.log('checking available missions');
+	//console.log('checking available missions');
 	var availablemissions = [];
 	//get uncompleted, available missions
 	for (i=0; i<challenge['missiontext'].length; i++) {
-		console.log(JSON.stringify(account['missionqual'][i])+' | '+account['missionqual'][i].every(Boolean));
+		//console.log(JSON.stringify(account['missionqual'][i])+' | '+account['missionqual'][i].every(Boolean));
 		if (!account['missionqual'][i].every(Boolean)) {//not completed
 			//check prerequisites
-			console.log('found uncompleted mission: '+i);
+			//console.log('found uncompleted mission: '+i);
 			var prereq = true;
 			for (j=0; j<challenge['missionprereq'][i].length; j++) {
 				if (!account['missionqual'][challenge['missionprereq'][i][j]].every(Boolean)) {
@@ -1431,10 +1431,10 @@ function handle_connect(message) {
     db.announcers.distinct('name', function(err, announcers) {announcers.forEach(function(announcer) {
 		timers[announcer] = setTimeout(
 			function(){
-				console.log("checking "+announcer+" logs (2 min timer)");
+				console.log("checking "+announcer+" logs (1 min timer)");
 				get_server_logs(announcer)
 			},
-			120*1000
+			60*1000
 		);
     });});
 }
