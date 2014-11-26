@@ -528,7 +528,7 @@ function get_available_dieselrobin_missions(challenge, account) {
 	console.log('checking available missions');
 	var availablemissions = [];
 	//get uncompleted, available missions
-	for (i=0; i<challenge['missiontext']; i++) {
+	for (i=0; i<challenge['missiontext'].length; i++) {
 		console.log(JSON.stringify(account['missionqual'][i])+' | '+account['missionqual'][i].every(Boolean));
 		if (!account['missionqual'][i].every(Boolean)) {//not completed
 			//check prerequisites
