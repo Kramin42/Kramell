@@ -178,10 +178,10 @@ function get_server_logs(announcer) {
     }
     timers[announcer] = setTimeout(
 		function(){
-    		console.log("checking "+announcer+" logs (2 min timer)");
+    		console.log("checking "+announcer+" logs (1 min timer)");
     		get_server_logs(announcer)
     	},
-    	120*1000
+    	60*1000
     );
     if (fetching[announcer]) {return;}//don't want simultaneous fetches breaking things
 	fetching[announcer] = true;
@@ -525,9 +525,11 @@ function check_csdc_points(name, milestone, week) {
 }
 
 function get_available_dieselrobin_missions(challenge, account) {
+	console.log('checking available missions');
 	var availablemissions = [];
 	//get uncompleted, available missions
 	for (i=0; i<challenge['missiontext']; i++) {
+		console.log(JSON.stringify(account['missionqual'][i])+' | '+account['missionqual'][i].every(Boolean));
 		if (!account['missionqual'][i].every(Boolean)) {//not completed
 			//check prerequisites
 			console.log('found uncompleted mission: '+i);
