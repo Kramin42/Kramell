@@ -235,7 +235,7 @@ function get_server_logs(announcer) {
                     var process = function() {
                     	process_milestone(milestones.shift(), announcer, file["url"]).then(function() {
                     		if (milestones.length>0) {
-                    			console.log('iterating to next milestone');
+                    			//console.log('iterating to next milestone');
                     			return process();
                     		}
                     	});
@@ -284,11 +284,12 @@ function process_milestone(milestone, announcer, url) {
         console.log("in milestone: "+milestone)
         return Promise.resolve(0);
     }
-    //console.log("milestone for "+name+" ("+version+")");
+    console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
     if (milestone.match(/v=0.16-a/) && !milestone.match(/god=(Ru|Gozag)/)) {//trunk only for csdc, Ru and Gozag not allowed
         db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
             if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
+            	console.log("csdc player confirmed");
                 //go through active weeks with the name and return only data for that player (+general data)
                 db.csdc.find({"active":true}, 
                     {"players": {$elemMatch: {"name":name.toLowerCase()}},
@@ -303,6 +304,7 @@ function process_milestone(milestone, announcer, url) {
                         end:1
                     }
                 ).forEach(function(err, week) {
+                	console.log("got week and player data");
                     //console.log(JSON.stringify(week));
                     timeStamp = getTimeStamp();
                     //console.log(timeStamp);
