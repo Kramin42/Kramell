@@ -25,3 +25,4 @@ qs
 supervisor
 traverse
 mongojs
+promised-mongo
