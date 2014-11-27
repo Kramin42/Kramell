@@ -39,17 +39,20 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
   process.env.OPENSHIFT_APP_NAME;
 }
 console.log("connection_string: "+connection_string);
-var mongojs = require('mongojs');
-var db = mongojs(connection_string, ['announcers','channels','csdc','nick_aliases','dieselrobin']);
+//var mongojs = require('mongojs');
+// var db = mongojs(connection_string, ['announcers','channels','csdc','nick_aliases','dieselrobin']);
+// var announcers = db.collection('announcers');
+// var channels = db.collection('channels');
+// var csdc = db.collection('csdc');
+// var nick_aliases = db.collection('nick_aliases');
+// var dieselrobin = db.collection('dieselrobin');
+var pmongo = require('promised-mongo');
+var db = pmongo(connection_string, ['announcers','channels','csdc','nick_aliases','dieselrobin']);
 var announcers = db.collection('announcers');
 var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
 var dieselrobin = db.collection('dieselrobin');
-
-var pmongo = require('promised-mongo');
-var pdb = pmongo(connection_string, ['announcers','channels','csdc','nick_aliases','dieselrobin']);
-var pDR = pdb.collection('dieselrobin');
 
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
@@ -329,9 +332,9 @@ function process_milestone(milestone, announcer, url) {
     
     //dieselrobin
     //get the associated team and account
-    var team = pdb.pDR.findOne({"accounts": name.toUpperCase()});
-    var account = pdb.pDR.findOne({"account": name.toUpperCase()});
-    var challenge = pdb.pDR.findOne({"challenge": "dieselrobin"});
+    var team = db.dieselrobin.findOne({"accounts": name.toUpperCase()});
+    var account = db.dieselrobin.findOne({"account": name.toUpperCase()});
+    var challenge = db.dieselrobin.findOne({"challenge": "dieselrobin"});
     promises.push(Promise.All([challenge, team, account]).then(function(data) {
     	if (data[0] && data[1] && data[2]) {
     		console.log("found dieselrobin milestone: "+account['account']);
@@ -570,7 +573,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			if (!account['retries']) {account['retries']=0;}
 			account['retries']++;
 			if (account['retries']<20) {
-				promises.push(pdb.pDR.update({'account': account['account']},{$set: {'retries': account['retries']}}));
+				promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'retries': account['retries']}}));
 				bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during the first mission '+account['retries']+' time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
 			} else {
 				gameover = true;
@@ -582,14 +585,14 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 	if (milestone.search(/ktyp=winning/i)>-1) {
 		gameover = true;
 		account['missionpoints'][14] = 3;
-		promises.push(pdb.pDR.update({'account': account['account']},{$set: {'missionpoints.14': 3}}));
+		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'missionpoints.14': 3}}));
 		bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' (Team '+team['team']+') has won for 3 points!'));
 	}
 	if (gameover) {
 		add = function(prev,current){return current + prev;}
 		var score = account['missionpoints'].reduce(add, 0) + account['bonuspoints'].reduce(add, 0);
 		bot.say('##dieselrobin', irc.colors.wrap('light_blue', 'Team '+team['team']+"'s final score for "+account['char']+' (on '+account['account']+'): '+score));
-		promises.push(pdb.pDR.update({'account': account['account']},{$set: {'alive': false}}));
+		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'alive': false}}));
 	}
 	
 	//go through available missions and check if newly completed
@@ -602,7 +605,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
         	account['missionqual'][mission][challenge['missionqual'][mission].length-1] = false;
         	toset = {};
         	toset['missionqual.'+mission] = account['missionqual'][mission];
-        	promises.push(pdb.pDR.update({'account':account['account']}, {$set: toset}));
+        	promises.push(db.dieselrobin.update({'account':account['account']}, {$set: toset}));
         }
         for (j=0;j<challenge['missionqual'][mission].length;j++) {
 			if (!account['missionqual'][mission][j] && milestone.search(challenge['missionqual'][mission][j])>-1) {
@@ -610,7 +613,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 				account['missionqual'][mission][j]=true;
 				toset = {};
         		toset['missionqual.'+mission+'.'+j] = true;
-				promises.push(pdb.pDR.update({'account': account['account']},{$set: toset}));
+				promises.push(db.dieselrobin.update({'account': account['account']},{$set: toset}));
 				break;
 			}
 		}
@@ -620,14 +623,14 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			account['missionpoints'][mission] = points;
 			toset = {};
         	toset['missionpoints.'+mission] = points;
-			promises.push(pdb.pDR.update({'account': account['account']},{$set: toset}));
+			promises.push(db.dieselrobin.update({'account': account['account']},{$set: toset}));
 			bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed mission '+(mission+1)+': '+challenge['missiontext'][mission]));
 			
 			var newmissions = get_available_dieselrobin_missions(challenge, account);
 			console.log('new available missions: '+newmissions);
 			if (newmissions.length>0) {
 				account['playerorder'].push(account['playerorder'].shift());//rotate
-				promises.push(pdb.pDR.update({'account': account['account']},{$set: {'playerorder': account['playerorder']}}));
+				promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'playerorder': account['playerorder']}}));
 			}
 			if (newmissions.length>1) {
 				for (n=0; n<newmissions.length; n++) {newmissions[n]++;}//count from 0 for display
