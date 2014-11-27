@@ -288,6 +288,16 @@ function process_milestone(milestone, announcer, url) {
     //console.log(message);
     if (milestone.match(/v=0.16-a/) && !milestone.match(/god=(Ru|Gozag)/)) {//trunk only for csdc, Ru and Gozag not allowed
         db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
+        	
+        	db.mycollection.find({"active":true}, {"players": {$elemMatch: {"name":name.toLowerCase()}}, "char":1, gods:1, bonusqual:1, bonusdisqual:1, bonusworth:1, bonusdisqualresetqual:1, week:1, start:1, end:1}).toArray().then(function(docs){
+        		console.log("toarray.then docs for "+name+": " + JSON.stringify(docs));
+    		});
+    		
+    		db.mycollection.find({"active":true}, {"players": {$elemMatch: {"name":name.toLowerCase()}}, "char":1, gods:1, bonusqual:1, bonusdisqual:1, bonusworth:1, bonusdisqualresetqual:1, week:1, start:1, end:1}, function(err, docs){
+        		console.log("normal way docs for "+name+": " + JSON.stringify(docs));
+    		});
+        	
+        	
             if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
             	//console.log("csdc player confirmed, "+name);
                 //go through active weeks with the name and return only data for that player (+general data)
