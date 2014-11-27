@@ -211,7 +211,8 @@ function get_server_logs(announcer) {
             // var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
             //child.stdout.on('data', function (data) {
-            exec('curl -sr '+file["offset"]+'- '+file["url"], {maxBuffer: 1024*1024}, function (error, data, stderr) {
+            var upperlimit = file["offset"]+4096;
+            exec('curl -sr '+file["offset"]+'-'+upperlimit+' '+file["url"], function (error, data, stderr) {
             	if (error) {console.log('Error: '+error);}
             	if (stderr) {console.log('STDERR: '+error);}
             	//if (announcer=='Prequell') {console.log('Prequell data: '+data);}
