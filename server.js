@@ -289,7 +289,7 @@ function process_milestone(milestone, announcer, url) {
     if (milestone.match(/v=0.16-a/) && !milestone.match(/god=(Ru|Gozag)/)) {//trunk only for csdc, Ru and Gozag not allowed
         db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
             if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
-            	console.log("csdc player confirmed, "+name);
+            	//console.log("csdc player confirmed, "+name);
                 //go through active weeks with the name and return only data for that player (+general data)
                 db.csdc.find({"active":true}, 
                     {"players": {$elemMatch: {"name":name.toLowerCase()}},
@@ -304,7 +304,7 @@ function process_milestone(milestone, announcer, url) {
                         end:1
                     }
                 ).forEach(function(err, week) {
-                	console.log("got week and player data for "+name);
+                	console.log("got week and player data for "+name+": "+JSON.stringify(week));
                     //console.log(JSON.stringify(week));
                     timeStamp = getTimeStamp();
                     //console.log(timeStamp);
