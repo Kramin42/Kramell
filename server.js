@@ -335,7 +335,7 @@ function process_milestone(milestone, announcer, url) {
     var team = db.dieselrobin.findOne({"accounts": name.toUpperCase()});
     var account = db.dieselrobin.findOne({"account": name.toUpperCase()});
     var challenge = db.dieselrobin.findOne({"challenge": "dieselrobin"});
-    promises.push(Promise.All([challenge, team, account]).then(function(data) {
+    promises.push(Promise.all([challenge, team, account]).then(function(data) {
     	if (data[0] && data[1] && data[2]) {
     		console.log("found dieselrobin milestone: "+account['account']);
     		return check_dieselrobin_points(data[0], data[1], data[2], milestone);
@@ -351,7 +351,7 @@ function process_milestone(milestone, announcer, url) {
 //     		}
 //     	});
 //     });
-    return Promise.All(promises);
+    return Promise.all(promises);
 }
 
 function check_csdc_points(name, milestone, week) {
@@ -640,7 +640,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			}
 		}
 	}
-	return Promise.All(promises);
+	return Promise.all(promises);
 }
 
 function update_aliases(nick) {
