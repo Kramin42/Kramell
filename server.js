@@ -58,7 +58,7 @@ var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 var csdcrunning = true;
-var fetchlimit = 4096;
+var fetchlimit = 4095;
 
 var timers = {};
 var NAnick;
@@ -309,12 +309,12 @@ function process_milestone(milestone, announcer, url) {
                     }
                 ).toArray().then(function(weeks) {
                 weeks.forEach(function(week) {
-                	console.log("got week and player data for "+name+": "+JSON.stringify(week));
+                	//console.log("got week and player data for "+name+": "+JSON.stringify(week));
                     //console.log(JSON.stringify(week));
                     timeStamp = getTimeStamp();
                     //console.log(timeStamp);
                     if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
-                    	console.log("data valid and within dates for "+name);
+                    	//console.log("data valid and within dates for "+name);
                         if (week['players'] && week['players'][0]) {
                             if (week['players'][0]['alive'] && milestone.search(new RegExp("char="+week["char"],"i"))>-1) {
                                 //csdc_announce(name, milestone, week);
