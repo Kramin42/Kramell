@@ -58,6 +58,7 @@ var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 var csdcrunning = true;
+var fetchlimit = 4096;
 
 var timers = {};
 var NAnick;
@@ -181,16 +182,7 @@ function get_logfile_offset(announcer, url) {
 }
 
 function get_server_logs(announcer) {
-	if (timers[announcer]) {
-    	clearTimeout(timers[announcer]);
-    }
-    timers[announcer] = setTimeout(
-		function() {
-			console.log("checking "+announcer+" logs (1 min timer)");
-    		get_server_logs(announcer);
-    	},
-    	60*1000
-    );
+	var delay = 60;
     if (fetching[announcer]) {console.log("preventing simultaneous fetch for "+announcer); return;}//don't want simultaneous fetches breaking things
 	fetching[announcer] = true;
 	//console.log('fetching from '+announcer+': '+fetching[announcer]);
@@ -211,7 +203,7 @@ function get_server_logs(announcer) {
             // var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
             //child.stdout.on('data', function (data) {
-            var upperlimit = file["offset"]+4096;
+            var upperlimit = file["offset"]+fetchlimit;
             exec('curl -sr '+file["offset"]+'-'+upperlimit+' '+file["url"], function (error, data, stderr) {
             	if (error) {console.log('Error: '+error);}
             	if (stderr) {console.log('STDERR: '+error);}
@@ -223,6 +215,7 @@ function get_server_logs(announcer) {
                     data = logacc[announcer][file["url"]] + data;
                     logacc[announcer][file["url"]] = "";
                     console.log(announcer+' data size: '+datalength+' bytes');
+                    if (datalength >= fetchlimit-1) {delay = 10;}
                     
                     data = data.replace(/\n\n/g,"\n");
                     datasplit = data.split(/\n/);
@@ -259,6 +252,16 @@ function get_server_logs(announcer) {
         	console.log(announcer+" log not found "+JSON.stringify(file));
         }
     });});
+    if (timers[announcer]) {
+    	clearTimeout(timers[announcer]);
+    }
+    timers[announcer] = setTimeout(
+		function() {
+			console.log("checking "+announcer+" logs on timer");
+    		get_server_logs(announcer);
+    	},
+    	delay*1000
+    );
 }
 
 function process_milestone(milestone, announcer, url) {
