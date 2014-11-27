@@ -288,16 +288,6 @@ function process_milestone(milestone, announcer, url) {
     //console.log(message);
     if (milestone.match(/v=0.16-a/) && !milestone.match(/god=(Ru|Gozag)/)) {//trunk only for csdc, Ru and Gozag not allowed
         db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
-        	
-        	db.csdc.find({"active":true}, {"players": {$elemMatch: {"name":name.toLowerCase()}}, "char":1, gods:1, bonusqual:1, bonusdisqual:1, bonusworth:1, bonusdisqualresetqual:1, week:1, start:1, end:1}).toArray().then(function(docs){
-        		console.log("toarray.then docs for "+name+": " + JSON.stringify(docs));
-    		});
-    		
-    		db.csdc.find({"active":true}, {"players": {$elemMatch: {"name":name.toLowerCase()}}, "char":1, gods:1, bonusqual:1, bonusdisqual:1, bonusworth:1, bonusdisqualresetqual:1, week:1, start:1, end:1}, function(err, docs){
-        		console.log("normal way docs for "+name+": " + JSON.stringify(docs));
-    		});
-        	
-        	
             if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
             	//console.log("csdc player confirmed, "+name);
                 //go through active weeks with the name and return only data for that player (+general data)
@@ -313,7 +303,8 @@ function process_milestone(milestone, announcer, url) {
                         start:1,
                         end:1
                     }
-                ).forEach(function(err, week) {
+                ).toArray().then(function(weeks) {
+                weeks.forEach(function(week) {
                 	console.log("got week and player data for "+name+": "+JSON.stringify(week));
                     //console.log(JSON.stringify(week));
                     timeStamp = getTimeStamp();
@@ -333,11 +324,11 @@ function process_milestone(milestone, announcer, url) {
                                 //week["players"] = [{"name": name, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
                                 //csdc_announce(name, message, week);
                                 console.log("enrolled "+name+" into csdc "+week["week"]);
-                                
                             });
                         }
                         //console.log(milestone);
                     }
+                });
                 });
             }
         });
