@@ -5,6 +5,7 @@
 
 var express = require('express');
 var fs      = require('fs');
+var Promise = require("bluebird");
 
 var exec = require('child_process').exec;
 
@@ -45,6 +46,10 @@ var channels = db.collection('channels');
 var csdc = db.collection('csdc');
 var nick_aliases = db.collection('nick_aliases');
 var dieselrobin = db.collection('dieselrobin');
+
+var pmongo = require('promised-mongo');
+var pdb = pmongo(connection_string, ['announcers','channels','csdc','nick_aliases','dieselrobin']);
+var pDR = pdb.collection('dieselrobin');
 
 var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
@@ -209,35 +214,35 @@ function get_server_logs(announcer) {
             	//if (announcer=='Prequell') {console.log('Prequell data: '+data);}
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
                 	fetching[announcer] = true;
-                	//console.log('fetching from '+announcer+': '+fetching[announcer]);
-                	//console.log(JSON.stringify(data.split(/\n/)));
-                    //console.log(announcer+': ' + data);
-                    //console.log(data.replace(/^\s+|\s+$/g, '').split("\n").length+" milestones for "+announcer);
+                	
                     datalength = byteCount(data);
-                    //if (datalength != byteCount(data)) console.log("differing byte counts: old: "+byteCount(data)+", new: "+datalength);
                     data = logacc[announcer][file["url"]] + data;
                     logacc[announcer][file["url"]] = "";
                     console.log(announcer+' data size: '+datalength+' bytes');
-                    //data = data.replace(/\n/g,"");
-                    //data = data.replace(/(.)v=(\d\.\d\d)/g,"$1:>>>&&&<<<:v=$2");
-                    //data = data.replace(/^(v=\d\.\d\d)/g,"<<<:$1");
-                    //console.log(data);
+                    
                     data = data.replace(/\n\n/g,"\n");
                     datasplit = data.split(/\n/);
                     for (i=0; i<datasplit.length-1; i++) {
                     	datasplit[i]+="\n";
                     }
-                    //console.log(JSON.stringify(datasplit));
-                    datasplit.forEach(function(text) {process_milestone(text,announcer,file["url"])});
+                    
+                    //datasplit.forEach(function(text) {process_milestone(text,announcer,file["url"])});
+                    
+                    milestones = datasplit;
+                    var process = function() {
+                    	process_milestone(milestones.shift(), announcer, file["url"]).then(function() {
+                    		if (milestones.length>0) {
+                    			console.log('iterating to next milestone');
+                    			return process();
+                    		}
+                    	});
+                    };
+                    process();
+                    
                     if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
-                    //console.log(data);
-                    //offset+=datalength;
-                    //console.log("before announcer update");
+                    
                     db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
                     	fetching[announcer] = false;
-                    	//if (announcer=='Prequell') {console.log('Prequell fetch finished');}
-                    	//console.log("after announcer update");
-                		//console.log('fetching from '+announcer+': '+fetching[announcer]);
                     });
                 } else {
                     //console.log("no new content");
@@ -246,18 +251,6 @@ function get_server_logs(announcer) {
                     //if (announcer=='Prequell') {console.log('Prequell fetch finished (nothing found)');}
                 }
             });
-// 
-//             child.stderr.on('data', function (data) {
-//               console.log('stderr: ' + data);
-//             });
-// 
-//             child.on('close', function (code) {
-//                 if (code>0) {console.log('logfile fetch for '+file["url"]+' exited with code ' + code);}
-//             });
-//             
-//             child.on('message', function (message) {
-//                 console.log(announcer+': '+message);
-//             });
         } else {
         	console.log(announcer+" log not found "+JSON.stringify(file));
         }
@@ -265,6 +258,7 @@ function get_server_logs(announcer) {
 }
 
 function process_milestone(milestone, announcer, url) {
+	var promises = [];
     //milestone = milestone.replace(/\n/g,"");
     
     // make sure it's a complete milestone
@@ -279,21 +273,9 @@ function process_milestone(milestone, announcer, url) {
     	return;
     }
     
-    //console.log("milestone: "+milestone);
-    
     try {
         var name = milestone.match(/name=(\w*):/)[1];
         var version = milestone.match(/v=(.*):vlong/)[1];
-        //var mtext = milestone.match(/(milestone|tmsg)=(.*)/)[1];
-//         var xl = milestone.match(/xl=(\d+):/)[1];
-//         var combo = milestone.match(/char=(\w\w\w\w):/)[1];
-//         var text = milestone.match(/milestone=(\w*)/)[1];
-//         if (milestone.match(/oplace=/)) {
-//             var place = milestone.replace('::',';;').match(/oplace=([^:]*):/)[1].replace(';;',':');
-//         } else {
-//             var place = milestone.replace('::',';;').match(/place=([^:]*):/)[1].replace(';;',':');
-//         }
-        //var message = name+' (L'+xl+' '+combo+') '+text+' ('+place+')';
     } catch(error) {
         console.log(error);
         console.log("in milestone: "+milestone)
@@ -347,16 +329,26 @@ function process_milestone(milestone, announcer, url) {
     
     //dieselrobin
     //get the associated team and account
-    db.dieselrobin.findOne({"accounts": name.toUpperCase()}, function(err, team) {
-    	db.dieselrobin.findOne({"account": name.toUpperCase()}, function(err, account) {
-    		if (team && account) {
-    			console.log("found dieselrobin milestone: "+account['account']);
-    			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
-    				check_dieselrobin_points(challenge, team, account, milestone);
-    			});
-    		}
-    	});
-    });
+    var team = pdb.pDR.findOne({"accounts": name.toUpperCase()});
+    var account = pdb.pDR.findOne({"account": name.toUpperCase()});
+    var challenge = pdb.pDR.findOne({"challenge": "dieselrobin"});
+    promises.push(Promise.All([challenge, team, account]).then(function(data) {
+    	if (data[0] && data[1] && data[2]) {
+    		console.log("found dieselrobin milestone: "+account['account']);
+    		return check_dieselrobin_points(data[0], data[1], data[2], milestone);
+    	}
+    }));
+//     db.dieselrobin.findOne({"accounts": name.toUpperCase()}, function(err, team) {
+//     	db.dieselrobin.findOne({"account": name.toUpperCase()}, function(err, account) {
+//     		if (team && account) {
+//     			console.log("found dieselrobin milestone: "+account['account']);
+//     			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
+//     				check_dieselrobin_points(challenge, team, account, milestone);
+//     			});
+//     		}
+//     	});
+//     });
+    return Promise.All(promises);
 }
 
 function check_csdc_points(name, milestone, week) {
@@ -568,6 +560,7 @@ function get_available_dieselrobin_missions(challenge, account) {
 }
 
 function check_dieselrobin_points(challenge, team, account, milestone) {
+	var promises = [];
 	console.log(milestone);
 	var availablemissions = get_available_dieselrobin_missions(challenge, account);
 	console.log('available missions: '+availablemissions);
@@ -577,7 +570,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			if (!account['retries']) {account['retries']=0;}
 			account['retries']++;
 			if (account['retries']<20) {
-				db.dieselrobin.update({'account': account['account']},{$set: {'retries': account['retries']}});
+				promises.push(pdb.pDR.update({'account': account['account']},{$set: {'retries': account['retries']}}));
 				bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during the first mission '+account['retries']+' time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
 			} else {
 				gameover = true;
@@ -589,14 +582,14 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 	if (milestone.search(/ktyp=winning/i)>-1) {
 		gameover = true;
 		account['missionpoints'][14] = 3;
-		db.dieselrobin.update({'account': account['account']},{$set: {'missionpoints.14': 3}});
+		promises.push(pdb.pDR.update({'account': account['account']},{$set: {'missionpoints.14': 3}}));
 		bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' (Team '+team['team']+') has won for 3 points!'));
 	}
 	if (gameover) {
 		add = function(prev,current){return current + prev;}
 		var score = account['missionpoints'].reduce(add, 0) + account['bonuspoints'].reduce(add, 0);
 		bot.say('##dieselrobin', irc.colors.wrap('light_blue', 'Team '+team['team']+"'s final score for "+account['char']+' (on '+account['account']+'): '+score));
-		db.dieselrobin.update({'account': account['account']},{$set: {'alive': false}});
+		promises.push(pdb.pDR.update({'account': account['account']},{$set: {'alive': false}}));
 	}
 	
 	//go through available missions and check if newly completed
@@ -609,7 +602,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
         	account['missionqual'][mission][challenge['missionqual'][mission].length-1] = false;
         	toset = {};
         	toset['missionqual.'+mission] = account['missionqual'][mission];
-        	db.dieselrobin.update({'account':account['account']}, {$set: toset});
+        	promises.push(pdb.pDR.update({'account':account['account']}, {$set: toset}));
         }
         for (j=0;j<challenge['missionqual'][mission].length;j++) {
 			if (!account['missionqual'][mission][j] && milestone.search(challenge['missionqual'][mission][j])>-1) {
@@ -617,7 +610,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 				account['missionqual'][mission][j]=true;
 				toset = {};
         		toset['missionqual.'+mission+'.'+j] = true;
-				db.dieselrobin.update({'account': account['account']},{$set: toset});
+				promises.push(pdb.pDR.update({'account': account['account']},{$set: toset}));
 				break;
 			}
 		}
@@ -627,14 +620,14 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			account['missionpoints'][mission] = points;
 			toset = {};
         	toset['missionpoints.'+mission] = points;
-			db.dieselrobin.update({'account': account['account']},{$set: toset});
+			promises.push(pdb.pDR.update({'account': account['account']},{$set: toset}));
 			bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed mission '+(mission+1)+': '+challenge['missiontext'][mission]));
 			
 			var newmissions = get_available_dieselrobin_missions(challenge, account);
 			console.log('new available missions: '+newmissions);
 			if (newmissions.length>0) {
 				account['playerorder'].push(account['playerorder'].shift());//rotate
-				db.dieselrobin.update({'account': account['account']},{$set: {'playerorder': account['playerorder']}});
+				promises.push(pdb.pDR.update({'account': account['account']},{$set: {'playerorder': account['playerorder']}}));
 			}
 			if (newmissions.length>1) {
 				for (n=0; n<newmissions.length; n++) {newmissions[n]++;}//count from 0 for display
@@ -644,6 +637,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			}
 		}
 	}
+	return Promise.All(promises);
 }
 
 function update_aliases(nick) {
