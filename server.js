@@ -211,7 +211,7 @@ function get_server_logs(announcer) {
             // var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
 
             //child.stdout.on('data', function (data) {
-            exec('curl -sr '+file["offset"]+'- '+file["url"], function (error, data, stderr) {
+            exec('curl -sr '+file["offset"]+'- '+file["url"], {maxBuffer: 1024*1024}, function (error, data, stderr) {
             	if (error) {console.log('Error: '+error);}
             	if (stderr) {console.log('STDERR: '+error);}
             	//if (announcer=='Prequell') {console.log('Prequell data: '+data);}
@@ -235,7 +235,7 @@ function get_server_logs(announcer) {
                     var process = function() {
                     	process_milestone(milestones.shift(), announcer, file["url"]).then(function() {
                     		if (milestones.length>0) {
-                    			//console.log('iterating to next milestone');
+                    			console.log('iterating to next milestone');
                     			return process();
                     		}
                     	});
@@ -273,7 +273,7 @@ function process_milestone(milestone, announcer, url) {
     		//console.log("appending to logacc: "+milestone);
     		logacc[announcer][url] += milestone;
     	}
-    	return Promise.resolve(0);
+    	return Promise.resolve(1);
     }
     
     try {
@@ -282,7 +282,7 @@ function process_milestone(milestone, announcer, url) {
     } catch(error) {
         console.log(error);
         console.log("in milestone: "+milestone)
-        return Promise.resolve(0);
+        return Promise.resolve(1);
     }
     //console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
