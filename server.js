@@ -273,7 +273,7 @@ function process_milestone(milestone, announcer, url) {
     		//console.log("appending to logacc: "+milestone);
     		logacc[announcer][url] += milestone;
     	}
-    	return;
+    	return Promise.resolve(0);
     }
     
     try {
@@ -282,7 +282,7 @@ function process_milestone(milestone, announcer, url) {
     } catch(error) {
         console.log(error);
         console.log("in milestone: "+milestone)
-        return;
+        return Promise.resolve(0);
     }
     //console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
