@@ -1537,7 +1537,7 @@ var SampleApp = function() {
         self.zcache['dieselrobin/missions.md'] = fs.readFileSync('./dieselrobin/missions.md', 'utf8');
         self.zcache['dieselrobin/bonus.md'] = fs.readFileSync('./dieselrobin/bonus.md', 'utf8');
         self.zcache['dieselrobin/workflow.md'] = fs.readFileSync('./dieselrobin/workflow.md', 'utf8');
-        self.zcache['strapdown.html'] = fs.readFileSync('./strapdown.html');
+        self.zcache['strapdown.html'] = fs.readFileSync('./strapdown.html', 'utf8');
     };
 
 
