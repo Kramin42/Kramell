@@ -1010,7 +1010,7 @@ function do_command(arg, chan, nick, admin) {
     						if (arg.length>2 && admin) name = arg[2];
     						else name=nick;
     						console.log('adding combo');
-							db.dieselrobin.findAndModify({query: {"players": new RegExp(name,'i')}, update: {$set: {"nominated.$": arg[1]}}}).then(function(updated) {
+							db.dieselrobin.findAndModify({query: {"players": new RegExp(name,'i')}, update: {$set: {"nominated.$": arg[1]}}}, function(updated) {
 								console.log(JSON.stringify(updated));
 								if (updated) {
 									bot.say(chan, name+" (team "+updated["team"]+") has nominated "+arg[1]);
