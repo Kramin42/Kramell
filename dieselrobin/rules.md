@@ -12,8 +12,13 @@ to Lair, Lair:1-8).
 
 **Servers**
 
-* CAO/CSZO - tiles, console or a mix of both
-* CDO - console only
+* CAO
+* CDO
+* CSZO
+* CBRO
+* CLAN
+* CPO
+* CXC
 
 **Combo Selection** 
 
@@ -22,14 +27,15 @@ encouraged to choose combos which allow for a reasonable amount of flexibility.
 Combos  which force a certain playstyle or set of circumstances are interesting
 to play solo, but can be frustrating (or boring, in the case of overpowered
 combos) in an ad-hoc team environment. Combos of the latter nature may be
-replaced at the discretion of the organizers. In addition, some number of
-randomly chosen combos may be replaced. All replacements will come from the
-oldwon pool.
+replaced at the discretion of the organizers.
+
+Once you have signed up to a team (see below) you can nominate a combo in `##dieselrobin` with:
+
+	$nominate <combo>
 
 **Time Frame**
 
-The competition will start on a Friday at 19:00 UTC and will end 16 days later
-on Sunday at 19:00 UTC. Any games still in progress will be scored as if they
+The competition will start TBA and will end 16 days later. Any games still in progress will be scored as if they
 died of old age at that point. The start and end times will be posted in
 `??dieselrobin[4]`
 
@@ -38,10 +44,10 @@ died of old age at that point. The start and end times will be posted in
 
 ### Composition
 
-Teams are made up of 3 players. The account must be owned by a single
-individual, which means NO ROBIN ACCOUNTS. Players are allowed to form their
-own teams or join up solo and get assigned to a team randomly. Team rosters are
-frozen 48 hours after the start of the competition. 
+Teams are made up of 3 players. Players are allowed to form their
+own teams or join up solo and get assigned to a team randomly, 
+add your name to `??teamless` in this case. Team rosters are
+frozen after the start of the competition. 
 
 ### Substitutions
 
@@ -55,17 +61,24 @@ Each team should choose a team name and three account names. Account
 names **must** be in ALLCAPS. Each team also needs to pick an order of play and
 decide which player will start which character (once combos are assigned).
 
+Once you have a team name, all players must sign up in `##dieselrobin` with:
+
+	$signup <team name>
+
+When the combos have been assigned, assign a combo and starting player to an account with:
+
+	$assign <combo> <account> [starting player]
+
+If the starting player is omitted it will use the name of the player who issued the command.
+
 ### Organization
 
-Making a learndb entry with your team's information might be a good idea. An example:
+The bot in `##dieselrobin`, `Kramell`, will track your progress and tell you when you have 
+completed missions, what missions are available next, and which player is to play 
+on the that account next.
 
-    team dd guide[1/3]: elliptic, pivotal, ophanim. Accounts: MAKHLEB 
-    (TrHu), USETHEWAND (HuSu), RECHARGEIT (DrEE). Play order: elliptic ->
-    ophanim -> pivotal -> elliptic.
-
-You should also duplicate the [scoring sheet template](https://docs.google.com/spreadsheet/ccc?key=0AsDUl9FTpJmLdEh2ZnYtUlp3a3BESWJlUERqYklCdUE)
-and use that speadsheet to keep track of your team’s progress.
-
+If you wish to keep track independently you could use an online spreadsheet 
+similar to those used in previous competitions: [scoring sheet template](https://docs.google.com/spreadsheet/ccc?key=0AsDUl9FTpJmLdEh2ZnYtUlp3a3BESWJlUERqYklCdUE)
 
 ## For Players
 
@@ -102,7 +115,7 @@ instead; once begun, the only options are completion, death, or going to Zot and
 winning instead. You do not have to stop immediately when you have completed the
 tasks in the mission; they are just the minimum you have to do.
 
-These missions will be in the `??mission` entry in the learndb and at [dieselrobin.org](http://dieselrobin.org/rules) for easy reference.
+These missions can be queried in `##dieselrobin` with `$mission <num>` and are listed online at [kramell-kramin.rhcloud.com](https://kramell-kramin.rhcloud.com/dieselrobin/rules) for easy reference.
 
 
 ### Bonus Missions
