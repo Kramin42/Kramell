@@ -1,37 +1,22 @@
-# Dieselrobin Rules
+# DieselRobin
 
 **Summary**
 
 Teams of players are assigned race/class combinations (multiple combos per team)
 and team members take turns completing "Missions" with each character (e.g., D
-to Lair, Lair:1-8).
-
-## Rules
+to Lair, Lair:1-8). The competition will be run on the freenode IRC channel [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin).
 
 *Game Version:* Trunk
 
 **Servers**
 
-* CAO
-* CDO
-* CSZO
-* CBRO
-* CLAN
-* CPO
-* CXC
-
-**Combo Selection** 
-
-Combo selection: Each player will choose one race/class combination. Players are
-encouraged to choose combos which allow for a reasonable amount of flexibility.
-Combos  which force a certain playstyle or set of circumstances are interesting
-to play solo, but can be frustrating (or boring, in the case of overpowered
-combos) in an ad-hoc team environment. Combos of the latter nature may be
-replaced at the discretion of the organizers.
-
-Once you have signed up to a team (see below) you can nominate a combo in `##dieselrobin` with:
-
-	$nominate <combo>
+* [CAO](http://crawl.akrasiac.org)
+* CDO (console only)
+* [CSZO](http://crawl.s-z.org)
+* [CBRO](http://crawl.berotato.org)
+* [CLAN](http://crawl.lantea.net:8080)
+* [CPO](https://crawl.project357.org)
+* [CXC](http://crawl.XTAHUA.com)
 
 **Time Frame**
 
@@ -39,15 +24,14 @@ The competition will start TBA and will end 16 days later. Any games still in pr
 died of old age at that point. The start and end times will be posted in
 `??dieselrobin[4]`
 
-
 ## Teams
 
 ### Composition
 
 Teams are made up of 3 players. Players are allowed to form their
 own teams or join up solo and get assigned to a team randomly, 
-add your name to `??teamless` in this case. Team rosters are
-frozen after the start of the competition. 
+add your name to `??teamless` in this case (use `!learn edit teamless[1] s/$/, <name>/` to append your name to the list). 
+Team rosters are frozen after the start of the competition. 
 
 ### Substitutions
 
@@ -61,19 +45,35 @@ Each team should choose a team name and three account names. Account
 names **must** be in ALLCAPS. Each team also needs to pick an order of play and
 decide which player will start which character (once combos are assigned).
 
-Once you have a team name, all players must sign up in `##dieselrobin` with:
+Once you have a team name, all players must sign up in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with (use quotes if your team name has spaces):
 
-	$signup <team name>
+	$signup <team>
+	$signup "DON'T LABEL ME"
 
 When the combos have been assigned, assign a combo and starting player to an account with:
 
-	$assign <combo> <account> [starting player]
+	$assign <combo> <account> <player>
+	$assign DEMo DEEPELFMONK Kramin
 
-If the starting player is omitted it will use the name of the player who issued the command.
+If the player is omitted it will use the name of the player who issued the command.
+
+### Combo Selection
+
+Each player will choose one race/class combination. Players are
+encouraged to choose combos which allow for a reasonable amount of flexibility.
+Combos  which force a certain playstyle or set of circumstances are interesting
+to play solo, but can be frustrating (or boring, in the case of overpowered
+combos) in an ad-hoc team environment. Combos of the latter nature may be
+replaced at the discretion of the organizers.
+
+Once you have signed up to a team you can nominate a combo in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with:
+
+	$nominate <combo>
+	$nominate DgWn
 
 ### Organization
 
-The bot in `##dieselrobin`, `Kramell`, will track your progress and tell you when you have 
+The bot in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin), **Kramell**, will track your progress and tell you when you have 
 completed missions, what missions are available next, and which player is to play 
 on the that account next.
 
@@ -115,7 +115,7 @@ instead; once begun, the only options are completion, death, or going to Zot and
 winning instead. You do not have to stop immediately when you have completed the
 tasks in the mission; they are just the minimum you have to do.
 
-These missions can be queried in `##dieselrobin` with `$mission <num>` and are listed online at [kramell-kramin.rhcloud.com](https://kramell-kramin.rhcloud.com/dieselrobin/rules) for easy reference.
+These missions can be queried in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with `$mission <num>` and are listed online at [kramell-kramin.rhcloud.com](https://kramell-kramin.rhcloud.com/dieselrobin/rules) for easy reference.
 
 
 ### Bonus Missions
@@ -153,12 +153,14 @@ The character who scores the lowest on the regular mission will have their
 regular mission score dropped. Any bonus missions completed by this character
 are still worth points. 
 
+(TBA, I don't like this complex formula)
 3\*highest regular score + min(2\*2nd highest regular score, 21) + Tier 1 completed\*2 + Tier 2 completed\*4 + Tier 3 completed\*6
  
 Max score: 51 + 21 + 6 + 12 + 18 = 108
 
 ### Ties
 
+(TBA, not sure about MuCK as a tiebreaker)
 In the event that two or more teams have the same final mission score, each team
 will create a new account and start a MuCK. You may not abandon Xom at any point
 during a tiebreaker, and once you die, it's game over dude. No restarts on

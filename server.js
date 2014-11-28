@@ -1534,6 +1534,10 @@ var SampleApp = function() {
         //  Local cache for static content.
         self.zcache['index.html'] = fs.readFileSync('./index.html');
         self.zcache['dieselrobin/rules.md'] = fs.readFileSync('./dieselrobin/rules.md', 'utf8');
+        self.zcache['dieselrobin/missions.md'] = fs.readFileSync('./dieselrobin/missions.md', 'utf8');
+        self.zcache['dieselrobin/bonus.md'] = fs.readFileSync('./dieselrobin/bonus.md', 'utf8');
+        self.zcache['dieselrobin/workflow.md'] = fs.readFileSync('./dieselrobin/workflow.md', 'utf8');
+        self.zcache['strapdown.html'] = fs.readFileSync('./strapdown.html');
     };
 
 
@@ -1542,7 +1546,8 @@ var SampleApp = function() {
      *  @param {string} key  Key identifying content to retrieve from cache.
      */
     self.cache_get = function(key) { return self.zcache[key]; };
-
+    
+    self.strapdownize = function(markdown) {return self.cache_get('strapdown.html').replace('##MARKDOWN##', markdown);};
 
     /**
      *  terminator === the termination handler
@@ -1602,7 +1607,19 @@ var SampleApp = function() {
         
         self.routes['/dieselrobin/rules'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
-            res.send(marked(self.cache_get('dieselrobin/rules.md')));
+            res.send(self.strapdownize(self.cache_get('dieselrobin/rules.md')));
+        };
+        self.routes['/dieselrobin/missions'] = function(req, res) {
+            res.setHeader('Content-Type', 'text/html');
+            res.send(self.strapdownize(self.cache_get('dieselrobin/missions.md')));
+        };
+        self.routes['/dieselrobin/bonusses'] = function(req, res) {
+            res.setHeader('Content-Type', 'text/html');
+            res.send(self.strapdownize(self.cache_get('dieselrobin/bonus.md')));
+        };
+        self.routes['/dieselrobin/workflow'] = function(req, res) {
+            res.setHeader('Content-Type', 'text/html');
+            res.send(self.strapdownize(self.cache_get('dieselrobin/workflow.md')));
         };
     };
 
