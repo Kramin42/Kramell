@@ -4,7 +4,7 @@
 
 Teams of players are assigned race/class combinations (multiple combos per team)
 and team members take turns completing "Missions" with each character (e.g., D
-to Lair, Lair:1-8). The competition will be run on the freenode IRC channel [#dieselrobin](https://webchat.freenode.net/?channels=#dieselrobin).
+to Lair, Lair:1-8). The competition will be run on the freenode IRC channel [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin).
 
 *Game Version:* Trunk
 
@@ -45,7 +45,7 @@ Each team should choose a team name and three account names. Account
 names **must** be in ALLCAPS. Each team also needs to pick an order of play and
 decide which player will start which character (once combos are assigned).
 
-Once you have a team name, all players must sign up in [#dieselrobin](https://webchat.freenode.net/?channels=#dieselrobin) with (use quotes if your team name has spaces):
+Once you have a team name, all players must sign up in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with (use quotes if your team name has spaces):
 
 	$signup <team>
 	$signup "DON'T LABEL ME"
@@ -66,14 +66,14 @@ to play solo, but can be frustrating (or boring, in the case of overpowered
 combos) in an ad-hoc team environment. Combos of the latter nature may be
 replaced at the discretion of the organizers.
 
-Once you have signed up to a team you can nominate a combo in [#dieselrobin](https://webchat.freenode.net/?channels=#dieselrobin) with:
+Once you have signed up to a team you can nominate a combo in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with:
 
 	$nominate <combo>
 	$nominate DgWn
 
 ### Organization
 
-The bot in [#dieselrobin](https://webchat.freenode.net/?channels=#dieselrobin), **Kramell**, will track your progress and tell you when you have 
+The bot in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin), **Kramell**, will track your progress and tell you when you have 
 completed missions, what missions are available next, and which player is to play 
 on that account next.
 
@@ -115,7 +115,7 @@ instead; once begun, the only options are completion, death, or going to Zot and
 winning instead. You do not have to stop immediately when you have completed the
 tasks in the mission; they are just the minimum you have to do.
 
-These missions can be queried in [#dieselrobin](https://webchat.freenode.net/?channels=#dieselrobin) with `$mission <num>` and are listed online at [kramell-kramin.rhcloud.com](http://kramell-kramin.rhcloud.com/dieselrobin/missions) for easy reference.
+These missions can be queried in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with `$mission <num>` and are listed online at [kramell-kramin.rhcloud.com](http://kramell-kramin.rhcloud.com/dieselrobin/missions) for easy reference.
 
 
 ### Bonus Missions
