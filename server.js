@@ -1491,6 +1491,8 @@ function nop(){}
 
 //  OpenShift sample Node application
 
+var marked = require('marked');
+
 /**
  *  Define the sample application.
  */
@@ -1595,6 +1597,11 @@ var SampleApp = function() {
         self.routes['/'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
             res.send(self.cache_get('index.html') );
+        };
+        
+        self.routes['/dieselrobin/rules'] = function(req, res) {
+            res.setHeader('Content-Type', 'text/html');
+            res.send(marked(self.cache_get('./dieselrobin/rules.md')));
         };
     };
 
