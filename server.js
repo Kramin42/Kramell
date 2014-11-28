@@ -1533,7 +1533,7 @@ var SampleApp = function() {
 
         //  Local cache for static content.
         self.zcache['index.html'] = fs.readFileSync('./index.html');
-        self.zcache['strapdown.js'] = fs.readFileSync('./strapdown.js');
+//         self.zcache['strapdown.js'] = fs.readFileSync('./strapdown.js');
         self.zcache['dieselrobin/rules.md'] = fs.readFileSync('./dieselrobin/rules.md', 'utf8');
         self.zcache['dieselrobin/missions.md'] = fs.readFileSync('./dieselrobin/missions.md', 'utf8');
         self.zcache['dieselrobin/bonus.md'] = fs.readFileSync('./dieselrobin/bonus.md', 'utf8');
@@ -1606,10 +1606,10 @@ var SampleApp = function() {
             res.send(self.cache_get('index.html') );
         };
         
-        self.routes['/strapdown.js'] = function(req, res) {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(self.cache_get('strapdown.js') );
-        };
+//         self.routes['/strapdown.js'] = function(req, res) {
+//             res.setHeader('Content-Type', 'text/html');
+//             res.send(self.cache_get('strapdown.js') );
+//         };
         
         self.routes['/dieselrobin/rules'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
