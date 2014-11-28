@@ -982,7 +982,7 @@ function do_command(arg, chan, nick, admin) {
     		arg[1] = nick;
     	}
     	if (arg.length>1) {
-    		db.dieselrobin.findOne({$or: [{'team': new RegExp(arg[1],'i')}, {'players': new RegExp(arg[1],'i')}]}, function(err, team) {
+    		db.dieselrobin.findOne({$or: [{'team': new RegExp(arg[1],'i')}, {'players': new RegExp(arg[1],'i')}]}).then(function(team) {
     			if (team) {
     				nom = "";
     				for (i=0; i<team["nominated"].length; i++) {
@@ -1001,13 +1001,13 @@ function do_command(arg, chan, nick, admin) {
     					bot.say(chan, "No chars nominated by team "+team["team"]);
     				}
     			} else {
-    				db.dieselrobin.findOne({"nominated": new RegExp(arg[1],'i')}, function(err, found) {
+    				db.dieselrobin.findOne({"nominated": new RegExp(arg[1],'i')}).then(function(found) {
     					if (found) {
     						bot.say(chan, arg[1]+" has already been nominated");
     					} else {
     						if (arg.length>2 && admin) name = arg[2];
     						else name=nick;
-							db.dieselrobin.findAndModify({query: {"players": new RegExp(name,'i')}, update: {$set: {"nominated.$": arg[1]}}}, function(err, updated) {
+							db.dieselrobin.findAndModify({query: {"players": new RegExp(name,'i')}, update: {$set: {"nominated.$": arg[1]}}}).then(function(updated) {
 								if (updated) {
 									bot.say(chan, name+" (team "+updated["team"]+") has nominated "+arg[1]);
 								} else {
