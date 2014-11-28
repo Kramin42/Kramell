@@ -27,3 +27,4 @@ traverse
 mongojs
 promised-mongo
 bluebird
+marked
