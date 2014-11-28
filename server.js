@@ -1601,7 +1601,7 @@ var SampleApp = function() {
         
         self.routes['/dieselrobin/rules'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
-            res.send(marked(self.cache_get('./dieselrobin/rules.md')));
+            res.send(marked(self.cache_get('dieselrobin/rules.md')));
         };
     };
 
