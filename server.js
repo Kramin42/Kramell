@@ -582,7 +582,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			account['retries']++;
 			if (account['retries']<20) {
 				promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'retries': account['retries']}}));
-				bot.say('#dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during the first mission '+account['retries']+' time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
+				bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+team['team']+':'+account['playerorder'][0]+') has died during the first mission '+account['retries']+' time'+(account['retries']==1 ? '' : 's')+' and may retry '+(20-account['retries'])+' more time'+(account['retries']==19 ? '' : 's')));
 			} else {
 				gameover = true;
 			}
@@ -594,12 +594,12 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 		gameover = true;
 		account['missionpoints'][14] = 3;
 		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'missionpoints.14': 3}}));
-		bot.say('#dieselrobin', irc.colors.wrap('dark_green', account['account']+' (Team '+team['team']+') has won for 3 points!'));
+		bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' (Team '+team['team']+') has won for 3 points!'));
 	}
 	if (gameover) {
 		add = function(prev,current){return current + prev;}
 		var score = account['missionpoints'].reduce(add, 0) + account['bonuspoints'].reduce(add, 0);
-		bot.say('#dieselrobin', irc.colors.wrap('light_blue', 'Team '+team['team']+"'s final score for "+account['char']+' (on '+account['account']+'): '+score));
+		bot.say('##dieselrobin', irc.colors.wrap('light_blue', 'Team '+team['team']+"'s final score for "+account['char']+' (on '+account['account']+'): '+score));
 		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'alive': false}}));
 	}
 	
@@ -632,7 +632,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			toset = {};
         	toset['missionpoints.'+mission] = points;
 			promises.push(db.dieselrobin.update({'account': account['account']},{$set: toset}));
-			bot.say('#dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed mission '+(mission+1)+': '+challenge['missiontext'][mission]));
+			bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed mission '+(mission+1)+': '+challenge['missiontext'][mission]));
 			
 			var newmissions = get_available_dieselrobin_missions(challenge, account);
 			console.log('new available missions: '+newmissions);
@@ -642,9 +642,9 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			}
 			if (newmissions.length>1) {
 				for (n=0; n<newmissions.length; n++) {newmissions[n]++;}//count from 0 for display
-				bot.say('#dieselrobin', irc.colors.wrap('magenta', 'Possible next missions for '+account['account']+', to be played by '+account['playerorder'][0]+': '+newmissions.join(', ')+' (use $mission <num> to see them)'));
+				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Possible next missions for '+account['account']+', to be played by '+account['playerorder'][0]+': '+newmissions.join(', ')+' (use $mission <num> to see them)'));
 			} else if (newmissions.length==1) {
-				bot.say('#dieselrobin', irc.colors.wrap('magenta', 'Next mission for '+account['account']+', to be played by '+account['playerorder'][0]+': '+challenge['missiontext'][newmissions[0]]+'. New places: '+challenge['locations'][newmissions[0]]));
+				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Next mission for '+account['account']+', to be played by '+account['playerorder'][0]+': '+challenge['missiontext'][newmissions[0]]+'. New places: '+challenge['locations'][newmissions[0]]));
 			}
 		}
 	}
@@ -763,7 +763,7 @@ function do_command(arg, chan, nick, admin) {
     if (arg[0]=="help" || arg[0]=="commands"){
     	if (chan=="##csdc") {
     		
-    	} else if (chan=="#dieselrobin") {
+    	} else if (chan=="##dieselrobin") {
     		
     	} else {
 			bot.say(chan, "Kramell commands:");
@@ -918,7 +918,7 @@ function do_command(arg, chan, nick, admin) {
     
     //dieselrobin commands
     //$signup [-rm] <team> [name]
-    if (arg[0]=="signup" && chan=="#dieselrobin") {
+    if (arg[0]=="signup" && chan=="##dieselrobin") {
     	argteam = "";
     	callback = function() {
     		db.dieselrobin.distinct('players', {'team':new RegExp(argteam,'i')}, function(err, players) {
@@ -959,7 +959,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$mission <num|"list">
-    if (arg[0]=="mission" && chan=="#dieselrobin") {
+    if (arg[0]=="mission" && chan=="##dieselrobin") {
     	if (arg.length>1) {
     		if (arg[1]=="list") {
     			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
@@ -977,7 +977,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$nominate <combo> [player]
-    if ((arg[0]=="nominate" || arg[0]=="nominated")  && chan=="#dieselrobin") {
+    if ((arg[0]=="nominate" || arg[0]=="nominated")  && chan=="##dieselrobin") {
     	if (arg.length==1) {
     		arg[1] = nick;
     	}
@@ -1022,7 +1022,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$teams
-    if (arg[0]=='teams' && chan=="#dieselrobin") {
+    if (arg[0]=='teams' && chan=="##dieselrobin") {
     	db.dieselrobin.find({'team': {$exists: true}}, function(err, teams) {
     		teamlist = '';
     		teams.forEach(function(team) {
@@ -1037,7 +1037,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$team [team name|player name]
-    if (arg[0]=='team' && chan=="#dieselrobin") {
+    if (arg[0]=='team' && chan=="##dieselrobin") {
     	if (arg.length==1) {
     		arg[1] = nick;
     	}
@@ -1061,7 +1061,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$assign <combo> <account> [player name]
-    if (arg[0]=='assign' && chan=="#dieselrobin") {
+    if (arg[0]=='assign' && chan=="##dieselrobin") {
     	if (arg.length == 3) {
     		arg[3] = nick;
     	}
@@ -1099,7 +1099,7 @@ function do_command(arg, chan, nick, admin) {
     	}
     }
     
-    if (admin && arg[0]=="shufflechars" && chan=="#dieselrobin") {
+    if (admin && arg[0]=="shufflechars" && chan=="##dieselrobin") {
     	db.dieselrobin.distinct('nominated', function(err, chars) {
     		db.dieselrobin.distinct('team', {$or: [{nominated: {$exists: false}}, {nominated: {$size: 0}}, {nominated: {$size: 1}}, {nominated: {$size: 2}}]}, function(err, unnomteams) {
     			console.log(JSON.stringify(unnomteams));
