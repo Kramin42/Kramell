@@ -75,7 +75,7 @@ Once you have signed up to a team you can nominate a combo in [#dieselrobin](htt
 
 The bot in [#dieselrobin](https://webchat.freenode.net/?channels=#dieselrobin), **Kramell**, will track your progress and tell you when you have 
 completed missions, what missions are available next, and which player is to play 
-on the that account next.
+on that account next.
 
 If you wish to keep track independently you could use an online spreadsheet 
 similar to those used in previous competitions: [scoring sheet template](https://docs.google.com/spreadsheet/ccc?key=0AsDUl9FTpJmLdEh2ZnYtUlp3a3BESWJlUERqYklCdUE)
@@ -115,7 +115,7 @@ instead; once begun, the only options are completion, death, or going to Zot and
 winning instead. You do not have to stop immediately when you have completed the
 tasks in the mission; they are just the minimum you have to do.
 
-These missions can be queried in [#dieselrobin](https://webchat.freenode.net/?channels=#dieselrobin) with `$mission <num>` and are listed online at [kramell-kramin.rhcloud.com](https://kramell-kramin.rhcloud.com/dieselrobin/rules) for easy reference.
+These missions can be queried in [#dieselrobin](https://webchat.freenode.net/?channels=#dieselrobin) with `$mission <num>` and are listed online at [kramell-kramin.rhcloud.com](http://kramell-kramin.rhcloud.com/dieselrobin/missions) for easy reference.
 
 
 ### Bonus Missions

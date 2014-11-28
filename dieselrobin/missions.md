@@ -1,76 +1,20 @@
 # Regular Missions
 
-## Part One
+**Missions 5-7 and 9-14 may be done in any order**
 
-### Mission 1
-
-Find the entrances to Lair and Orc. If you die, you may try again up to twenty
-times. New locations: D:1-13, Temple.
-
-### Mission 2
-
-Find the three branch entrances in Lair. New locations: Lair.
-
-### Mission 3
-
-Enter the shops in the Orc:4 shop vault and find the entrance to Vault. New
-locations: Orc, Elf, D:14-20.
-
-### Mission 4
-
-Get a Lair rune. New locations: one Lair subbranch.
-
----
-
-## Part Two
-
-#### Missions 5, 6, and 7 can be done in any order.
-
-### Mission 5
-
-Find the entrance to Tomb and enter the end of Crypt. New locations: Vault:1-4,
-Crypt, Blade.
-
-### Mission 6
-
-Get a second Lair rune. New locations: a second Lair subbranch.
-
-### Mission 7
-
-Find at least one entrance to Pan, Hell, and Zot. New locations: D:21-27,
-Vestibule.
-
-### Mission 8
-
-Get the silver or golden rune. New locations: either Vault:5 or Tomb,
-along with Zot (since you have 3 runes now).
-
----
-
-## Part Three
-
-#### Missions 9-14 can be done in any order.
-
-### Mission 9
-
-Get a third Lair rune. New locations: the third Lair subbranch.
-
-### Mission 10
-
-Get the silver or golden rune. New locations: either Vault:5 or Tomb.
-
-### Mission 11
-
-Get three Pan runes. New locations: Pan.
-
-### Mission 12
-
-Get the remaining two Pan runes and return to D.
-
-### Mission 13
-
-Get two Hell runes. New locations: all four hell branches.
-
-### Mission 14
-
-Get the remaining two Hell runes.
+|Mission|Description|New Locations|
+| ----: |:--------- |:----------- |
+|   1   | Enter Lair or Orc. | D:1-12, Temple |
+|   2   | Finish Lair or Orc (whichever was entered in mission 1) | Lair, Orc |
+|   3   | Finish the rest of Lair, Orc, and D | D:13-15, Elf |
+|   4   | Get a Lair rune | S1 (one of the Lair sub-branches) |
+|   5   | Get a second Lair rune | S2 (another Lair sub-branch) |
+|   6   | Reach the end of Depths | Depths |
+|   7   | Do Vaults:1-4 and reach the end of Crypt | Vaults:1-4, Crypt |
+|   8   | Get a third rune from either Vaults, Abyss or the last Lair branch | Vaults:5, S3 (the last Lair sub-branch), Zot |
+|   9   | Get the other two runes out of Vaults, Abyss, Lair branches | |
+|  10   | Get the Tomb rune | Tomb |
+|  11   | Get three Pan runes | Pan |
+|  12   | Get two Hell runes | Hell and its branches |
+|  13   | Get the remaining two Pan runes | |
+|  14   | Get the remaining two Hell runes | |
