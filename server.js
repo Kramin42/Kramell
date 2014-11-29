@@ -921,7 +921,7 @@ function do_command(arg, chan, nick, admin) {
     if (arg[0]=="signup" && chan=="##dieselrobin") {
     	argteam = "";
     	callback = function() {
-    		db.dieselrobin.distinct('players', {'team':new RegExp('^'+argteam+'$','i')}, function(err, players) {
+    		db.dieselrobin.distinct('players', {'team':new RegExp('^'+argteam+'$','i')}).then(function(players) {
                 //console.log(JSON.stringify(updated));
                 bot.say(chan, "Players in team "+argteam+": "+players.join(', '));
         	});
@@ -1016,7 +1016,7 @@ function do_command(arg, chan, nick, admin) {
 								db.dieselrobin.update({"team": team['team']}, {$set: toset}).then(function(updated) {
 									//console.log(JSON.stringify(updated));
 									if (updated) {
-										bot.say(chan, name+" (team "+updated["team"]+") has nominated "+arg[1]);
+										bot.say(chan, name+" (team "+team['team']+") has nominated "+arg[1]);
 									} else {
 										bot.say(chan, "Join a team first");
 									}
