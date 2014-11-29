@@ -931,7 +931,7 @@ function do_command(arg, chan, nick, admin) {
                 argteam = arg[2];
                 argname = nick;
                 if (arg.length>3 && admin) argname = arg[3];
-                db.dieselrobin.update({"team":new RegExp('^'+argteam+'$','i')},{$pull: {"players": {$regex: argname, $options: 'i'}}},callback);
+                db.dieselrobin.update({"team":new RegExp('^'+argteam+'$','i')},{$pull: {"players": {$regex: '^'+argname+'$', $options: 'i'}}},callback);
                 bot.say(control_channel, "player removed ("+chan+"/"+nick+"): "+argname+" from "+argteam);
                 db.dieselrobin.remove({"players":[]});
             } else {
