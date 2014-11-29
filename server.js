@@ -921,7 +921,7 @@ function do_command(arg, chan, nick, admin) {
     if (arg[0]=="signup" && chan=="##dieselrobin") {
     	argteam = "";
     	callback = function() {
-    		db.dieselrobin.distinct('players', {'team':new RegExp(argteam,'i')}, function(err, players) {
+    		db.dieselrobin.distinct('players', {'team':new RegExp('^'+argteam+'$','i')}, function(err, players) {
                 //console.log(JSON.stringify(updated));
                 bot.say(chan, "Players in team "+argteam+": "+players.join(', '));
         	});
@@ -931,16 +931,16 @@ function do_command(arg, chan, nick, admin) {
                 argteam = arg[2];
                 argname = nick;
                 if (arg.length>3 && admin) argname = arg[3];
-                db.dieselrobin.update({"team":new RegExp(argteam,'i')},{$pull: {"players": {$regex: argname, $options: 'i'}}},callback);
+                db.dieselrobin.update({"team":new RegExp('^'+argteam+'$','i')},{$pull: {"players": {$regex: argname, $options: 'i'}}},callback);
                 bot.say(control_channel, "player removed ("+chan+"/"+nick+"): "+argname+" from "+argteam);
                 db.dieselrobin.remove({"players":[]});
             } else {
                 argteam = arg[1];
                 argname = nick;
                 if (arg.length>2 && admin) argname = arg[2];
-                db.dieselrobin.findOne({"team":new RegExp(argteam,'i')}, function(err,team) {
+                db.dieselrobin.findOne({"team":new RegExp('^'+argteam+'$','i')}, function(err,team) {
                 	if (!team || !team["players"] || team["players"].length<3) {
-                		db.dieselrobin.update({"team":new RegExp(argteam,'i')}, {$addToSet: {"players":argname}}, function(err, updated) {
+                		db.dieselrobin.update({"team":new RegExp('^'+argteam+'$','i')}, {$addToSet: {"players":argname}}, function(err, updated) {
                 			if (updated['n']==0) {
                 				db.dieselrobin.insert({"team": argteam, "players": [argname], "accounts": [], "assigned": [], "bonuspoints": [], "bonusqual": [], "nominated": []}, callback);
                 			} else {
@@ -982,7 +982,7 @@ function do_command(arg, chan, nick, admin) {
     		arg[1] = nick;
     	}
     	if (arg.length>1) {
-    		db.dieselrobin.findOne({$or: [{'team': new RegExp(arg[1],'i')}, {'players': new RegExp(arg[1],'i')}]}).then(function(team) {
+    		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}]}).then(function(team) {
     			//console.log(JSON.stringify(team));
     			if (team) {
     				nom = "";
@@ -1010,7 +1010,7 @@ function do_command(arg, chan, nick, admin) {
     						if (arg.length>2 && admin) name = arg[2];
     						else name=nick;
     						//console.log('adding combo');
-    						db.dieselrobin.findOne({"players": new RegExp(name,'i')}).then(function(team) {
+    						db.dieselrobin.findOne({"players": new RegExp('^'+name+'$','i')}).then(function(team) {
     							toset = {};
     							toset['nominated.'+team['players'].toLowerCase().indexOf(name.toLowerCase())] = arg[1];
 								db.dieselrobin.update({"team": team['team']}, {$set: toset}).then(function(updated) {
@@ -1050,7 +1050,7 @@ function do_command(arg, chan, nick, admin) {
     		arg[1] = nick;
     	}
     	if (arg.length==2) {
-    		db.dieselrobin.findOne({$or: [{'team': new RegExp(arg[1],'i')}, {'players': new RegExp(arg[1],'i')}]}, function(err, team) {
+    		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}]}, function(err, team) {
     			if (team) {
     				charlist = '';
     				for (i=0; i<3; i++) {
@@ -1077,7 +1077,7 @@ function do_command(arg, chan, nick, admin) {
     		combo = arg[1];
     		account = arg[2].toUpperCase();
     		name = arg[3];
-    		db.dieselrobin.findOne({'players': new RegExp(name,'i'), 'assigned': new RegExp(combo,'i')}, function (err, team) {
+    		db.dieselrobin.findOne({'players': new RegExp('^'+name+'$','i'), 'assigned': new RegExp(combo,'i')}, function (err, team) {
     			if (team) {
     				playerorder = [];
     				for (i=0; i<3; i++) {
