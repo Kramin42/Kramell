@@ -190,7 +190,7 @@ function get_server_logs(announcer) {
 		logacc[announcer] = {};
 	}
     //get the array of files and iterate through
-    db.announcers.findOne({"name": announcer}, function(err, server) {
+    db.announcers.findOne({"name": announcer}).then(function(server) {
     if (!server || !server["files"]) {
     	console.log(announcer+" not found");
     }
@@ -1031,7 +1031,7 @@ function do_command(arg, chan, nick, admin) {
     
     //$teams
     if (arg[0]=='teams' && chan=="##dieselrobin") {
-    	db.dieselrobin.find({'team': {$exists: true}}, function(err, teams) {
+    	db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
     		teamlist = '';
     		teams.forEach(function(team) {
     			if (teamlist!='') {
@@ -1050,7 +1050,7 @@ function do_command(arg, chan, nick, admin) {
     		arg[1] = nick;
     	}
     	if (arg.length==2) {
-    		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}]}, function(err, team) {
+    		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}]}).then(function(team) {
     			if (team) {
     				charlist = '';
     				for (i=0; i<3; i++) {
@@ -1077,7 +1077,7 @@ function do_command(arg, chan, nick, admin) {
     		combo = arg[1];
     		account = arg[2].toUpperCase();
     		name = arg[3];
-    		db.dieselrobin.findOne({'players': new RegExp('^'+name+'$','i'), 'assigned': new RegExp(combo,'i')}, function (err, team) {
+    		db.dieselrobin.findOne({'players': new RegExp('^'+name+'$','i'), 'assigned': new RegExp(combo,'i')}).then(function (team) {
     			if (team) {
     				playerorder = [];
     				for (i=0; i<3; i++) {
@@ -1173,7 +1173,7 @@ function do_command(arg, chan, nick, admin) {
                 });
             } else {
                 //arg[1] = arg.slice(1, arg.length).join(' ');
-                db.csdc.findOne({"week":arg[1]}, function(err,week) { 
+                db.csdc.findOne({"week":arg[1]}).then(function(week) { 
                     if (week) {
                         bot.say(chan, week["week"] +" active: "+week["active"]+(week["active"] ? " (from "+week["start"]+" to "+week["end"]+")" : ""));
                         bot.say(chan, week["week"] +" char: "+week["char"]);
@@ -1285,7 +1285,7 @@ function handle_message(nick, chan, message) {
         //check if from announcer
         db.announcers.count({"name":nick},function(err, count){ if (count) {
         	//do CSDC weekly combo announcement
-			db.csdc.findOne({"announced": false, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}, function(err, week) {
+			db.csdc.findOne({"announced": false, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).then(function(week) {
 				//if (week) console.log("checking date for "+week["week"]+", "+getTimeStamp()+">="+week["start"]);
 				if (week && getTimeStamp() >= week["start"]) {
 					db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
@@ -1384,7 +1384,7 @@ function handle_message(nick, chan, message) {
             var pstr = "Points for "+arg[1]+": ";
             var s = [];
             var first=true;
-            db.csdc.find({},{"players": {$elemMatch: {"name":new RegExp(arg[1], "i")}}, week:1}, function(err, weeks) {
+            db.csdc.find({},{"players": {$elemMatch: {"name":new RegExp(arg[1], "i")}}, week:1}).toArray().then(function(weeks) {
                 weeks.forEach(function(week) {
                         if (week && week["players"] && week["players"][0] && week["week"].match(/(\d+)/)) {
                             s[week["week"].match(/(\d+)/)[1]] = week["week"]+(week["players"][0]["alive"] ? " (in prog.)" : "")+": "+week["players"][0]['points'].reduce(function(a,b,i){return a+b;},0);
@@ -1408,7 +1408,7 @@ function handle_message(nick, chan, message) {
         if (arg[0]=="info" || arg[0]=="week") {
         	regex = arg.length>1 ? new RegExp(arg.slice(1,arg.length).join(' '),"i") : /.*/;
         	//console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
-			db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1, function(err, weeks) {
+			db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1).toArray().then(function(err, weeks) {
 				week = weeks[0];
 				if (week) {
 					//bot.say(chan, irc.colors.wrap('magenta', "CSDC "+week["week"]);
