@@ -1053,14 +1053,23 @@ function do_command(arg, chan, nick, admin) {
     		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}]}).then(function(team) {
     			if (team) {
     				charlist = '';
-    				for (i=0; i<3; i++) {
-    					charlist+=team['assigned'][i];
-    					if (team['accounts'][i]) {
-    						charlist+=' on '+team['accounts'][i];
-    					}
-    					if (i<2) {charlist+=', ';}
+    				if (team['assigned'].length>0) {
+						charlist = '; ';
+						for (i=0; i<3; i++) {
+							charlist+=team['assigned'][i];
+							if (team['accounts'][i]) {
+								charlist+=' on '+team['accounts'][i];
+							}
+							if (i<2) {charlist+=', ';}
+						}
+    				} else if (team['nominated'].length>0) {
+    					charlist = '; ';
+    					for (i=0; i<team['nominated'].length; i++) {
+							charlist+=team['nominated'][i];
+							if (i<2) {charlist+=', ';}
+						}
     				}
-    				bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', ')+'; '+charlist);
+    				bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', ')+charlist);
     			} else {
     				bot.say(chan, 'No team or player '+arg[1]+' signed up');
     			}
