@@ -1066,7 +1066,7 @@ function do_command(arg, chan, nick, admin) {
     					charlist = '; ';
     					for (i=0; i<team['nominated'].length; i++) {
 							charlist+=team['nominated'][i];
-							if (i<2) {charlist+=', ';}
+							if (i<team['nominated'].length-1) {charlist+=', ';}
 						}
     				}
     				bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', ')+charlist);
