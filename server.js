@@ -1013,7 +1013,7 @@ function do_command(arg, chan, nick, admin) {
     						db.dieselrobin.findOne({"players": new RegExp(name,'i')}).then(function(team) {
     							toset = {};
     							toset['nominated.'+team['players'].toLowerCase().indexOf(name.toLowerCase())] = arg[1];
-								db.dieselrobin.update({"team": team['team']}, {$set: toset}, function(updated) {
+								db.dieselrobin.update({"team": team['team']}, {$set: toset}).then(function(updated) {
 									//console.log(JSON.stringify(updated));
 									if (updated) {
 										bot.say(chan, name+" (team "+updated["team"]+") has nominated "+arg[1]);
