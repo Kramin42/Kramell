@@ -982,6 +982,7 @@ function do_command(arg, chan, nick, admin) {
     		arg[1] = nick;
     	}
     	if (arg.length>1) {
+    		if (!admin) {arg[3] = nick;}
     		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}]}).then(function(team) {
     			//console.log(JSON.stringify(team));
     			if (team) {
@@ -1085,7 +1086,8 @@ function do_command(arg, chan, nick, admin) {
     	if (arg.length > 3) {
     		combo = arg[1];
     		account = arg[2].toUpperCase();
-    		name = arg[3];
+    		name=nick;
+    		if (admin) {name = arg[3];}
     		db.dieselrobin.findOne({'players': new RegExp('^'+name+'$','i'), 'assigned': new RegExp(combo,'i')}).then(function (team) {
     			if (team) {
     				playerorder = [];

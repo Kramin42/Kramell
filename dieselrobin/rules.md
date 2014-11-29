@@ -50,12 +50,10 @@ Once you have a team name, all players must sign up in [##dieselrobin](https://w
 	$signup <team>
 	$signup "DON'T LABEL ME"
 
-When the combos have been assigned, assign a combo and starting player to an account with:
+When the combos have been assigned, each player must assign the combo they want to start on to an allcaps account with:
 
-	$assign <combo> <account> <player>
-	$assign DEMo DEEPELFMONK Kramin
-
-If the player is omitted it will use the name of the player who issued the command.
+	$assign <combo> <account>
+	$assign DEMo DEEPELFMONK
 
 ### Combo Selection
 
