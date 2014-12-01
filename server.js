@@ -552,7 +552,7 @@ function get_available_dieselrobin_missions(challenge, account) {
 	//get uncompleted, available missions
 	for (i=0; i<challenge['missiontext'].length; i++) {
 		//console.log(JSON.stringify(account['missionqual'][i])+' | '+account['missionqual'][i].every(Boolean));
-		if (!account['missionqual'][i] || !account['missionqual'][i].every(Boolean)) {//not completed
+		if ((!account['missionqual'][i] || !account['missionqual'][i].every(Boolean)) && !account['missionover'][mission]) {//not completed
 			//check prerequisites
 			//console.log('found uncompleted mission: '+i);
 			var prereq = true;
@@ -576,7 +576,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 	var availablemissions = get_available_dieselrobin_missions(challenge, account);
 	console.log('available missions: '+availablemissions);
 	var gameover = false
-	if (milestone.search(/ktyp=/i)>-1 && !(milestone.search(/ktyp=winning/i)>-1)) {//RIP
+	if (milestone.search(/ktyp=/i)>-1 && !(milestone.search(/ktyp=winning/i)>-1)) {//YASD
 		if (availablemissions[0]==0) {//still on first mission
 			if (!account['retries']) {account['retries']=0;}
 			account['retries']++;
@@ -590,12 +590,14 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			gameover = true;
 		}
 	}
-	if (milestone.search(/ktyp=winning/i)>-1) {
+	
+	if (milestone.search(/ktyp=winning/i)>-1) {//YAVP
 		gameover = true;
 		account['missionpoints'][14] = 3;
 		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'missionpoints.14': 3}}));
 		bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' (Team '+team['team']+') has won for 3 points!'));
 	}
+	
 	if (gameover) {
 		add = function(prev,current){return current + prev;}
 		var score = account['missionpoints'].reduce(add, 0) + account['bonuspoints'].reduce(add, 0);
@@ -606,6 +608,8 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 	//go through available missions and check if newly completed
 	for (i=0; i<availablemissions.length; i++) {
 		var mission = availablemissions[i];
+		
+		//check stuff exists
 		if (!account['missionqual'][mission]) {
 			account['missionqual'][mission] = [];
 		}
@@ -615,6 +619,26 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
         	toset['missionqual.'+mission] = account['missionqual'][mission];
         	promises.push(db.dieselrobin.update({'account':account['account']}, {$set: toset}));
         }
+        
+        //check if a mission was started:
+        if (!account['missionover'][mission] && milestone.search(challenge['missionstart'][mission])>-1) {
+        	if (account['currentmission']!=-1 && account['currentmission']!=mission) {
+        		bot.say('##dieselrobin', irc.colors.wrap('magenta', account['account']+' ('+account['players'][0]+') has started mission '+mission));
+        		
+        		if (!account['missionover'][account['currentmission']]) {
+        			bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+account['players'][0]+') has forfeited mission '+mission));
+        			account['missionover'][account['currentmission']] = true;
+        			toset = {};
+        			toset['missionover.'+account['currentmission']] = true;
+        			promises.push(db.dieselrobin.update({'account': account['account']},{$set: toset}));
+        		}
+        		
+        		account['currentmission'] = mission;
+        		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'currentmission': mission}}));
+        	}
+        }
+        
+        //check quals
         for (j=0;j<challenge['missionqual'][mission].length;j++) {
 			if (!account['missionqual'][mission][j] && milestone.search(challenge['missionqual'][mission][j])>-1) {
 				console.log('qualified for: '+mission+' ('+j+')');
@@ -631,6 +655,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			account['missionpoints'][mission] = points;
 			toset = {};
         	toset['missionpoints.'+mission] = points;
+        	toset['missionover.'+mission] = true;
 			promises.push(db.dieselrobin.update({'account': account['account']},{$set: toset}));
 			bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed mission '+(mission+1)+': '+challenge['missiontext'][mission]));
 			
@@ -645,6 +670,8 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Possible next missions for '+account['account']+', to be played by '+account['playerorder'][0]+': '+newmissions.join(', ')+' (use $mission <num> to see them)'));
 			} else if (newmissions.length==1) {
 				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Next mission for '+account['account']+', to be played by '+account['playerorder'][0]+': '+challenge['missiontext'][newmissions[0]]+'. New places: '+challenge['locations'][newmissions[0]]));
+        		account['currentmission'] = newmissions[0];
+        		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'currentmission': newmissions[0]}}));
 			}
 		}
 	}
@@ -1102,9 +1129,9 @@ function do_command(arg, chan, nick, admin) {
     						'comments': [],
     						'newcomments': [],
     						'currentmission': 0,
-    						'currentmissiongroup': 0,
     						'missionpoints': [],
     						'missionqual': [],
+    						'missionover': [],
     						'bonuspoints': [],
     						'bonusqual': []}}, {upsert:true});
     				toset = {};
@@ -1638,7 +1665,7 @@ var SampleApp = function() {
             res.setHeader('Content-Type', 'text/html');
             res.send(self.strapdownize(self.cache_get('dieselrobin/missions.md')));
         };
-        self.routes['/dieselrobin/bonusses'] = function(req, res) {
+        self.routes['/dieselrobin/bonus'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
             res.send(self.strapdownize(self.cache_get('dieselrobin/bonus.md')));
         };
