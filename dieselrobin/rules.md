@@ -113,7 +113,7 @@ instead; once begun, the only options are completion, death, or going to Zot and
 winning instead. You do not have to stop immediately when you have completed the
 tasks in the mission; they are just the minimum you have to do.
 
-These missions can be queried in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with `$mission <num>` and are listed online at [kramell.mooo.com](http://kramell.mooo.com/dieselrobin/missions) for easy reference.
+These missions can be queried in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with `$mission <num>` and are [listed online](./missions) for easy reference.
 
 
 ### Bonus Missions
