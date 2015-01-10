@@ -231,7 +231,7 @@ function get_server_logs(announcer) {
 						console.log(announcer+' data size: '+datalength+' bytes');
 						//console.log(data);
 						if (datalength >= fetchlimit-1) {delay = 10;}
-					
+						
 						data = data.replace(/\n\n/g,"\n");
 						datasplit = data.split(/\n/);
 						for (i=0; i<datasplit.length-1; i++) {
@@ -252,7 +252,7 @@ function get_server_logs(announcer) {
 									db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
 										fetching[announcer] = false;
 										fetching[file['url']] = false;
-										console.log("finished fetch from "+file['url']);
+										//console.log("finished fetch from "+file['url']);
 									});
 								}
 							});
@@ -287,7 +287,7 @@ function process_milestone(milestone, announcer, url) {
     //milestone = milestone.replace(/\n/g,"");
     
     // make sure it's a complete milestone
-    if (!milestone.match(/^v=.*:vlong=.*\n/)) {
+    if (!milestone.match(/^v=.*\n/)) {
     	//milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
     	if (milestone.match(/\n/)) {
     		console.log("broken milestone: "+milestone);
