@@ -623,10 +623,10 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
         //check if a mission was started:
         if (!account['missionover'][mission] && milestone.search(challenge['missionstart'][mission])>-1) {
         	if (account['currentmission']!=-1 && account['currentmission']!=mission) {
-        		bot.say('##dieselrobin', irc.colors.wrap('magenta', account['account']+' ('+account['players'][0]+') has started mission '+mission));
+        		bot.say('##dieselrobin', irc.colors.wrap('magenta', account['account']+' ('+account['players'][0]+') has started mission '+(mission+1)));
         		
         		if (!account['missionover'][account['currentmission']]) {
-        			bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+account['players'][0]+') has forfeited mission '+mission));
+        			bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+account['players'][0]+') has forfeited mission '+(account['currentmission']+1)));
         			account['missionover'][account['currentmission']] = true;
         			toset = {};
         			toset['missionover.'+account['currentmission']] = true;
@@ -666,12 +666,12 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 				promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'playerorder': account['playerorder']}}));
 			}
 			if (newmissions.length>1) {
-				for (n=0; n<newmissions.length; n++) {newmissions[n]++;}//count from 0 for display
+				for (n=0; n<newmissions.length; n++) {newmissions[n]++;}//count from 1 for display
 				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Possible next missions for '+account['account']+', to be played by '+account['playerorder'][0]+': '+newmissions.join(', ')+' (use $mission <num> to see them)'));
 			} else if (newmissions.length==1) {
 				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Next mission for '+account['account']+', to be played by '+account['playerorder'][0]+': '+challenge['missiontext'][newmissions[0]]+'. New places: '+challenge['locations'][newmissions[0]]));
-        		account['currentmission'] = newmissions[0];
-        		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'currentmission': newmissions[0]}}));
+        		//account['currentmission'] = newmissions[0];
+        		//promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'currentmission': newmissions[0]}}));
 			}
 		}
 	}
