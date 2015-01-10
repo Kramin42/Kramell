@@ -670,8 +670,8 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Possible next missions for '+account['account']+', to be played by '+account['playerorder'][0]+': '+newmissions.join(', ')+' (use $mission <num> to see them)'));
 			} else if (newmissions.length==1) {
 				bot.say('##dieselrobin', irc.colors.wrap('magenta', 'Next mission for '+account['account']+', to be played by '+account['playerorder'][0]+': '+challenge['missiontext'][newmissions[0]]+'. New places: '+challenge['locations'][newmissions[0]]));
-        		//account['currentmission'] = newmissions[0];
-        		//promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'currentmission': newmissions[0]}}));
+        		account['currentmission'] = newmissions[0];
+        		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'currentmission': newmissions[0]}}));
 			}
 		}
 	}
