@@ -606,6 +606,10 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 	}
 	
 	//go through available missions and check if newly completed
+	if (!account['missionover']) {
+		account['missionover'] = [];
+        promises.push(db.dieselrobin.update({'account':account['account']}, {$set: {'missionover': []}}));
+	}
 	for (i=0; i<availablemissions.length; i++) {
 		var mission = availablemissions[i];
 		
