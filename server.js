@@ -252,7 +252,7 @@ function get_server_logs(announcer) {
 									db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
 										fetching[announcer] = false;
 										fetching[file['url']] = false;
-										console.log("finished fetch from "+announcer);
+										console.log("finished fetch from "+file['url']);
 									});
 								}
 							});
