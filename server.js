@@ -183,6 +183,16 @@ function get_logfile_offset(announcer, url) {
 
 function get_server_logs(announcer) {
 	var delay = 60;
+	if (timers[announcer]) {
+    	clearTimeout(timers[announcer]);
+    }
+    timers[announcer] = setTimeout(
+		function() {
+			console.log("checking "+announcer+" logs on timer");
+    		get_server_logs(announcer);
+    	},
+    	delay*1000
+    );
     if (fetching[announcer]) {console.log("preventing simultaneous fetch for "+announcer); return;}//don't want simultaneous fetches breaking things
 	fetching[announcer] = true;
 	//console.log('fetching from '+announcer+': '+fetching[announcer]);
@@ -236,6 +246,7 @@ function get_server_logs(announcer) {
                     
                     			db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
                     				fetching[announcer] = false;
+                    				console.log("finished fetch from "+announcer);
                     			});
                     		}
                     	});
@@ -252,16 +263,6 @@ function get_server_logs(announcer) {
         	console.log(announcer+" log not found "+JSON.stringify(file));
         }
     });});
-    if (timers[announcer]) {
-    	clearTimeout(timers[announcer]);
-    }
-    timers[announcer] = setTimeout(
-		function() {
-			console.log("checking "+announcer+" logs on timer");
-    		get_server_logs(announcer);
-    	},
-    	delay*1000
-    );
 }
 
 function process_milestone(milestone, announcer, url) {
@@ -274,7 +275,7 @@ function process_milestone(milestone, announcer, url) {
     	if (milestone.match(/\n/)) {
     		console.log("broken milestone: "+milestone);
     	} else {
-    		console.log("appending to logacc: "+milestone);
+    		//console.log("appending to logacc: "+milestone);
     		logacc[announcer][url] += milestone;
     	}
     	return Promise.resolve(1);
