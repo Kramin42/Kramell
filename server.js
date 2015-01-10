@@ -274,7 +274,7 @@ function process_milestone(milestone, announcer, url) {
     	if (milestone.match(/\n/)) {
     		console.log("broken milestone: "+milestone);
     	} else {
-    		//console.log("appending to logacc: "+milestone);
+    		console.log("appending to logacc: "+milestone);
     		logacc[announcer][url] += milestone;
     	}
     	return Promise.resolve(1);
@@ -573,6 +573,10 @@ function get_available_dieselrobin_missions(challenge, account) {
 function check_dieselrobin_points(challenge, team, account, milestone) {
 	var promises = [];
 	console.log(milestone);
+	if (!account['missionover']) {
+		account['missionover'] = [];
+        promises.push(db.dieselrobin.update({'account':account['account']}, {$set: {'missionover': []}}));
+	}
 	var availablemissions = get_available_dieselrobin_missions(challenge, account);
 	console.log('available missions: '+availablemissions);
 	var gameover = false
@@ -606,10 +610,6 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 	}
 	
 	//go through available missions and check if newly completed
-	if (!account['missionover']) {
-		account['missionover'] = [];
-        promises.push(db.dieselrobin.update({'account':account['account']}, {$set: {'missionover': []}}));
-	}
 	for (i=0; i<availablemissions.length; i++) {
 		var mission = availablemissions[i];
 		
