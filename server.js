@@ -183,17 +183,20 @@ function get_logfile_offset(announcer, url) {
 
 function get_server_logs(announcer) {
 	var delay = 60;
-	if (timers[announcer]) {
-    	clearTimeout(timers[announcer]);
+    if (fetching[announcer]) {//don't want simultaneous fetches breaking things
+    	console.log("preventing simultaneous fetch for "+announcer);
+    	if (timers[announcer]) {
+    		clearTimeout(timers[announcer]);
+    	}
+    	timers[announcer] = setTimeout(
+			function() {
+				console.log("checking "+announcer+" logs on timer");
+    			get_server_logs(announcer);
+    		},
+    		delay*1000
+    	);
+    	return;
     }
-    timers[announcer] = setTimeout(
-		function() {
-			console.log("checking "+announcer+" logs on timer");
-    		get_server_logs(announcer);
-    	},
-    	delay*1000
-    );
-    if (fetching[announcer]) {console.log("preventing simultaneous fetch for "+announcer); return;}//don't want simultaneous fetches breaking things
 	fetching[announcer] = true;
 	//console.log('fetching from '+announcer+': '+fetching[announcer]);
 	if (!logacc[announcer]) {
@@ -225,6 +228,7 @@ function get_server_logs(announcer) {
                     data = logacc[announcer][file["url"]] + data;
                     logacc[announcer][file["url"]] = "";
                     console.log(announcer+' data size: '+datalength+' bytes');
+                    console.log(data);
                     if (datalength >= fetchlimit-1) {delay = 10;}
                     
                     data = data.replace(/\n\n/g,"\n");
@@ -263,6 +267,16 @@ function get_server_logs(announcer) {
         	console.log(announcer+" log not found "+JSON.stringify(file));
         }
     });});
+    if (timers[announcer]) {
+    	clearTimeout(timers[announcer]);
+    }
+    timers[announcer] = setTimeout(
+		function() {
+			console.log("checking "+announcer+" logs on timer");
+    		get_server_logs(announcer);
+    	},
+    	delay*1000
+    );
 }
 
 function process_milestone(milestone, announcer, url) {
