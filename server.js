@@ -345,7 +345,7 @@ function process_milestone(milestone, announcer, url) {
     var challenge = db.dieselrobin.findOne({"challenge": "dieselrobin"});
     promises.push(Promise.all([challenge, team, account]).then(function(data) {
     	if (data[0] && data[1] && data[2]) {
-    		console.log("found dieselrobin milestone: "+account['account']);
+    		console.log("found dieselrobin milestone: "+data[2]['account']);
     		return check_dieselrobin_points(data[0], data[1], data[2], milestone);
     	}
     }));
@@ -552,7 +552,7 @@ function get_available_dieselrobin_missions(challenge, account) {
 	//get uncompleted, available missions
 	for (i=0; i<challenge['missiontext'].length; i++) {
 		//console.log(JSON.stringify(account['missionqual'][i])+' | '+account['missionqual'][i].every(Boolean));
-		if ((!account['missionqual'][i] || !account['missionqual'][i].every(Boolean)) && !account['missionover'][mission]) {//not completed
+		if ((!account['missionqual'][i] || !account['missionqual'][i].every(Boolean)) && !account['missionover'][i]) {//not completed
 			//check prerequisites
 			//console.log('found uncompleted mission: '+i);
 			var prereq = true;
