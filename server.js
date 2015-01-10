@@ -285,14 +285,14 @@ function get_server_logs(announcer) {
 function process_milestone(milestone, announcer, url) {
 	var promises = [];
     //milestone = milestone.replace(/\n/g,"");
-    console.log(milestone);
+    //console.log(milestone);
     // make sure it's a complete milestone
     if (!milestone.match(/^v=.*:vlong=.*\n/)) {
     	//milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
     	if (milestone.match(/\n/)) {
     		console.log("broken milestone: "+milestone);
     	} else {
-    		console.log("appending to logacc["+announcer+"]["+url+"]: "+milestone);
+    		//console.log("appending to logacc["+announcer+"]["+url+"]: "+milestone);
     		logacc[announcer][url] += milestone;
     	}
     	return Promise.resolve(1);
