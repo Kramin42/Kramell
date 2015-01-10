@@ -292,7 +292,7 @@ function process_milestone(milestone, announcer, url) {
     	if (milestone.match(/\n/)) {
     		console.log("broken milestone: "+milestone);
     	} else {
-    		//console.log("appending to logacc: "+milestone);
+    		console.log("appending to logacc["+announcer+"]["+url+"]: "+milestone);
     		logacc[announcer][url] += milestone;
     	}
     	return Promise.resolve(1);
