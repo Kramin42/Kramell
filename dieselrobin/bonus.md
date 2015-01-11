@@ -48,4 +48,4 @@ Pacifist Zot. After entering Zot you may not kill any enemies until you pick up 
 
 Kill all four panlords with a single Cerebov firestorm.
 
-DISCLAIMER: DieselRobin™ Inc may not be held liable for loss of limbs, sanity, or life in the pursuit of the T100 mission.
+DISCLAIMER: DieselRobin Inc may not be held liable for loss of limbs, sanity, or life in the pursuit of the T100 mission.
