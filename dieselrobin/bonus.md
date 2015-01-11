@@ -4,52 +4,48 @@
 
 ### Mission A:
 
-Clear Elf:3 before entering a lair sub-branch.
+Get banished and escape before entering a lair sub-branch (while in mission 3).
 
 ### Mission B:
 
-Complete mission 2 without worshipping a god at any point. (Dg doens't count)
+Reach Lair 8 at XL12 or lower.
 
 ### Mission C
 
-Clear Blade during Mission 5 before entering Crypt.
+Abandon a god and worship another before entering a lair sub-branch (any switch not resulting in god wrath doesn't coun't, e.g. good->good or Ru->any don't count)
 
 ## Tier 2 (4 points)
 
-### Mission D
-
-Get the slimy rune on mission 4 without worshipping Jiyva at any point.
-
-### Mission E
-
-Get the golden rune on mission 8 without worshipping Kiku at any point.
-
-### Mission F
+### Mission A
 
 Polymorph and then kill the royal jelly without worshipping Jiyva at any point.
 
+### Mission B
+
+Get all the pan runes without killing any of the special panlords (they follow you across levels in trunk).
+
+### Mission C
+
+Complete mission 7 without using any potions or scrolls.
+
 ## Tier 3 (6 points)
 
-### Mission G
+### Mission A
+
+Enter the depths zig before starting mission 8 and clear it.
+
+### Mission B
 
 Orbrun Tomb. You may not enter Tomb until you are carrying the orb, and you
 must get the golden rune. Completing this bonus mission also fulfills the
 requirements for mission 10.
 
-### Mission H
+### Mission C
 
-Kill all 8 hellpanlords.
+Pacifist Zot. After entering Zot you may not kill any enemies until you pick up the orb.
 
-### Mission I
+## Tier 100 (100 points)
 
-Complete a zig as soon after mission 8 as possible:
+Kill all four panlords with a single Cerebov firestorm.
 
-* If you have a zig in D:
-  * If you have enough gold, enter it at the beginning of turn 9 at the latest.
-  * If you don't have gold and Tomb will give you enough gold, do Tomb on turn 9
-    and then zig at the end of turn 9 or the start of turn 10.
-* If you don't have a zig in D (or it is far too expensive):
-  * You must enter pan on turn 9, and you must enter the first zig you see
-    that you can afford, and you must not leave pan before completing a
-    zig. If no zig is found on turn 9, find a zig before you leave pan on turn
-    10.
+DISCLAIMER: DieselRobin™ Inc may not be held liable for loss of limbs, sanity, or life in the pursuit of the T100 mission.

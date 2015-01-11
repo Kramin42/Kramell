@@ -20,9 +20,9 @@ to Lair, Lair:1-8). The competition will be run on the freenode IRC channel [##d
 
 **Time Frame**
 
-The competition will start TBA and will end 16 days later. Any games still in progress will be scored as if they
+The competition will start TBA and will end 16 days later (two weeks including weekends on both ends). Any games still in progress will be scored as if they
 died of old age at that point. The start and end times will be posted in
-`??dieselrobin[4]`
+`??dieselrobin`
 
 ## Teams
 
@@ -151,14 +151,13 @@ The character who scores the lowest on the regular mission will have their
 regular mission score dropped. Any bonus missions completed by this character
 are still worth points. 
 
-(TBA, I don't like this complex formula)
+(TBD, might change it a bit, simplify maybe)
 3\*highest regular score + min(2\*2nd highest regular score, 21) + Tier 1 completed\*2 + Tier 2 completed\*4 + Tier 3 completed\*6
  
 Max score: 51 + 21 + 6 + 12 + 18 = 108
 
 ### Ties
 
-(TBA, not sure about MuCK as a tiebreaker)
 In the event that two or more teams have the same final mission score, each team
 will create a new account and start a MuCK. You may not abandon Xom at any point
 during a tiebreaker, and once you die, it's game over dude. No restarts on
