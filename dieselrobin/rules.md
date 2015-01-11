@@ -119,19 +119,18 @@ These missions can be queried in [##dieselrobin](https://webchat.freenode.net/?c
 ### Bonus Missions
 
 There are 3 tiers of bonus missions: Tier 1 (2 points each), Tier 2 (4 points
-each), and Tier 3 (6 points each)
+each), and Tier 3 (6 points each). [They are listed here](./bonus).
 
-The missions themselves will be kept secret until the start of the tournament.
 Your team will assign one mission from each tier to each character before
 starting a mission on any character.
 
 Once you have started a mission, the bonus mission assignments are frozen.
-The bonus mission assignments will be placed on the scoring sheet for your team.
 
 If you are unable to assign all your missions due to character/class/race
 makeup, we will swap a conflicting mission with an alternate mission for that
 tier that can be completed.
 
+TODO: implement a Kramell command for assigning bonus missions
 
 ## Scoring
 
