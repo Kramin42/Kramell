@@ -1278,12 +1278,13 @@ function do_command(arg, chan, nick, admin) {
 							if (arg[3][i]=='0' || arg[3][i]=='a' || arg[3][i]=='A') {bonusmissions[i] = 0;}
 							else if (arg[3][i]=='1' || arg[3][i]=='b' || arg[3][i]=='B') {bonusmissions[i] = 1;}
 							else if (arg[3][i]=='2' || arg[3][i]=='c' || arg[3][i]=='C') {bonusmissions[i] = 2;}
-							if (bonusmissions[i]==-1) {bot.say(chan, "invalid bonus mission choice");}
+							if (bonusmissions[i]==-1) {bot.say(chan, "invalid bonus mission choice"); return;}
 							var index = team['unassignedbonus'][i].indexOf(bonusmissions[i]);
 							if (index>-1) {
 								team['unassignedbonus'][i].splice(index,1);
 							} else {
 								bot.say(chan, "That Tier "+i+" bonus mission has already been assigned");
+								return;
 							}
 						}
 					
