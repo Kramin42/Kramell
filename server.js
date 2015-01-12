@@ -222,39 +222,37 @@ function get_server_logs(announcer) {
             	if (stderr) {console.log('STDERR: '+error);}
             	//if (announcer=='Prequell') {console.log('Prequell data: '+data);}
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
-						datalength = byteCount(data);
-						data = logacc[announcer][file["url"]] + data;
+						var datalength = byteCount(data);
+						var data = logacc[announcer][file["url"]] + data;
 						logacc[announcer][file["url"]] = "";
 						console.log(announcer+' data size: '+datalength+' bytes');
 						//console.log(data);
 						if (datalength >= fetchlimit-1) {delay = 10;}
 						
 						data = data.replace(/\n\n/g,"\n");
-						datasplit = data.split(/\n/);
+						var datasplit = data.split(/\n/);
 						for (i=0; i<datasplit.length-1; i++) {
 							datasplit[i]+="\n";
 						}
 						
 						//datasplit.forEach(function(text) {process_milestone(text,announcer,file["url"])});
 						
-						milestones = datasplit;
+						var milestones = datasplit;
 						var process = function() {
 							process_milestone(milestones.shift(), announcer, file["url"]).then(function() {
 								if (milestones.length>0) {
 									console.log('iterating to milestone '+milestones.length);
 									return process();
 								} else {
-									
+									if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
+									db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
+ 										//fetching[announcer] = false;
+										//console.log("finished fetch from "+file['url']);
+									});
 								}
 							});
 						};
 						process();
-						
-						if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
-						db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
-// 							fetching[announcer] = false;
-							//console.log("finished fetch from "+file['url']);
-						});
                 } else {
                     //console.log("no new content");
                     //console.log("no new milestones for "+announcer);
