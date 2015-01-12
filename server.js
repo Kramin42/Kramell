@@ -716,6 +716,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 				}
 			}
 			if (i==0 && j==2) {//T1C
+				if (!account['bonusqual'][i]) {account['bonusqual'][i]=[];}
 				if (milestone.search("br=(Swamp|Shoals|Spider|Snake|Slime).*type=br.enter")>-1) {
 					account['bonusdisqual'][i]=true;
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.0': true}}));
@@ -757,10 +758,11 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 				}
 			}
 			if (i==1 && j==2) {//T2C
+				if (!account['bonusqual'][i]) {account['bonusqual'][i]=[];}
 				if (milestone.search("br=Vaults.*type=br.enter")>-1) {
 					account['bonusqual'][i] = [milestone.match("potionsused=(\d*):")[1],milestone.match("scrollsused=(\d*):")[1]];
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': account['bonusqual'][i]}}));
-				} else if (milestone.search("br=Crypt.*type=br.end")>-1) {
+				} else if (account['bonusqual'][i][0] && milestone.search("br=Crypt.*type=br.end")>-1) {
 					//account['bonusqual'][i]=[true];
 					if (milestone.match("potionsused=(\d*):")[1]==account['bonusqual'][i][0] && milestone.match("scrollsused=(\d*):")[1]==account['bonusqual'][i][1]) {
 						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': true, 'bonuspoints.1': 4}}));
@@ -1301,7 +1303,8 @@ function do_command(arg, chan, nick, admin) {
 								'missionover': [],
 								'bonusmissions': bonusmissions,
 								'bonuspoints': [],
-								'bonusqual': []}}, {upsert:true});
+								'bonusqual': [],
+								'bonusdisqual': []}}, {upsert:true});
 						toset = {};
 						toset['bonusmissions.'+accountindex] = bonusmissions;
 						toset['accounts.'+accountindex] = account;
