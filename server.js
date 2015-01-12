@@ -722,7 +722,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.0': true}}));
 				} else if (milestone.search("type=god.renounce")>-1) {
 					account['bonusqual'][i]=[milestone.match("milestone=abandoned (\w*)\.")[1],false];
-					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': [true,false]}}));
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': account['bonusqual'][i]}}));
 				} else if (account['bonusqual'][i][0] && milestone.search("type=god.worship")>-1) {
 					var oldgod = account['bonusqual'][i][0];
 					var newgod = milestone.match("god=(\w*):")[1];
