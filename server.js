@@ -703,15 +703,15 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.0': true}}));
 				} else if (milestone.search("br=Elf.*type=br.end")>-1) {
 					//account['bonusqual'][i]=true;
-					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': true, 'bonuspoints.0': 2}}));
-					announce=true; bonuswon=0; points=2;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': true, 'bonuspoints.0': 3}}));
+					announce=true; bonuswon=0; points=3;
 				}
 			}
 			if (i==0 && j==1) {//T1B
 				if (milestone.search("xl=(\d|1[012]):.*br=Lair.*type=br.end")>-1) {
 					//account['bonusqual'][i]=true;
-					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': true, 'bonuspoints.0': 2}}));
-					announce=true; bonuswon=1; points=2;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': true, 'bonuspoints.0': 3}}));
+					announce=true; bonuswon=1; points=3;
 				}
 			}
 			if (i==0 && j==2) {//T1C
@@ -726,8 +726,8 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 					var oldgod = account['bonusqual'][i][0];
 					var newgod = milestone.match(/god=(\w*):/)[1];
 					if (oldgod!=newgod && oldgod!='Ru' && !(oldgod.search("Ely|The Shining One|Zin")>-1 && newgod.search("Ely|The Shining One|Zin")>-1)) {
-						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': [true,true], 'bonuspoints.0': 2}}));
-						announce=true; bonuswon=2; points=2;
+						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': [true,true], 'bonuspoints.0': 3}}));
+						announce=true; bonuswon=2; points=3;
 					}
 				}
 			}
@@ -773,8 +773,8 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.2': true}}));
 				} else if (milestone.search("zigscompleted=1:")>-1) {
 					//account['bonusqual'][i]=[true];
-					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': true, 'bonuspoints.2': 6}}));
-					announce=true; bonuswon=6; points=6;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': true, 'bonuspoints.2': 8}}));
+					announce=true; bonuswon=6; points=8;
 				}
 			}
 			if (i==2 && j==1) {//T3B orbrun tomb
@@ -787,8 +787,8 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': account['bonusqual'][i]}}));
 				}
 				if (account['bonusqual'][i]==2 && milestone.search("br=Tomb.*type=rune:")>-1) {//get rune
-					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': true, 'bonuspoints.2': 6}}));
-					announce=true; bonuswon=7; points=6;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': true, 'bonuspoints.2': 8}}));
+					announce=true; bonuswon=7; points=8;
 				}
 			}
 			if (i==2 && j==2) {//T3C
@@ -798,8 +798,8 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 				} else if (milestone.search("type=orb")>-1) {
 					//account['bonusqual'][i]=[true];
 					if (milestone.match(/kills=(\d*):/)[1]==account['bonusqual'][i]) {
-						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': true, 'bonuspoints.1': 6}}));
-						announce=true; bonuswon=8; points=6;
+						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': true, 'bonuspoints.1': 8}}));
+						announce=true; bonuswon=8; points=8;
 					}
 				}
 			}

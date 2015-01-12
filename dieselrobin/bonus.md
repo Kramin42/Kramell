@@ -1,6 +1,6 @@
 # Bonus Missions
 
-## Tier 1 (2 points)
+## Tier 1 (3 points)
 
 ### Mission A:
 
@@ -28,7 +28,7 @@ Get all the pan runes without killing any of the special panlords (they follow y
 
 Complete mission 7 without using any potions or scrolls.
 
-## Tier 3 (6 points)
+## Tier 3 (8 points)
 
 ### Mission A
 
@@ -43,6 +43,7 @@ requirements for mission 10.
 ### Mission C
 
 Pacifist Zot. After entering Zot you may not kill any enemies until you pick up the orb.
+WARNING: Monsters killed by neutral monsters you have pacified or frenzied or summoned with lugonu still count as kills.
 
 ## Tier 100 (100 points)
 
