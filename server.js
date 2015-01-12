@@ -1283,7 +1283,7 @@ function do_command(arg, chan, nick, admin) {
 							if (index>-1) {
 								team['unassignedbonus'][i].splice(index,1);
 							} else {
-								bot.say(chan, "That Tier "+i+" bonus mission has already been assigned");
+								bot.say(chan, "That Tier "+(i+1)+" bonus mission has already been assigned");
 								return;
 							}
 						}
@@ -1299,6 +1299,7 @@ function do_command(arg, chan, nick, admin) {
 								'missionpoints': [],
 								'missionqual': [],
 								'missionover': [],
+								'bonusmissions': bonusmissions,
 								'bonuspoints': [],
 								'bonusqual': []}}, {upsert:true});
 						toset = {};
