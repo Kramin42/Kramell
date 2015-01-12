@@ -183,21 +183,21 @@ function get_logfile_offset(announcer, url) {
 
 function get_server_logs(announcer) {
 	var delay = 60;
-    if (fetching[announcer]) {//don't want simultaneous fetches breaking things
-    	console.log("preventing simultaneous fetch for "+announcer);
-    	if (timers[announcer]) {
-    		clearTimeout(timers[announcer]);
-    	}
-    	timers[announcer] = setTimeout(
-			function() {
-				console.log("checking "+announcer+" logs on timer");
-    			get_server_logs(announcer);
-    		},
-    		delay*1000
-    	);
-    	return;
-    }
-	fetching[announcer] = true;
+    // if (fetching[announcer]) {//don't want simultaneous fetches breaking things
+//     	console.log("preventing simultaneous fetch for "+announcer);
+//     	if (timers[announcer]) {
+//     		clearTimeout(timers[announcer]);
+//     	}
+//     	timers[announcer] = setTimeout(
+// 			function() {
+// 				console.log("checking "+announcer+" logs on timer");
+//     			get_server_logs(announcer);
+//     		},
+//     		delay*1000
+//     	);
+//     	return;
+//     }
+// 	fetching[announcer] = true;
 	//console.log('fetching from '+announcer+': '+fetching[announcer]);
 	if (!logacc[announcer]) {
 		logacc[announcer] = {};
@@ -210,7 +210,7 @@ function get_server_logs(announcer) {
     server["files"].forEach(function(file) {
         if (file["offset"]) {
         	//console.log("checking "+announcer+" logs");
-        	if (!logacc[announcer][file["url"]]) {
+        	if (logacc[announcer][file["url"]]===undefined) {
 				logacc[announcer][file["url"]] = "";
 			}
             // var child = exec('curl -sr '+file["offset"]+'- '+file["url"]);
@@ -222,9 +222,6 @@ function get_server_logs(announcer) {
             	if (stderr) {console.log('STDERR: '+error);}
             	//if (announcer=='Prequell') {console.log('Prequell data: '+data);}
                 if (data.search("416 Requested Range Not Satisfiable")==-1) {
-                	if (!fetching[file['url']]) {
-						fetching[file['url']] = true;
-					
 						datalength = byteCount(data);
 						data = logacc[announcer][file["url"]] + data;
 						logacc[announcer][file["url"]] = "";
@@ -250,19 +247,17 @@ function get_server_logs(announcer) {
 									if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
 									
 									db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
-										fetching[announcer] = false;
-										fetching[file['url']] = false;
+// 										fetching[announcer] = false;
 										//console.log("finished fetch from "+file['url']);
 									});
 								}
 							});
 						};
 						process();
-                    }
                 } else {
                     //console.log("no new content");
                     //console.log("no new milestones for "+announcer);
-                    fetching[announcer] = false;
+//                     fetching[announcer] = false;
                     //if (announcer=='Prequell') {console.log('Prequell fetch finished (nothing found)');}
                 }
             });
@@ -812,6 +807,11 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			}
 		}
 	}
+	if (announce) {
+		var ABC=['A','B','C'];
+		bot.say('##dieselrobin', irc.colors.wrap('light_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed bonus mission T'+(bonuswon/3)+ABC[bonuswon%3]+': '+challenge['bonustext'][bonuswon]));
+	}
+	
 	
 	return Promise.all(promises);
 }
