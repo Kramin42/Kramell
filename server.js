@@ -1324,7 +1324,7 @@ function do_command(arg, chan, nick, admin) {
     				var ABC = ['A','B','C'];
     				for (i=0; i<team['accounts'].length; i++) {
     					s+=team['accounts'][i]+' ('+team['assigned'][i]+'): ';
-    					for for (j=0; j<3; j++) {
+    					for (j=0; j<3; j++) {
     						s+='T'+j+ABC[team['bonusmissions'][i][j]];
     						if (j<2) s+=', ';
     					}
