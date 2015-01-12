@@ -1258,10 +1258,12 @@ function do_command(arg, chan, nick, admin) {
     			if (team) {
     				//see if a previous account was assigned
     				var accountindex = team['assigned'].toLowerCase().indexOf(combo.toLowerCase());
-    				db.dieselrobin.findOne({'account': team['accounts'][accountindex]}).then(function (prevaccount) {
+    				var prevaccountname = team['accounts'][accountindex];
+    				if (!prevaccountname) prevaccountname='nonexistentaccount';
+    				db.dieselrobin.findOne({'account': prevaccountname}).then(function (prevaccount) {
     					if (prevaccount) {
     						bonusmissions = prevaccount['bonusmissions'];
-    						db.dieselrobin.remove({'account': prevaccount['account']});
+    						db.dieselrobin.remove({'account': prevaccount['account']}, true);
     					}
 						playerorder = [];
 						for (i=0; i<3; i++) {
@@ -1325,12 +1327,12 @@ function do_command(arg, chan, nick, admin) {
     				for (i=0; i<team['accounts'].length; i++) {
     					s+=team['accounts'][i]+' ('+team['assigned'][i]+'): ';
     					for (j=0; j<3; j++) {
-    						s+='T'+j+ABC[team['bonusmissions'][i][j]];
+    						s+='T'+(j+1)+ABC[team['bonusmissions'][i][j]];
     						if (j<2) s+=', ';
     					}
     					if (i<team['accounts'].length-1) s+='; ';
     				}
-    				bot.say(chan, 'Team '+team['team']+'bonus assignments: '+s);
+    				bot.say(chan, 'Team '+team['team']+' bonus assignments: '+s);
     			} else {
     				bot.say(chan, 'No team or player '+arg[1]+' signed up');
     			}
