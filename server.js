@@ -721,11 +721,11 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 					account['bonusdisqual'][i]=true;
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.0': true}}));
 				} else if (milestone.search("type=god.renounce")>-1) {
-					account['bonusqual'][i]=[milestone.match("milestone=abandoned (\w*)\.")[1],false];
+					account['bonusqual'][i]=[milestone.match(/milestone=abandoned (\w*)\./)[1],false];
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': account['bonusqual'][i]}}));
 				} else if (account['bonusqual'][i][0] && milestone.search("type=god.worship")>-1) {
 					var oldgod = account['bonusqual'][i][0];
-					var newgod = milestone.match("god=(\w*):")[1];
+					var newgod = milestone.match(/god=(\w*):/)[1];
 					if (oldgod!=newgod && oldgod!='Ru' && !(oldgod.search("Ely|The Shining One|Zin")>-1 && newgod.search("Ely|The Shining One|Zin")>-1)) {
 						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': [true,true], 'bonuspoints.0': 2}}));
 						announce=true; bonuswon=2; points=2;
@@ -760,11 +760,11 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			if (i==1 && j==2) {//T2C
 				if (!account['bonusqual'][i]) {account['bonusqual'][i]=[];}
 				if (milestone.search("br=Vaults.*type=br.enter")>-1) {
-					account['bonusqual'][i] = [milestone.match("potionsused=(\d*):")[1],milestone.match("scrollsused=(\d*):")[1]];
+					account['bonusqual'][i] = [milestone.match(/potionsused=(\d*):/)[1],milestone.match(/scrollsused=(\d*):/)[1]];
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': account['bonusqual'][i]}}));
 				} else if (account['bonusqual'][i][0] && milestone.search("br=Crypt.*type=br.end")>-1) {
 					//account['bonusqual'][i]=[true];
-					if (milestone.match("potionsused=(\d*):")[1]==account['bonusqual'][i][0] && milestone.match("scrollsused=(\d*):")[1]==account['bonusqual'][i][1]) {
+					if (milestone.match(/potionsused=(\d*):/)[1]==account['bonusqual'][i][0] && milestone.match(/scrollsused=(\d*):/)[1]==account['bonusqual'][i][1]) {
 						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': true, 'bonuspoints.1': 4}}));
 						announce=true; bonuswon=5; points=4;
 					}
@@ -797,11 +797,11 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			}
 			if (i==2 && j==2) {//T3C
 				if (milestone.search("br=Zot.*type=br.enter")>-1) {
-					account['bonusqual'][i] = milestone.match("kills=(\d*):")[1];
+					account['bonusqual'][i] = milestone.match(/kills=(\d*):/)[1];
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': account['bonusqual'][i]}}));
 				} else if (milestone.search("type=orb")>-1) {
 					//account['bonusqual'][i]=[true];
-					if (milestone.match("kills=(\d*):")[1]==account['bonusqual'][i]) {
+					if (milestone.match(/kills=(\d*):/)[1]==account['bonusqual'][i]) {
 						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': true, 'bonuspoints.1': 6}}));
 						announce=true; bonuswon=8; points=6;
 					}
