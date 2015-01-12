@@ -4,7 +4,7 @@
 
 ### Mission A:
 
-Get banished and escape before entering a lair sub-branch (while in mission 3).
+Get banished and escape before entering a lair sub-branch (while in mission 3). Lugonu not allowed.
 
 ### Mission B:
 

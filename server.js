@@ -697,6 +697,122 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			}
 		}
 	}
+	
+	//check bonus missions, the qualifiers/disquals are hard coded here.
+	var announce = false; var bonuswon = -1; var points = -1;
+	for (i=0; i<3; i++) {
+		if (!account['bonuspoints'][i] && !account['bonusdisqual'][i]) {//check it's not done already or disqualified
+			var j = account['bonusmissions'][i];
+			if (i==0 && j==0) {//T1A
+				if (milestone.search("br=(Swamp|Shoals|Spider|Snake|Slime).*type=br.enter")>-1) {
+					account['bonusdisqual'][i]=true;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.0': true}}));
+				} else if (milestone.search("type=abyss.exit")>-1) {
+					//account['bonusqual'][i]=true;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': true, 'bonuspoints.0': 2}}));
+					announce=true; bonuswon=0; points=2;
+				}
+			}
+			if (i==0 && j==1) {//T1B
+				if (milestone.search("xl=(\d|1[012]):.*br=Lair.*type=br.end")>-1) {
+					//account['bonusqual'][i]=true;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': true, 'bonuspoints.0': 2}}));
+					announce=true; bonuswon=1; points=2;
+				}
+			}
+			if (i==0 && j==2) {//T1C
+				if (milestone.search("br=(Swamp|Shoals|Spider|Snake|Slime).*type=br.enter")>-1) {
+					account['bonusdisqual'][i]=true;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.0': true}}));
+				} else if (milestone.search("type=god.renounce")>-1) {
+					account['bonusqual'][i]=[milestone.match("milestone=abandoned (\w*)\.")[1],false];
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': [true,false]}}));
+				} else if (account['bonusqual'][i][0] && milestone.search("type=god.worship")>-1) {
+					var oldgod = account['bonusqual'][i][0];
+					var newgod = milestone.match("god=(\w*):")[1];
+					if (oldgod!=newgod && oldgod!='Ru' && !(oldgod.search("Ely|The Shining One|Zin")>-1 && newgod.search("Ely|The Shining One|Zin")>-1)) {
+						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': [true,true], 'bonuspoints.0': 2}}));
+						announce=true; bonuswon=2; points=2;
+					}
+				}
+			}
+			
+			if (i==1 && j==0) {//T2A
+				if (milestone.search("god=Jiyva.*type=god.worship")>-1) {
+					account['bonusdisqual'][i]=true;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.1': true}}));
+				} else if (milestone.search("type=uniq.*shaped Royal Jelly")>-1) {
+					//account['bonusqual'][i]=[true];
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': [true], 'bonuspoints.1': 4}}));
+					announce=true; bonuswon=3; points=4;
+				}
+			}
+			if (i==1 && j==1) {//T2B
+				if (milestone.search("type=uniq.*(Cerebov|Lom Lobon|Mnoleg|Gloorx vloq)")>-1) {
+					account['bonusdisqual'][i]=true;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.1': true}}));
+				} else if (milestone.search("place=Pan.*type=rune")>-1) {
+					if (account['bonusqual'][i]) {account['bonusqual'][i]++;} else {account['bonusqual'][i] = 1;}
+					if (account['bonusqual'][i]>=5) {
+						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': true, 'bonuspoints.1': 4}}));
+						announce=true; bonuswon=4; points=4;
+					} else {
+						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': account['bonusqual'][i]}}));
+					}
+				}
+			}
+			if (i==1 && j==2) {//T2C
+				if (milestone.search("br=Vaults.*type=br.enter")>-1) {
+					account['bonusqual'][i] = [milestone.match("potionsused=(\d*):")[1],milestone.match("scrollsused=(\d*):")[1]];
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': account['bonusqual'][i]}}));
+				} else if (milestone.search("br=Crypt.*type=br.end")>-1) {
+					//account['bonusqual'][i]=[true];
+					if (milestone.match("potionsused=(\d*):")[1]==account['bonusqual'][i][0] && milestone.match("scrollsused=(\d*):")[1]==account['bonusqual'][i][1]) {
+						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': true, 'bonuspoints.1': 4}}));
+						announce=true; bonuswon=5; points=4;
+					}
+				}
+			}
+			
+			if (i==2 && j==0) {//T3A
+				if (milestone.search("urune=3")>-1) {
+					account['bonusdisqual'][i]=true;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.2': true}}));
+				} else if (milestone.search("zigscompleted=1:")>-1) {
+					//account['bonusqual'][i]=[true];
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': true, 'bonuspoints.2': 6}}));
+					announce=true; bonuswon=6; points=6;
+				}
+			}
+			if (i==2 && j==1) {//T3B orbrun tomb
+				if (milestone.search("type=orb:")>-1) {//get orb
+					account['bonusqual'][i]=1;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': account['bonusqual'][i]}}));
+				}
+				if (account['bonusqual'][i]==1 && milestone.search("br=Tomb.*type=br.enter:")>-1) {//enter tomb for first time
+					account['bonusqual'][i]=2;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': account['bonusqual'][i]}}));
+				}
+				if (account['bonusqual'][i]==2 && milestone.search("br=Tomb.*type=rune:")>-1) {//get rune
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': true, 'bonuspoints.2': 6}}));
+					announce=true; bonuswon=7; points=6;
+				}
+			}
+			if (i==2 && j==2) {//T3C
+				if (milestone.search("br=Zot.*type=br.enter")>-1) {
+					account['bonusqual'][i] = milestone.match("kills=(\d*):")[1];
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': account['bonusqual'][i]}}));
+				} else if (milestone.search("type=orb")>-1) {
+					//account['bonusqual'][i]=[true];
+					if (milestone.match("kills=(\d*):")[1]==account['bonusqual'][i]) {
+						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': true, 'bonuspoints.1': 6}}));
+						announce=true; bonuswon=8; points=6;
+					}
+				}
+			}
+		}
+	}
+	
 	return Promise.all(promises);
 }
 
@@ -991,7 +1107,7 @@ function do_command(arg, chan, nick, admin) {
                 	if (!team || !team["players"] || team["players"].length<3) {
                 		db.dieselrobin.update({"team":new RegExp('^'+argteam+'$','i')}, {$addToSet: {"players":argname}}, function(err, updated) {
                 			if (updated['n']==0) {
-                				db.dieselrobin.insert({"team": argteam, "players": [argname], "accounts": [], "assigned": [], "bonuspoints": [], "bonusqual": [], "nominated": []}, callback);
+                				db.dieselrobin.insert({"team": argteam, "players": [argname], "accounts": [], "assigned": [], "nominated": [], "unassignedbonus": [[0,1,2],[0,1,2],[0,1,2]]}, callback);
                 			} else {
                 				callback();
                 			}
@@ -1127,41 +1243,96 @@ function do_command(arg, chan, nick, admin) {
     	}
     }
     
-    //$assign <combo> <account> [player name]
+    //$assign <combo> <account> <bonusmissions> [player name]
     if (arg[0]=='assign' && chan=="##dieselrobin") {
-    	if (arg.length == 3) {
-    		arg[3] = nick;
+    	if (arg.length == 4) {
+    		arg[4] = nick;
     	}
-    	if (arg.length > 3) {
+    	if (arg.length > 4) {
     		combo = arg[1];
     		account = arg[2].toUpperCase();
+    		bonusmissions = [-1,-1,-1];
     		name=nick;
-    		if (admin) {name = arg[3];}
+    		if (admin) {name = arg[4];}
     		db.dieselrobin.findOne({'players': new RegExp('^'+name+'$','i'), 'assigned': new RegExp(combo,'i')}).then(function (team) {
     			if (team) {
-    				playerorder = [];
-    				for (i=0; i<3; i++) {
-    					playerorder[i] = team['players'][(team['players'].toLowerCase().indexOf(name.toLowerCase()) + i) % 3]
-    				}
-    				db.dieselrobin.update({'account': account}, 
-    					{$set: 
-    						{'char': combo,
-    						'playerorder': playerorder,
-    						'retries': 0,
-    						'comments': [],
-    						'newcomments': [],
-    						'currentmission': 0,
-    						'missionpoints': [],
-    						'missionqual': [],
-    						'missionover': [],
-    						'bonuspoints': [],
-    						'bonusqual': []}}, {upsert:true});
-    				toset = {};
-    				toset['accounts.'+team['assigned'].toLowerCase().indexOf(combo.toLowerCase())] = account;
-    				db.dieselrobin.update({'team': team['team']}, {$set: toset});
-    				bot.say(chan, 'Team '+team['team']+' will play '+combo+' on the account '+account+', starting with '+name);
+    				//see if a previous account was assigned
+    				var accountindex = team['assigned'].toLowerCase().indexOf(combo.toLowerCase());
+    				db.dieselrobin.findOne({'account': team['accounts'][accountindex]}).then(function (prevaccount) {
+    					if (prevaccount) {
+    						bonusmissions = prevaccount['bonusmissions'];
+    						db.dieselrobin.remove({'account': prevaccount['account']});
+    					}
+						playerorder = [];
+						for (i=0; i<3; i++) {
+							playerorder[i] = team['players'][(team['players'].toLowerCase().indexOf(name.toLowerCase()) + i) % 3]
+						}
+					
+						for (i=0; i<3; i++){
+							if (bonusmissions[i]>-1) {//readd bonus missions from prev account
+								team['unassignedbonus'][i].push(bonusmissions[i]);
+							}
+						
+							if (arg[3][i]=='0' || arg[3][i]=='a' || arg[3][i]=='A') {bonusmissions[i] = 0;}
+							else if (arg[3][i]=='1' || arg[3][i]=='b' || arg[3][i]=='B') {bonusmissions[i] = 1;}
+							else if (arg[3][i]=='2' || arg[3][i]=='c' || arg[3][i]=='C') {bonusmissions[i] = 2;}
+							if (bonusmissions[i]==-1) {bot.say(chan, "invalid bonus mission choice");}
+							var index = team['unassignedbonus'][i].indexOf(bonusmissions[i]);
+							if (index>-1) {
+								team['unassignedbonus'][i].splice(index,1);
+							} else {
+								bot.say(chan, "That Tier "+i+" bonus mission has already been assigned");
+							}
+						}
+					
+						db.dieselrobin.update({'account': account}, 
+							{$set: 
+								{'char': combo,
+								'playerorder': playerorder,
+								'retries': 0,
+								'comments': [],
+								'newcomments': [],
+								'currentmission': 0,
+								'missionpoints': [],
+								'missionqual': [],
+								'missionover': [],
+								'bonuspoints': [],
+								'bonusqual': []}}, {upsert:true});
+						toset = {};
+						toset['bonusmissions.'+accountindex] = bonusmissions;
+						toset['accounts.'+accountindex] = account;
+						toset['unassignedbonus'] = team['unassignedbonus'];
+						db.dieselrobin.update({'team': team['team']}, {$set: toset});
+						bot.say(chan, 'Team '+team['team']+' will play '+combo+' on the account '+account+', starting with '+name);
+    				});
     			} else {
     				bot.say(chan, combo+' has not been assigned to '+name+"'s team");
+    			}
+    		});
+    	}
+    }
+    
+    //$bonus <player/team name>
+    if (arg[0]=='bonus'  && chan=="##dieselrobin") {
+    	if (arg.length == 1) {
+    		arg[1] = nick;
+    	}
+    	if (arg.length>1) {
+    		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}]}).then(function(team) {
+    			if (team) {
+    				var s = "";
+    				var ABC = ['A','B','C'];
+    				for (i=0; i<team['accounts'].length; i++) {
+    					s+=team['accounts'][i]+' ('+team['assigned'][i]+'): ';
+    					for for (j=0; j<3; j++) {
+    						s+='T'+j+ABC[team['bonusmissions'][i][j]];
+    						if (j<2) s+=', ';
+    					}
+    					if (i<team['accounts'].length-1) s+='; ';
+    				}
+    				bot.say(chan, 'Team '+team['team']+'bonus assignments: '+s);
+    			} else {
+    				bot.say(chan, 'No team or player '+arg[1]+' signed up');
     			}
     		});
     	}
