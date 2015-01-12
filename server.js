@@ -241,19 +241,20 @@ function get_server_logs(announcer) {
 						var process = function() {
 							process_milestone(milestones.shift(), announcer, file["url"]).then(function() {
 								if (milestones.length>0) {
-									//console.log('iterating to next milestone');
+									console.log('iterating to milestone '+milestones.length);
 									return process();
 								} else {
-									if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
 									
-									db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
-// 										fetching[announcer] = false;
-										//console.log("finished fetch from "+file['url']);
-									});
 								}
 							});
 						};
 						process();
+						
+						if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
+						db.announcers.update({name: announcer, "files.url": file["url"]}, {$inc: {"files.$.offset": datalength}}, function() {
+// 							fetching[announcer] = false;
+							//console.log("finished fetch from "+file['url']);
+						});
                 } else {
                     //console.log("no new content");
                     //console.log("no new milestones for "+announcer);
@@ -811,7 +812,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 	}
 	if (announce) {
 		var ABC=['A','B','C'];
-		bot.say('##dieselrobin', irc.colors.wrap('light_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed bonus mission T'+(bonuswon/3)+ABC[bonuswon%3]+': '+challenge['bonustext'][bonuswon]));
+		bot.say('##dieselrobin', irc.colors.wrap('light_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed bonus mission T'+(Math.floor(bonuswon/3)+1)+ABC[bonuswon%3]+': '+challenge['bonustext'][bonuswon]));
 	}
 	
 	
