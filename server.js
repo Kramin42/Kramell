@@ -733,10 +733,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 			}
 			
 			if (i==1 && j==0) {//T2A
-				if (milestone.search("god=Jiyva.*type=god.worship")>-1) {
-					account['bonusdisqual'][i]=true;
-					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.1': true}}));
-				} else if (milestone.search("type=uniq.*shaped Royal Jelly")>-1) {
+				if (milestone.search("type=uniq.*shaped Royal Jelly")>-1) {
 					//account['bonusqual'][i]=[true];
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': [true], 'bonuspoints.1': 4}}));
 					announce=true; bonuswon=3; points=4;

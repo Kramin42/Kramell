@@ -18,7 +18,7 @@ Abandon a god and worship another before entering a lair sub-branch (any switch 
 
 ### Mission A
 
-Polymorph and then kill the royal jelly without worshipping Jiyva at any point.
+Polymorph and then kill The Royal Jelly.
 
 ### Mission B
 
