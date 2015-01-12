@@ -811,6 +811,9 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 	if (announce) {
 		var ABC=['A','B','C'];
 		bot.say('##dieselrobin', irc.colors.wrap('light_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed bonus mission T'+(Math.floor(bonuswon/3)+1)+ABC[bonuswon%3]+': '+challenge['bonustext'][bonuswon]));
+		toset={};
+		toset['bonusdone.'+bonuswon] = true;
+		promises.push(db.dieselrobin.update({'team': team['team']},{$set: toset}));
 	}
 	
 	
@@ -1108,7 +1111,7 @@ function do_command(arg, chan, nick, admin) {
                 	if (!team || !team["players"] || team["players"].length<3) {
                 		db.dieselrobin.update({"team":new RegExp('^'+argteam+'$','i')}, {$addToSet: {"players":argname}}, function(err, updated) {
                 			if (updated['n']==0) {
-                				db.dieselrobin.insert({"team": argteam, "players": [argname], "accounts": [], "assigned": [], "nominated": [], "unassignedbonus": [[0,1,2],[0,1,2],[0,1,2]]}, callback);
+                				db.dieselrobin.insert({"team": argteam, "players": [argname], "accounts": [], "assigned": [], "nominated": [], "unassignedbonus": [[0,1,2],[0,1,2],[0,1,2]], "bonusdone": [[],[],[]]}, callback);
                 			} else {
                 				callback();
                 			}
@@ -1332,6 +1335,7 @@ function do_command(arg, chan, nick, admin) {
     					s+=team['accounts'][i]+' ('+team['assigned'][i]+'): ';
     					for (j=0; j<3; j++) {
     						s+='T'+(j+1)+ABC[team['bonusmissions'][i][j]];
+    						if (team['bonusdone'][j*3+team['bonusmissions'][i][j]]) s+=' ✓';
     						if (j<2) s+=', ';
     					}
     					if (i<team['accounts'].length-1) s+='; ';
