@@ -698,10 +698,10 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 		if (!account['bonuspoints'][i] && !account['bonusdisqual'][i]) {//check it's not done already or disqualified
 			var j = account['bonusmissions'][i];
 			if (i==0 && j==0) {//T1A
-				if (milestone.search("br=(Swamp|Shoals|Spider|Snake|Slime).*type=br.enter")>-1) {
+				if (milestone.search("br=Lair.*type=br.enter")>-1) {
 					account['bonusdisqual'][i]=true;
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusdisqual.0': true}}));
-				} else if (milestone.search("type=abyss.exit")>-1) {
+				} else if (milestone.search("br=Elf.*type=br.end")>-1) {
 					//account['bonusqual'][i]=true;
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.0': true, 'bonuspoints.0': 2}}));
 					announce=true; bonuswon=0; points=2;

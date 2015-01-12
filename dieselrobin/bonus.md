@@ -4,7 +4,7 @@
 
 ### Mission A:
 
-Get banished and escape before entering a lair sub-branch (while in mission 3). Lugonu not allowed.
+Reach the end of Elf before entering Lair (while in mission 3, you must enter Orc for mission 1).
 
 ### Mission B:
 
