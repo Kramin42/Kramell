@@ -152,11 +152,11 @@ are still worth points.
 
 2\*highest regular score + 2nd highest regular score + Tier 1 completed\*3 + Tier 2 completed\*4 + Tier 3 completed\*8 + 1 for participation
  
-Max score: 2\*18 + 3\*3 + 3\*4 + 3\*8 + 1 = 100
+Max score: 2\*18 + 18 + 3\*3 + 3\*4 + 3\*8 + 1 = 100
 
 ### Ties
 
-In the event that two or more teams have the same final mission score, each team
+In the event that two or more teams have the same final score, each team
 will create a new account and start a MuCK. You may not abandon Xom at any point
 during a tiebreaker, and once you die, it's game over dude. No restarts on
 Mission 1.  The starting player can be any player on your team, but the original

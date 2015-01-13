@@ -356,7 +356,7 @@ function process_milestone(milestone, announcer, url) {
     var account = db.dieselrobin.findOne({"account": name.toUpperCase()});
     var challenge = db.dieselrobin.findOne({"challenge": "dieselrobin"});
     promises.push(Promise.all([challenge, team, account]).then(function(data) {
-    	if (data[0] && data[1] && data[2]) {
+    	if (data[0] && data[1] && data[2] && data[2]['alive']) {
     		console.log("found dieselrobin milestone: "+data[2]['account']);
     		return check_dieselrobin_points(data[0], data[1], data[2], milestone);
     	}
