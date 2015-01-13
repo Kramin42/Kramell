@@ -137,8 +137,8 @@ TODO: implement a Kramell command for assigning bonus missions
 ### Regular Missions
 
 Each completed mission is worth one point. Mission 1 must be completed without
-dying to earn the point. Winning a character is worth 3 points. Thus the maximum
-possible regular mission score for each character is 17 points. 
+dying to earn the point. Winning a character is worth 4 points. Thus the maximum
+possible regular mission score for each character is 18 points. 
 
 ### Bonus Missions
 
@@ -150,10 +150,9 @@ The character who scores the lowest on the regular mission will have their
 regular mission score dropped. Any bonus missions completed by this character
 are still worth points. 
 
-(TBD, might change it a bit, simplify maybe)
-3\*highest regular score + min(2\*2nd highest regular score, 21) + Tier 1 completed\*2 + Tier 2 completed\*4 + Tier 3 completed\*6
+2\*highest regular score + 2nd highest regular score + Tier 1 completed\*3 + Tier 2 completed\*4 + Tier 3 completed\*8 + 1 for participation
  
-Max score: 51 + 21 + 6 + 12 + 18 = 108
+Max score: 2\*18 + 3\*3 + 3\*4 + 3\*8 + 1 = 100
 
 ### Ties
 
