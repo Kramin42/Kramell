@@ -610,8 +610,8 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 	if (milestone.search(/ktyp=winning/i)>-1) {//YAVP
 		gameover = true;
 		account['missionpoints'][14] = 3;
-		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'missionpoints.14': 3}}));
-		bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' (Team '+team['team']+') has won for 3 points!'));
+		promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'missionpoints.14': 4}}));
+		bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' (Team '+team['team']+') has won for 4 points!'));
 	}
 	
 	if (gameover) {

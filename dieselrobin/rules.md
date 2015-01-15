@@ -6,7 +6,9 @@ Teams of players are assigned race/class combinations (multiple combos per team)
 and team members take turns completing "Missions" with each character (e.g., D
 to Lair, Lair:1-8). The competition will be run on the freenode IRC channel [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin).
 
-*Game Version:* Trunk
+See the [Workflow](./workflow) for concise instructions on how to get registered and organise your team.
+
+*Game Version:* Trunk (0.16-a)
 
 **Servers**
 
@@ -45,16 +47,6 @@ Each team should choose a team name and three account names. Account
 names **must** be in ALLCAPS. Each team also needs to pick an order of play and
 decide which player will start which character (once combos are assigned).
 
-Once you have a team name, all players must sign up in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with (use quotes if your team name has spaces):
-
-	$signup <team>
-	$signup "DON'T LABEL ME"
-
-When the combos have been assigned, each player must assign the combo they want to start on to an allcaps account with:
-
-	$assign <combo> <account>
-	$assign DEMo DEEPELFMONK
-
 ### Combo Selection
 
 Each player will choose one race/class combination. Players are
@@ -63,11 +55,6 @@ Combos  which force a certain playstyle or set of circumstances are interesting
 to play solo, but can be frustrating (or boring, in the case of overpowered
 combos) in an ad-hoc team environment. Combos of the latter nature may be
 replaced at the discretion of the organizers.
-
-Once you have signed up to a team you can nominate a combo in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with:
-
-	$nominate <combo>
-	$nominate DgWn
 
 ### Organization
 
@@ -115,7 +102,6 @@ tasks in the mission; they are just the minimum you have to do.
 
 These missions can be queried in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with `$mission <num>` and are [listed online](./missions) for easy reference.
 
-
 ### Bonus Missions
 
 There are 3 tiers of bonus missions: Tier 1 (2 points each), Tier 2 (4 points
@@ -129,8 +115,6 @@ Once you have started a mission, the bonus mission assignments are frozen.
 If you are unable to assign all your missions due to character/class/race
 makeup, we will swap a conflicting mission with an alternate mission for that
 tier that can be completed.
-
-TODO: implement a Kramell command for assigning bonus missions
 
 ## Scoring
 
