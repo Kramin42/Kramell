@@ -22,7 +22,7 @@ See the [Workflow](./workflow) for concise instructions on how to get registered
 
 **Time Frame**
 
-The competition will start TBA and will end 16 days later (two weeks including weekends on both ends). Any games still in progress will be scored as if they
+The competition will start at 0 AM UTC on the 24th of Jan and will end 16 days later (two weeks including weekends on both ends). Any games still in progress will be scored as if they
 died of old age at that point. The start and end times will be posted in
 `??dieselrobin`
 

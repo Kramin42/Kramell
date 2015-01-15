@@ -2,7 +2,7 @@
 
 ## Registration
 
-If you have organised a team with two other players then go to the IRC channel [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) on freenode, feel free to use a better IRC client, and enter the command:
+If you have organised a team with two other players then go to the IRC channel [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) on freenode (feel free to use a better IRC client) and enter the command:
 
 	$signup <team name>
 	$signup "DON'T LABEL ME"
@@ -21,8 +21,11 @@ Nominate a combo in [##dieselrobin](https://webchat.freenode.net/?channels=##die
 	$nominate <combo>
 	$nominate DgWn
 
+## Tournament Time
+
 ### Making a robin account and choosing bonus missions
 
+* Each team will be given 3 combos at the start of the tourney
 * Each player must pick which combo they will start with.
 * Teams must assign all bonus missions before playing, one of each tier to each combo.
 
@@ -32,8 +35,6 @@ Once you are organised, each player must make an ALLCAPS account on a server (su
 	$assign DEMo DEEPELFMONK ABC
 
 The "ABC" here means mission A from Tier 1, mission B from Tier 2, and mission C from Tier 3. Change that to the missions you arranged to do with your team.
-
-## Tournament Time
 
 ### Missions
 
