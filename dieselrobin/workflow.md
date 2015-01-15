@@ -7,7 +7,7 @@ If you have organised a team with two other players then go to the IRC channel [
 	$signup <team name>
 	$signup "DON'T LABEL ME"
 
-If you don't have a team and want to be randomly assigned to one, then tell Kramin (ping me in ##dieselrobin or ##crawl) before the 17th of Jan. On the 17th all the teamless people will be randomly grouped into teams.
+If you don't have a team and want to be randomly assigned to one, then tell Kramin (ping me in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) or [##dieselrobin](https://webchat.freenode.net/?channels=##crawl)) before the 17th of Jan. On the 17th all the teamless people will be randomly grouped into teams.
 Then you can procede as above.
 
 ## Pre tournament
@@ -40,9 +40,9 @@ The "ABC" here means mission A from Tier 1, mission B from Tier 2, and mission C
 
 **Regular**
 
-When you complete a mission it will be announced in ##dieselrobin by the bot, Kramell. 
+When you complete a mission it will be announced in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) by the bot, Kramell. 
 Kramell will also tell you which mission to do next and whose turn it is to play next.
-For this reason it is best you stay connected to ##dieselrobin while you are playing.
+For this reason it is best you stay connected to [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) while you are playing.
 
 To check mission details in ##dieselrobin, use the command `$mission <num>`.
 
