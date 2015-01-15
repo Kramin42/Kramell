@@ -34,7 +34,7 @@ Once you are organised, each player must make an ALLCAPS account on a server (su
 	$assign <combo> <account> <bonus mission choice>
 	$assign DEMo DEEPELFMONK ABC
 
-The "ABC" here means mission A from Tier 1, mission B from Tier 2, and mission C from Tier 3. Change that to the missions you arranged to do with your team.
+The "ABC" here means mission A from Tier 1, B from Tier 2, and C from Tier 3. Change that to the missions you arranged to do on that combo.
 
 ### Missions
 
