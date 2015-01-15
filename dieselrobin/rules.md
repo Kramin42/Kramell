@@ -8,6 +8,8 @@ to Lair, Lair:1-8). The competition will be run on the freenode IRC channel [##d
 
 See the [Workflow](./workflow) for concise instructions on how to get registered and organise your team.
 
+If at any point you need help, feel free to ask in ##dieselrobin.
+
 *Game Version:* Trunk (0.16-a)
 
 **Servers**
@@ -31,8 +33,7 @@ died of old age at that point. The start and end times will be posted in
 ### Composition
 
 Teams are made up of 3 players. Players are allowed to form their
-own teams or join up solo and get assigned to a team randomly, 
-add your name to `??teamless` in this case (use `!learn edit teamless[1] s/$/, <name>/` to append your name to the list). 
+own teams or join up solo and get assigned to a team randomly (see [Workflow](./workflow)).
 Team rosters are frozen after the start of the competition. 
 
 ### Substitutions

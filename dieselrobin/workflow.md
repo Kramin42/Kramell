@@ -7,7 +7,7 @@ If you have organised a team with two other players then go to the IRC channel [
 	$signup <team name>
 	$signup "DON'T LABEL ME"
 
-If you don't have a team and want to be randomly assigned to one, then tell Kramin before the 17th of Jan. On the 17th all the teamless people will be randomly grouped into teams.
+If you don't have a team and want to be randomly assigned to one, then tell Kramin (ping me in ##dieselrobin or ##crawl) before the 17th of Jan. On the 17th all the teamless people will be randomly grouped into teams.
 Then you can procede as above.
 
 ## Pre tournament
