@@ -2,17 +2,13 @@
 
 ## Registration
 
-### Registration
-
 If you have organised a team with two other players then go to the IRC channel [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) on freenode, feel free to use a better IRC client, and enter the command:
 
 	$signup <team name>
 	$signup "DON'T LABEL ME"
 
-When the combos have been assigned, each player must assign the combo they want to start on to an allcaps account with:
-
-	$assign <combo> <account>
-	$assign DEMo DEEPELFMONK
+If you don't have a team and want to be randomly assigned to one, then tell Kramin before the 17th of Jan. On the 17th all the teamless people will be randomly grouped into teams.
+Then you can procede as above.
 
 ## Pre tournament
 
