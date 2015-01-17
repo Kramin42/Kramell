@@ -1204,7 +1204,7 @@ function do_command(arg, chan, nick, admin) {
     			teams.forEach(function(team) {
     				for (i=0; i<team["nominated"].length; i++) {
     					if (team["nominated"][i]) {
-    						newbit = team["nominated"][i]+" ("+team["players"][i]+")";
+    						newbit = team["nominated"][i];
     						if (nom!="") {
     							nom = [nom, newbit].join(", ");
     						} else {
