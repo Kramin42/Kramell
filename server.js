@@ -1143,7 +1143,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$nominate <combo> [player]
-    if ((arg[0]=="nominate" || arg[0]=="nominated")  && chan=="##dieselrobin") {
+    if ((arg[0]=="nominate")  && chan=="##dieselrobin") {
     	if (arg.length==1) {
     		arg[1] = nick;
     	}
@@ -1194,6 +1194,31 @@ function do_command(arg, chan, nick, admin) {
     			}
     		});
     	}
+    }
+    
+        //$nominate <combo> [player]
+    if ((arg[0]=="nominated")  && chan=="##dieselrobin") {
+    		db.dieselrobin.find({$exists: {'team': 1}}).then(function(teams) {
+    			//console.log(JSON.stringify(team));
+    			var nom = "";
+    			teams.forEach(function(team) {
+    				for (i=0; i<team["nominated"].length; i++) {
+    					if (team["nominated"][i]) {
+    						newbit = team["nominated"][i]+" ("+team["players"][i]+")";
+    						if (nom!="") {
+    							nom = [nom, newbit].join(", ");
+    						} else {
+    							nom = newbit;
+    						}
+    					}
+    				}
+    			});
+    			if (nom!="") {
+    				bot.say(chan, "Chars nominated: "+nom);
+    			} else {
+    				bot.say(chan, "No chars nominated");
+    			}
+    		});
     }
     
     //$teams
