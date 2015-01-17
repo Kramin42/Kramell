@@ -1198,7 +1198,7 @@ function do_command(arg, chan, nick, admin) {
     
         //$nominate <combo> [player]
     if ((arg[0]=="nominated")  && chan=="##dieselrobin") {
-    		db.dieselrobin.find({$exists: {'team': 1}}).then(function(teams) {
+    		db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
     			//console.log(JSON.stringify(team));
     			var nom = "";
     			teams.forEach(function(team) {
