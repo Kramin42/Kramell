@@ -1,0 +1,162 @@
+{
+   "_id": ObjectId("54b324f9e82451d207000000"),
+   "bonustext": [
+     "Reach the end of Elf before entering Lair (during mission 3)",
+     "Reach Lair 8 at XL12 or lower.",
+     "Abandon a god and worship another before entering a lair sub-branch.",
+     "Polymorph and then kill The Royal Jelly.",
+     "Get all the pan runes without killing any of the four panlords.",
+     "Complete mission 7 without using any potions or scrolls.",
+     "Enter the depths zig before starting mission 8 and clear it.",
+     "ORBRUN TOMB!!",
+     "Pacifist Zot." 
+  ],
+   "challenge": "dieselrobin",
+   "locations": [
+     "D:1-12, Temple",
+     "Lair, Orc",
+     "D:13-15, Elf",
+     "S1 (one of the Lair sub-branches)",
+     "S2 (another Lair sub-branch)",
+     "Depths",
+     "Vaults:1-4, Crypt",
+     "Vaults:5, S3 (the last Lair sub-branch), Zot",
+     "",
+     "Tomb",
+     "Pan",
+     "Hell and it's branches",
+     "",
+     "" 
+  ],
+   "missionprereq": [
+     [
+       
+    ],
+     [
+       0 
+    ],
+     [
+       1 
+    ],
+     [
+       2 
+    ],
+     [
+       3 
+    ],
+     [
+       3 
+    ],
+     [
+       3 
+    ],
+     [
+       4,
+       5,
+       6 
+    ],
+     [
+       7 
+    ],
+     [
+       7 
+    ],
+     [
+       7 
+    ],
+     [
+       7 
+    ],
+     [
+       7,
+       9 
+    ],
+     [
+       7,
+       10 
+    ] 
+  ],
+   "missionqual": [
+     [
+       "br=(Lair|Orc).*type=br.enter" 
+    ],
+     [
+       "br=(Lair|Orc).*type=br.end" 
+    ],
+     [
+       "br=(Lair|Orc|D).*type=br.end",
+       "br=(Lair|Orc|D).*type=br.end" 
+    ],
+     [
+       "br=(Swamp|Shoals|Spider|Snake|Slime).*type=rune" 
+    ],
+     [
+       "br=(Swamp|Shoals|Spider|Snake|Slime).*type=rune" 
+    ],
+     [
+       "br=Depths.*type=br.end" 
+    ],
+     [
+       "br=Crypt.*type=br.end" 
+    ],
+     [
+       "br=(Swamp|Shoals|Spider|Snake|Slime|Vaults|Abyss).*type=rune" 
+    ],
+     [
+       "br=(Swamp|Shoals|Spider|Snake|Slime|Vaults|Abyss).*type=rune",
+       "br=(Swamp|Shoals|Spider|Snake|Slime|Vaults|Abyss).*type=rune" 
+    ],
+     [
+       "br=Tomb.*type=rune" 
+    ],
+     [
+       "br=Pan.*type=rune",
+       "br=Pan.*type=rune",
+       "br=Pan.*type=rune" 
+    ],
+     [
+       "br=(Coc|Dis|Tar|Geh).*type=rune",
+       "br=(Coc|Dis|Tar|Geh).*type=rune" 
+    ],
+     [
+       "br=Pan.*type=rune",
+       "br=Pan.*type=rune" 
+    ],
+     [
+       "br=(Coc|Dis|Tar|Geh).*type=rune",
+       "br=(Coc|Dis|Tar|Geh).*type=rune" 
+    ] 
+  ],
+   "missionstart": [
+     "$^",
+     "$^",
+     "$^",
+     "$^",
+     "br=(Swamp|Shoals|Spider|Snake|Slime).*type=br.enter",
+     "br=Depths.*type=br.enter",
+     "br=Vaults.*type=br.enter",
+     "br=Vaults.*type=br.end|br=(Swamp|Shoals|Spider|Snake|Slime).*type=br.enter",
+     "$^",
+     "br=Tomb.*type=br.enter",
+     "br=Pan.*type=br.enter",
+     "br=(Coc|Geh|Tar|Dis).*type=br.enter",
+     "br=Pan.*type=br.enter",
+     "br=(Coc|Geh|Tar|Dis).*type=br.enter" 
+  ],
+   "missiontext": [
+     "Enter Lair or Orc.",
+     "Finish Lair or Orc (whichever was entered in mission 1)",
+     "Finish the rest of Lair, Orc, and D",
+     "Get a Lair rune",
+     "Get a second Lair rune",
+     "Reach the end of Depths",
+     "Do Vaults:1-4 and reach the end of Crypt",
+     "Get a third rune from either Vaults, Abyss or the last Lair branch",
+     "Get the other two runes out of Vaults, Abyss, Lair branches",
+     "Get the Tomb rune",
+     "Get three Pan runes",
+     "Get two Hell runes",
+     "Get the remaining two Pan runes",
+     "Get the remaining two Hell runes" 
+  ] 
+}

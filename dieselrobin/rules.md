@@ -64,7 +64,7 @@ completed missions, what missions are available next, and which player is to pla
 on that account next.
 
 If you wish to keep track independently you could use an online spreadsheet 
-similar to those used in previous competitions: [scoring sheet template](https://docs.google.com/spreadsheet/ccc?key=0AsDUl9FTpJmLdEh2ZnYtUlp3a3BESWJlUERqYklCdUE)
+similar to those used in previous competitions: [scoring sheet template](https://docs.google.com/spreadsheet/ccc?key=0AvVvVnv6CWSkdHJucW1WM3VGYTJWX25WTmY0RGlOU1E#gid=21)
 
 ## For Players
 

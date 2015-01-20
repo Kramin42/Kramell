@@ -3,6 +3,10 @@
 // Author: Cameron Dykstra
 // Email: dykstra.cameron@gmail.com
 
+// TODO: make it parse the milestone/log files and make its own announcements, independent of other bots.
+// see: https://github.com/neilmoore/sizzell/blob/sizzell/sizzell.pl
+// particularly see: parse_milestone_file() and parse_log_file()
+
 var express = require('express');
 var fs      = require('fs');
 var Promise = require("bluebird");
