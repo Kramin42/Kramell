@@ -934,6 +934,15 @@ function do_command(arg, chan, nick, admin) {
     	if (chan=="##csdc") {
     		
     	} else if (chan=="##dieselrobin") {
+    		bot.say(chan, "DieselRobin commands:");
+    		bot.say(chan, "  $signup [-rm] <team name>");
+    		bot.say(chan, "  $teams");
+    		bot.say(chan, "  $nominate <char>");
+    		bot.say(chan, "  $nominated");
+    		bot.say(chan, "  $assign <char> <account name> <bonus choice (e.g. ACB)>");
+    		bot.say(chan, "  $mission <mission num or bonus mission code (e.g. 1 or 4 or T2C)>");
+    		bot.say(chan, "  $team <team or player name>");
+    		bot.say(chan, "  $bonus <team or player name>");
     		
     	} else {
 			bot.say(chan, "Kramell commands:");
@@ -1337,6 +1346,7 @@ function do_command(arg, chan, nick, admin) {
 								{'char': combo,
 								'playerorder': playerorder,
 								'retries': 0,
+								'alive': true,
 								'comments': [],
 								'newcomments': [],
 								'currentmission': 0,
@@ -1667,7 +1677,7 @@ function handle_message(nick, chan, message) {
     }
     
     //kramell csdc queries (use $)
-    if ('$'.indexOf(message[0])>-1) {
+    if ('$'.indexOf(message[0])>-1 && (chan=="##csdc" || chan=="##crawl" || chan==control_channel)) {
         //remove prefix and add username as first arg if there is none
         var arg = message.slice(1, message.length).replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
         
