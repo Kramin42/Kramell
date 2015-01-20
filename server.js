@@ -1790,6 +1790,8 @@ function connect() {
 			channels: [control_channel,observe_channel].concat(chans),
 			port: 8001,
 			debug: true,
+			autoRejoin: true,
+    		autoConnect: true,
 	//        sasl: true,
 			userName: botnick
 	//        password: password
