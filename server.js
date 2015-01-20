@@ -1088,7 +1088,7 @@ function do_command(arg, chan, nick, admin) {
     
     //dieselrobin commands
     //$signup [-rm] <team> [name]
-    if (arg[0]=="signup" && chan=="##dieselrobin") {
+    if (arg[0]=="signup" && (chan=="##dieselrobin" || admin)) {
     	argteam = "";
     	callback = function() {
     		db.dieselrobin.distinct('players', {'team':new RegExp('^'+argteam+'$','i')}).then(function(players) {
@@ -1129,7 +1129,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$mission <num|"list">
-    if (arg[0]=="mission" && chan=="##dieselrobin") {
+    if (arg[0]=="mission" && (chan=="##dieselrobin" || admin)) {
     	if (arg.length>1) {
     		if (arg[1]=="list") {
     			//db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
@@ -1156,7 +1156,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$nominate <combo> [player]
-    if ((arg[0]=="nominate")  && chan=="##dieselrobin") {
+    if ((arg[0]=="nominate")  && (chan=="##dieselrobin" || admin)) {
     	if (arg.length==1) {
     		arg[1] = nick;
     	}
@@ -1210,7 +1210,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
         //$nominate <combo> [player]
-    if ((arg[0]=="nominated")  && chan=="##dieselrobin") {
+    if ((arg[0]=="nominated")  && (chan=="##dieselrobin" || admin)) {
     		db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
     			//console.log(JSON.stringify(team));
     			var nom = "";
@@ -1235,7 +1235,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$teams
-    if (arg[0]=='teams' && chan=="##dieselrobin") {
+    if (arg[0]=='teams' && (chan=="##dieselrobin" || admin)) {
     	db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
     		teamlist = '';
     		teams.forEach(function(team) {
@@ -1250,7 +1250,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$team [team name|player name]
-    if (arg[0]=='team' && chan=="##dieselrobin") {
+    if (arg[0]=='team' && (chan=="##dieselrobin" || admin)) {
     	if (arg.length==1) {
     		arg[1] = nick;
     	}
@@ -1283,7 +1283,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$assign <combo> <account> <bonusmissions> [player name]
-    if (arg[0]=='assign' && chan=="##dieselrobin") {
+    if (arg[0]=='assign' && (chan=="##dieselrobin" || admin)) {
     	if (arg.length == 4) {
     		arg[4] = nick;
     	}
@@ -1357,7 +1357,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$bonus <player/team name>
-    if (arg[0]=='bonus'  && chan=="##dieselrobin") {
+    if (arg[0]=='bonus'  && (chan=="##dieselrobin" || admin)) {
     	if (arg.length == 1) {
     		arg[1] = nick;
     	}
@@ -1383,7 +1383,7 @@ function do_command(arg, chan, nick, admin) {
     	}
     }
     
-    if (admin && arg[0]=="shufflechars" && chan=="##dieselrobin") {
+    if (admin && arg[0]=="shufflechars" && (chan=="##dieselrobin" || admin)) {
     	db.dieselrobin.distinct('nominated', function(err, chars) {
     		db.dieselrobin.distinct('team', {$or: [{nominated: {$exists: false}}, {nominated: {$size: 0}}, {nominated: {$size: 1}}, {nominated: {$size: 2}}]}, function(err, unnomteams) {
     			console.log(JSON.stringify(unnomteams));
@@ -1738,7 +1738,8 @@ function handle_message(nick, chan, message) {
         arg = arg.map(function(val,index) {return val.replace(/SPCSPCSPC/g, ' ');});
         //arg = [].concat.apply([], arg);
         console.log(arg);
-        admin = chan==control_channel || adminlist.indexOf(nick)>-1;
+        admin = (chan==control_channel || adminlist.indexOf(nick)>-1);
+        console.log("Admin: "+admin);
         do_command(arg, chan, nick, admin);
     }
 }
