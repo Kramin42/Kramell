@@ -1112,7 +1112,7 @@ function do_command(arg, chan, nick, admin) {
                 	if (!team || !team["players"] || team["players"].length<3) {
                 		db.dieselrobin.update({"team":new RegExp('^'+argteam+'$','i')}, {$addToSet: {"players":argname}}, function(err, updated) {
                 			if (updated['n']==0) {
-                				db.dieselrobin.insert({"team": argteam, "players": [argname], "accounts": [], "assigned": [], "nominated": [], "unassignedbonus": [[0,1,2],[0,1,2],[0,1,2]], "bonusdone": [[],[],[]]}, callback);
+                				db.dieselrobin.insert({"team": argteam, "players": [argname], "accounts": [], "assigned": [], "nominated": [], "unassignedbonus": [[0,1,2],[0,1,2],[0,1,2]], "bonusdone": []}, callback);
                 			} else {
                 				callback();
                 			}
@@ -1255,26 +1255,31 @@ function do_command(arg, chan, nick, admin) {
     		arg[1] = nick;
     	}
     	if (arg.length==2) {
+    		var promises = [];
     		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}]}).then(function(team) {
     			if (team) {
-    				charlist = '';
+    				//charlist = [];
     				if (team['assigned'].length>0) {
-						charlist = '; ';
 						for (i=0; i<3; i++) {
-							charlist+=team['assigned'][i];
+							//charlist+=team['assigned'][i];
 							if (team['accounts'][i]) {
-								charlist+=' on '+team['accounts'][i];
+								promises.push(db.dieselrobin.findOne({'account': team['accounts'][i]}).then(function(account) {
+									return team['accounts'][i]+' on '+team['accounts'][i]+' ('+account['missionpoints'].reduce(function(a,b,i){return a+b;},0)+')';
+								}));
+							} else {
+								promises.push(Promise.resolve(team['accounts'][i]));
 							}
-							if (i<2) {charlist+=', ';}
+							//if (i<2) {charlist+=', ';}
 						}
     				} else if (team['nominated'].length>0) {
-    					charlist = '; ';
     					for (i=0; i<team['nominated'].length; i++) {
-							charlist+=team['nominated'][i];
-							if (i<team['nominated'].length-1) {charlist+=', ';}
+							promises.push(Promise.resolve(team['nominated'][i]));
+							//if (i<team['nominated'].length-1) {charlist+=', ';}
 						}
     				}
-    				bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', ')+charlist);
+    				Promise.all(promises).then(function (charlist) {
+    					bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', ')+'; '+charlist.join(', '));
+    				});
     			} else {
     				bot.say(chan, 'No team or player '+arg[1]+' signed up');
     			}
