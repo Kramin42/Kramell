@@ -1264,10 +1264,10 @@ function do_command(arg, chan, nick, admin) {
 							//charlist+=team['assigned'][i];
 							if (team['accounts'][i]) {
 								promises.push(db.dieselrobin.findOne({'account': team['accounts'][i]}).then(function(account) {
-									return team['accounts'][i]+' on '+team['accounts'][i]+' ('+account['missionpoints'].reduce(function(a,b,i){return a+b;},0)+')';
+									return account['char']+' on '+account['account']+' ('+account['missionpoints'].reduce(function(a,b,i){return a+b;},0)+')';
 								}));
 							} else {
-								promises.push(Promise.resolve(team['accounts'][i]));
+								promises.push(Promise.resolve(team['assigned'][i]));
 							}
 							//if (i<2) {charlist+=', ';}
 						}
