@@ -1137,7 +1137,7 @@ function do_command(arg, chan, nick, admin) {
     			//		bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i-1]+". New places: "+challenge["locations"][i-1]);
     			//	}
     			//});
-    		} else if (arg[1][0]=='T') {
+    		} else if (arg[1][0]=='T' || arg[1][0]=='t') {
     			var i = parseInt(arg[1][1]);
     			var ABC = ['A','B','C'];
     			var j = ABC.indexOf(arg[1][2]);
