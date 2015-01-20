@@ -1132,13 +1132,22 @@ function do_command(arg, chan, nick, admin) {
     if (arg[0]=="mission" && chan=="##dieselrobin") {
     	if (arg.length>1) {
     		if (arg[1]=="list") {
+    			//db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
+    			//	for (i=1; i<=challenge["missiontext"].length; i++) {
+    			//		bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i-1]+". New places: "+challenge["locations"][i-1]);
+    			//	}
+    			//});
+    		} else if (arg[1][0]=='T') {
+    			var i = parseInt(arg[1][1]);
+    			var ABC = ['A','B','C'];
+    			var j = ABC.indexOf(arg[1][2]);
+    			if (j==-1) j = ['a','b','c'].indexOf(arg[1][2]);
+    			if (j==-1) j = parseInt(arg[1][2]);
     			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
-    				for (i=1; i<=challenge["missiontext"].length; i++) {
-    					bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i-1]+". New places: "+challenge["locations"][i-1]);
-    				}
+    				bot.say(chan, "Tier "+i+" bonus "+ABC[j]+": "+challenge["bonustext"][(i-1)*3+j]);
     			});
     		} else {
-    			i = parseInt(arg[1]);
+    			var i = parseInt(arg[1]);
     			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
     				bot.say(chan, "Mission "+i+": "+challenge["missiontext"][i-1]+". New places: "+challenge["locations"][i-1]);
     			});
