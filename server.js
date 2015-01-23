@@ -934,15 +934,7 @@ function do_command(arg, chan, nick, admin) {
     	if (chan=="##csdc") {
     		
     	} else if (chan=="##dieselrobin") {
-    		bot.say(chan, "DieselRobin commands:");
-    		bot.say(chan, "  $signup [-rm] <team name>");
-    		bot.say(chan, "  $teams");
-    		bot.say(chan, "  $nominate <char>");
-    		bot.say(chan, "  $nominated");
-    		bot.say(chan, "  $assign <char> <account name> <bonus choice (e.g. ACB)>");
-    		bot.say(chan, "  $mission <mission num or bonus mission code (e.g. 1 or 4 or T2C)>");
-    		bot.say(chan, "  $team <team or player name>");
-    		bot.say(chan, "  $bonus <team or player name>");
+    		bot.say(chan, "DieselRobin commands: $signup [-rm] <team name> | $teams | $nominate <char> | $nominated | $assign <char> <account name> <bonus choice (e.g. ACB)> | $mission <mission num/code> | $team <team or player name> | $bonus <team or player name>");
     		
     	} else {
 			bot.say(chan, "Kramell commands:");
@@ -1396,6 +1388,28 @@ function do_command(arg, chan, nick, admin) {
     			}
     		});
     	}
+    }
+    
+    if ((arg[0]=='r' || arg[0]=='remind') && (chan=="##dieselrobin" || admin)) {
+    	if (arg.length==1) {
+    		arg[1] = nick;
+    	}
+    	db.dieselrobin.findOne({"challenge": "dieselrobin"}).then(function(challenge) {
+    	db.dieselrobin.find({"playerorder.0": new RegExp('^'+arg[1]+'$','i')}).toArray().then(function(accounts) {
+    		if (accounts[0]) {
+				var s = [];
+				accounts.forEach(function(account) {
+					var missions = [account['currentmission']];
+					if (mission<0) {
+						missions = get_available_dieselrobin_missions(challenge, account);
+					}
+					missions = missions.join(' or ');
+					s.push(missions+' on '+account['account']+' ('+account['char']+')');
+				});
+				bot.say(chan, arg[1]+' to do: '+s.join(', '))
+    		}
+    	});
+    	});
     }
     
     if (admin && arg[0]=="shufflechars" && (chan=="##dieselrobin" || admin)) {
