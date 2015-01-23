@@ -22,7 +22,7 @@ var irc = require('irc');
 var observe_channel = "##crawl";
 var bot;
 
-var adminlist = ["Kramin"];
+var adminlist = ["Kramin","Kramin42"];
 
 fs.readFile(process.env.OPENSHIFT_DATA_DIR+'/password', function (err, data) {
     if (err) throw err;
@@ -1396,8 +1396,8 @@ function do_command(arg, chan, nick, admin) {
     	}
     	db.dieselrobin.findOne({"challenge": "dieselrobin"}).then(function(challenge) {
     	db.dieselrobin.find({"playerorder.0": new RegExp('^'+arg[1]+'$','i')}).toArray().then(function(accounts) {
+    		var s = [];
     		if (accounts[0]) {
-				var s = [];
 				accounts.forEach(function(account) {
 					var missions = [account['currentmission']];
 					if (mission<0) {
@@ -1406,8 +1406,8 @@ function do_command(arg, chan, nick, admin) {
 					missions = missions.join(' or ');
 					s.push(missions+' on '+account['account']+' ('+account['char']+')');
 				});
-				bot.say(chan, arg[1]+' to do: '+s.join(', '))
     		}
+    		bot.say(chan, arg[1]+' to do: '+s.join(', '))
     	});
     	});
     }
