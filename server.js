@@ -1416,10 +1416,11 @@ function do_command(arg, chan, nick, admin) {
     if (arg[0]=='scores'  && (chan=="##dieselrobin" || admin)) {
      	db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
      		var scores = [];
-     		console.log(teams.length);
+     		//console.log(teams.length);
      		teams.forEach(function(team) {
      			console.log('getting points for team '+team['team']);
      			scores.push(db.dieselrobin.find({'account': new RegExp('^'+team['accounts'].join('|')+'$','i')}).toArray.then(function(accounts) {
+     				console.log(JSON.stringify(accounts));
      				if (accounts && accounts[0]) {
 						var missionscores = [];
 						var score = 0;
@@ -1434,10 +1435,9 @@ function do_command(arg, chan, nick, admin) {
 						score+=2*missionscores[0]+missionscores[1];
 						console.log('Points for team '+team['team']+": "+score);
 						return Promise.resolve({'team': team['team'], 'score': score});
-     				} else {
-     					console.log('no points for team '+team['team']);
-     					return Promise.resolve({'team': team['team'], 'score': 0});
      				}
+     				console.log('no points for team '+team['team']);
+     				return Promise.resolve({'team': team['team'], 'score': 0});
      			}));
      		});
      		Promise.all(scores).then(function(scorearray) {
