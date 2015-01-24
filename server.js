@@ -1419,16 +1419,20 @@ function do_command(arg, chan, nick, admin) {
      		teams.forEach(function(team) {
      			console.log('getting points for team '+team['team']);
      			scores.push(db.dieselrobin.find({'account': new RegExp('^'+team['accounts'].join('|')+'$','i')}).toArray.then(function(accounts) {
-     				var missionscores = [];
-     				var score = 0;
-     				accounts.forEach(function(account) {
-     					score+=account['bonuspoints'].reduce(function(a,b,i){return a+b;});
-     					missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;}));
-     				});
-     				missionscores = missionscores.sort(function(a, b){return b-a;});
-     				score+=2*missionscores[0]+missionscores[1];
-     				console.log('Points for team '+team['team']+": "+score);
-     				return {'team': team['team'], 'score': score};
+     				if (accounts && accounts[0]) {
+						var missionscores = [];
+						var score = 0;
+						accounts.forEach(function(account) {
+							score+=account['bonuspoints'].reduce(function(a,b,i){return a+b;});
+							missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;}));
+						});
+						missionscores = missionscores.sort(function(a, b){return b-a;});
+						score+=2*missionscores[0]+missionscores[1];
+						console.log('Points for team '+team['team']+": "+score);
+						return {'team': team['team'], 'score': score};
+     				} else {
+     					return {'team': team['team'], 'score': 0};
+     				}
      			}));
      		});
      		Promise.all(scores).then(function(scorearray) {

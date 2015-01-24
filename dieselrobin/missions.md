@@ -1,6 +1,7 @@
 # Regular Missions
 
 **Missions 5-7 and 9-14 may be done in any order. You may win and end your game after mission 8, missions 9-14 are optional**
+**You may retry mission 1 up to 20 times, but you only get the point if you succeed on the first. After that it is sudden death, no retries.**
 
 |Mission|Description|New Locations|
 | ----: |:--------- |:----------- |
