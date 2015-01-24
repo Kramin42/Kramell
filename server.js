@@ -1419,7 +1419,8 @@ function do_command(arg, chan, nick, admin) {
      		//console.log(teams.length);
      		teams.forEach(function(team) {
      			console.log('getting points for team '+team['team']);
-     			scores.push(db.dieselrobin.find({'account': new RegExp('^'+team['accounts'].join('|')+'$','i')}).toArray.then(function(accounts) {
+     			//console.log('^'+team['accounts'].join('|')+'$');
+     			scores.push(db.dieselrobin.find({'account': new RegExp('^'+team['accounts'].join('|')+'$','i')}).toArray().then(function(accounts) {
      				console.log(JSON.stringify(accounts));
      				if (accounts && accounts[0]) {
 						var missionscores = [];

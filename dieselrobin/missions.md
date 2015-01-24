@@ -1,8 +1,10 @@
 # Regular Missions
 
-**Missions 5-7 and 9-14 may be done in any order. You may win and end your game after mission 8, missions 9-14 are optional**
+**Missions 5-7 and 9-14 may be done in any order. You may win and end your game after mission 8, missions 9-14 are optional.**
+
 **You may retry mission 1 up to 20 times, but you only get the point if you succeed on the first. After that it is sudden death, no retries.**
-**Where you may go is restricted! You may only go to the places stated in the mission or places from previous missions. e.g. you may not enter any lair branches until you start mission 4, and then you must pick one and are only allowed to explore that one (until you unlock the others later).**
+
+**Where you may go is restricted! You may only go to the places stated in the mission or places from previous missions. e.g. you may not enter any lair sub-branches until you start mission 4, and then you must pick one and are only allowed to explore that one (until you unlock the others later).**
 
 |Mission|Description|New Locations|
 | ----: |:--------- |:----------- |
