@@ -1422,19 +1422,17 @@ function do_command(arg, chan, nick, admin) {
      				var score = 0;
      				accounts.forEach(function(account) {
      					score+=account['bonuspoints'].reduce(function(a,b,i){return a+b;});
-     					missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;}))
+     					missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;}));
      				});
-     				missionscores = missionscores.sort(function(a, b){return b-a});
+     				missionscores = missionscores.sort(function(a, b){return b-a;});
      				score+=2*missionscores[0]+missionscores[1];
      				return {'team': team['team'], 'score': score};
      			}));
      		});
      		Promise.all(scores).then(function(scorearray) {
      			scorearray = scorearray.sort(function(a,b) {
-     				if (a['score'] < b['score'])
-     					return -1;
-     				if (a['score'] > b['score'])
-     					return 1;
+     				if (a['score'] < b['score']) {return -1;}
+     				if (a['score'] > b['score']) {return 1;}
      				return 0;
      			});
      			var s = [];
