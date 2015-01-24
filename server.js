@@ -1452,7 +1452,7 @@ function do_command(arg, chan, nick, admin) {
      				s.push(scorearray[i]['team']+": "+scorearray[i]['score']);
      			}
      			bot.say(chan, "Team scores: "+s.join(' | '));
-     		});
+     		}).done();
      	});
      }
     
