@@ -1403,6 +1403,7 @@ function do_command(arg, chan, nick, admin) {
 					if (missions[0]<0) {
 						missions = get_available_dieselrobin_missions(challenge, account);
 					}
+					missions = missions.map(function(num) {return num + 1;});
 					missions = missions.join(' or ');
 					s.push('Mission '+missions+' on '+account['account']+' ('+account['char']+')');
 				});
