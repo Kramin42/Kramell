@@ -934,7 +934,7 @@ function do_command(arg, chan, nick, admin) {
     	if (chan=="##csdc") {
     		
     	} else if (chan=="##dieselrobin") {
-    		bot.say(chan, "DieselRobin commands: $signup [-rm] <team name> | $teams | $nominate <char> | $nominated | $assign <char> <account name> <bonus choice (e.g. ACB)> | $mission <mission num/code> | $team <team or player name> | $bonus <team or player name>");
+    		bot.say(chan, "DieselRobin commands: $signup [-rm] <team name> | $teams | $nominate <char> | $nominated | $assign <char> <account name> <bonus choice (e.g. ACB)> | $mission <mission num/code> | $team [team or player name] | $bonus [team or player name] | $remind [player name] | $scores");
     		
     	} else {
 			bot.say(chan, "Kramell commands:");
@@ -1413,7 +1413,41 @@ function do_command(arg, chan, nick, admin) {
     	});
     }
     
-    if (admin && arg[0]=="shufflechars" && (chan=="##dieselrobin" || admin)) {
+    if (arg[0]=='scores'  && (chan=="##dieselrobin" || admin)) {
+     	db.dieselrobin.find({$exists: {"team": true}}).toArray().then(function(teams) {
+     		var scores = [];
+     		teams.forEach(function(team) {
+     			scores.push(db.dieselrobin.find({'account': new RegExp('^'+team['accounts'].join('|')+'$','i')}).toArray.then(function(accounts) {
+     				var missionscores = [];
+     				var score = 0;
+     				accounts.forEach(function(account) {
+     					score+=account['bonuspoints'].reduce(function(a,b,i){return a+b;});
+     					missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;}))
+     				});
+     				missionscores = missionscores.sort(function(a, b){return b-a});
+     				score+=2*missionscores[0]+missionscores[1];
+     				return {'team': team['team'], 'score': score};
+     			}));
+     		});
+     		Promise.all(scores).then(function(scorearray) {
+     			scorearray = scorearray.sort(function(a,b) {
+     				if (a['score'] < b['score'])
+     					return -1;
+     				if (a['score'] > b['score'])
+     					return 1;
+     				return 0;
+     			});
+     			var s = [];
+     			for (i=0; i<scorearray.length; i++) {
+     				s.push(scorearray[i]['team']+": "+scorearray[i]['score']);
+     			}
+     			bot.say(chan, "Team scores: "+s.join(' | '));
+     		});
+     	});
+     }
+    
+    //disabled now
+    //if (admin && arg[0]=="shufflechars" && (chan=="##dieselrobin" || admin)) {
     	db.dieselrobin.distinct('nominated', function(err, chars) {
     		db.dieselrobin.distinct('team', {$or: [{nominated: {$exists: false}}, {nominated: {$size: 0}}, {nominated: {$size: 1}}, {nominated: {$size: 2}}]}, function(err, unnomteams) {
     			console.log(JSON.stringify(unnomteams));
