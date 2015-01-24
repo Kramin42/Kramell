@@ -1400,14 +1400,14 @@ function do_command(arg, chan, nick, admin) {
     		if (accounts[0]) {
 				accounts.forEach(function(account) {
 					var missions = [account['currentmission']];
-					if (mission<0) {
+					if (missions[0]<0) {
 						missions = get_available_dieselrobin_missions(challenge, account);
 					}
 					missions = missions.join(' or ');
 					s.push(missions+' on '+account['account']+' ('+account['char']+')');
 				});
     		}
-    		bot.say(chan, arg[1]+' to do: '+s.join(', '))
+    		bot.say(chan, arg[1]+' to do: '+s.join(', '));
     	});
     	});
     }
