@@ -1414,7 +1414,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     if (arg[0]=='scores'  && (chan=="##dieselrobin" || admin)) {
-     	db.dieselrobin.find({$exists: {"team": true}}).toArray().then(function(teams) {
+     	db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
      		var scores = [];
      		teams.forEach(function(team) {
      			console.log('getting points for team '+team['team']);
