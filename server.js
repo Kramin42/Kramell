@@ -1428,8 +1428,8 @@ function do_command(arg, chan, nick, admin) {
 						accounts.forEach(function(account) {
 							if (account) {
 								console.log("checking account "+account['account']);
-								score+=account['bonuspoints'].reduce(function(a,b,i){return a+b;});
-								missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;}));
+								score+=account['bonuspoints'].reduce(function(a,b,i){return a+b;},0);
+								missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;},0));
 							}
 						});
 						missionscores = missionscores.sort(function(a, b){return b-a;});
