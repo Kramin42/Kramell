@@ -12,7 +12,8 @@ Reach Lair 8 at XL12 or lower.
 
 ### Mission C
 
-Abandon a god and worship another before entering a lair sub-branch (any switch not resulting in god wrath doesn't coun't, e.g. good->good or Ru->any don't count)
+Abandon a god and worship another before entering a lair sub-branch (any switch not resulting in god wrath doesn't coun't, e.g. good->good or Ru->any don't count).
+You must survive mission 1 for this to count.
 
 ## Tier 2 (4 points)
 

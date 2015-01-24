@@ -1404,7 +1404,7 @@ function do_command(arg, chan, nick, admin) {
 						missions = get_available_dieselrobin_missions(challenge, account);
 					}
 					missions = missions.join(' or ');
-					s.push(missions+' on '+account['account']+' ('+account['char']+')');
+					s.push('Mission '+missions+' on '+account['account']+' ('+account['char']+')');
 				});
     		}
     		bot.say(chan, arg[1]+' to do: '+s.join(', '));
