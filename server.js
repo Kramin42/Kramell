@@ -1266,7 +1266,7 @@ function do_command(arg, chan, nick, admin) {
 							//charlist+=team['assigned'][i];
 							if (team['accounts'][i]) {
 								promises.push(db.dieselrobin.findOne({'account': team['accounts'][i]}).then(function(account) {
-									return account['char']+' on '+account['account']+' ('+account['missionpoints'].reduce(function(a,b,i){return a+b;},0)+' mpts'+(account['alive'] ? '' : ', ANNIHILATED!!!')+')';
+									return (account['alive'] ? account['playerorder'][0]+' playing ' : ', ANNIHILATED!!! ')+account['char']+' on '+account['account']+' ('+account['missionpoints'].reduce(function(a,b,i){return a+b;},0)+' mpts)';
 								}));
 							} else {
 								promises.push(Promise.resolve(team['assigned'][i]));
