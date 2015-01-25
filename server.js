@@ -935,7 +935,7 @@ function do_command(arg, chan, nick, admin) {
     	if (chan=="##csdc") {
     		
     	} else if (chan=="##dieselrobin") {
-    		bot.say(chan, "DieselRobin commands: $signup [-rm] <team name> | $teams | $nominate <char> | $nominated | $assign <char> <account name> <bonus choice (e.g. ACB)> | $mission <mission num/code> | $team [team or player name] | $bonus [team or player name] | $remind [player name] | $scores");
+    		bot.say(chan, "DieselRobin commands: $signup [-rm] <team name> | $teams | $nominate <char> | $nominated | $assign <char> <account name> <bonus choice (e.g. ACB)> | $mission <mission num/code> | $team [team, player, or account name] | $bonus [team, player, or account name] | $remind [player name] | $scores");
     		
     	} else {
 			bot.say(chan, "Kramell commands:");
@@ -1258,7 +1258,7 @@ function do_command(arg, chan, nick, admin) {
     	}
     	if (arg.length==2) {
     		var promises = [];
-    		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}]}).then(function(team) {
+    		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}, {'accounts': new RegExp('^'+arg[1]+'$','i')}]}).then(function(team) {
     			if (team) {
     				//charlist = [];
     				if (team['assigned'].length>0) {
@@ -1370,7 +1370,7 @@ function do_command(arg, chan, nick, admin) {
     		arg[1] = nick;
     	}
     	if (arg.length>1) {
-    		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}]}).then(function(team) {
+    		db.dieselrobin.findOne({$or: [{'team': new RegExp('^'+arg[1]+'$','i')}, {'players': new RegExp('^'+arg[1]+'$','i')}, {'accounts': new RegExp('^'+arg[1]+'$','i')}]}).then(function(team) {
     			if (team) {
     				var s = "";
     				var ABC = ['A','B','C'];
