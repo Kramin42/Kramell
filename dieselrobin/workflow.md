@@ -1,4 +1,4 @@
-**Quick Links:** [Rules](./rules) [Regular Missions](./missions) [Bonus Missions](./missions)
+**Quick Links:** [Rules](./rules) [Regular Missions](./missions) [Bonus Missions](./bonus)
 
 # Workflow
 
