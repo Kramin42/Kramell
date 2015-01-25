@@ -1,3 +1,5 @@
+**Quick Links:** [Workflow](./workflow) [Regular Missions](./missions) [Bonus Missions](./missions)
+
 # DieselRobin
 
 **Summary**

@@ -1,3 +1,5 @@
+**Quick Links:** [Rules](./rules) [Regular Missions](./missions) [Bonus Missions](./missions)
+
 # Workflow
 
 ## Registration

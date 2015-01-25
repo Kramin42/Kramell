@@ -1,3 +1,5 @@
+**Quick Links:** [Rules](./rules) [Workflow](./workflow) [Bonus Missions](./missions)
+
 # Regular Missions
 
 **Missions 5-7 and 9-14 may be done in any order. You may win and end your game after mission 8, missions 9-14 are optional.**

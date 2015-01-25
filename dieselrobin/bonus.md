@@ -1,3 +1,5 @@
+**Quick Links:** [Rules](./rules) [Workflow](./workflow) [Regular Missions](./missions)
+
 # Bonus Missions
 
 ## Tier 1 (3 points)
