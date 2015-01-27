@@ -240,7 +240,7 @@ function get_server_logs(announcer) {
 						}
 						
 						//datasplit.forEach(function(text) {process_milestone(text,announcer,file["url"])});
-						console.log(data);
+						console.log("data: "+data);
 						var milestones = datasplit;
 						var process = function() {
 							process_milestone(milestones.shift(), announcer, file["url"]).then(function() {
@@ -283,13 +283,13 @@ function get_server_logs(announcer) {
 function process_milestone(milestone, announcer, url) {
 	var promises = [];
     //milestone = milestone.replace(/\n/g,"");
-    console.log(milestone);
+    console.log("milestone: "+milestone);
     // make sure it's a complete milestone
     if (!milestone.match(/^v=.*:vlong=.*(time=\d+S:type=.*:milestone=.*|tmsg=.*)\n$/)) {
     	//milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
     	if (milestone.match(/\n/)) {
     		console.log("broken milestone: "+milestone);
-    		//bot.say(control_channel, "Kramin: broken milestone: "+milestone);
+    		bot.say(control_channel, "Kramin: broken milestone: "+milestone);
     	} else {
     		console.log("appending to logacc["+announcer+"]["+url+"]: "+milestone);
     		logacc[announcer][url] += milestone;
