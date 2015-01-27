@@ -285,7 +285,7 @@ function process_milestone(milestone, announcer, url) {
     //milestone = milestone.replace(/\n/g,"");
     //console.log(milestone);
     // make sure it's a complete milestone
-    if (!milestone.match(/^v=.*:vlong=.*time=\d+S:type=.*:milestone=.*\n$/)) {
+    if (!milestone.match(/^v=.*:vlong=.*(time=\d+S:type=.*:milestone=.*|tmsg=.*)\n$/)) {
     	//milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
     	if (milestone.match(/\n/)) {
     		console.log("broken milestone: "+milestone);
