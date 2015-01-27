@@ -646,7 +646,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
         	if (account['currentmission']==-1 || account['currentmission']!=mission) {
         		bot.say('##dieselrobin', irc.colors.wrap('magenta', account['account']+' ('+account['playerorder'][0]+') has started mission '+(mission+1)));
         		
-        		if (!account['missionover'][account['currentmission']]) {
+        		if (account['currentmission']!=-1 && !account['missionover'][account['currentmission']]) {
         			bot.say('##dieselrobin', irc.colors.wrap('dark_red', account['account']+' ('+account['playerorder'][0]+') has forfeited mission '+(account['currentmission']+1)));
         			account['missionover'][account['currentmission']] = true;
         			toset = {};
