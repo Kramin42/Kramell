@@ -643,7 +643,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
         
         //check if a mission was started:
         if (!account['missionover'][mission] && milestone.search(challenge['missionstart'][mission])>-1) {
-        	if (account['currentmission']!=-1 && account['currentmission']!=mission) {
+        	if (account['currentmission']==-1 || account['currentmission']!=mission) {
         		bot.say('##dieselrobin', irc.colors.wrap('magenta', account['account']+' ('+account['playerorder'][0]+') has started mission '+(mission+1)));
         		
         		if (!account['missionover'][account['currentmission']]) {
