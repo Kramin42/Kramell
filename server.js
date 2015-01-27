@@ -233,7 +233,7 @@ function get_server_logs(announcer) {
 						//console.log(data);
 						if (datalength >= fetchlimit-1) {delay = 10;}
 						
-						data = data.replace(/\n\n/g,"\n");
+						//data = data.replace(/\n\n/g,"\n");
 						var datasplit = data.split(/\n/);
 						for (i=0; i<datasplit.length-1; i++) {
 							datasplit[i]+="\n";
@@ -285,7 +285,7 @@ function process_milestone(milestone, announcer, url) {
     //milestone = milestone.replace(/\n/g,"");
     //console.log(milestone);
     // make sure it's a complete milestone
-    if (!milestone.match(/^v=.*:vlong=.*\n/)) {
+    if (!milestone.match(/^v=.*:vlong=.*time=\d+S:type=.*:milestone=.*\n$/)) {
     	//milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
     	if (milestone.match(/\n/)) {
     		console.log("broken milestone: "+milestone);
@@ -1280,7 +1280,7 @@ function do_command(arg, chan, nick, admin) {
 						}
     				}
     				Promise.all(promises).then(function (charlist) {
-    					bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', ')+'; '+charlist.join(', '));
+    					bot.say(chan, 'Team '+team['team']+': '+team['players'].join(', ')+' | '+charlist.join(', '));
     				});
     			} else {
     				bot.say(chan, 'No team or player '+arg[1]+' signed up');
@@ -1421,26 +1421,26 @@ function do_command(arg, chan, nick, admin) {
      		var scores = [];
      		//console.log(teams.length);
      		teams.forEach(function(team) {
-     			console.log('getting points for team '+team['team']);
+     			//console.log('getting points for team '+team['team']);
      			//console.log('^'+team['accounts'].join('|')+'$');
      			scores.push(db.dieselrobin.find({'account': new RegExp('^('+team['accounts'].join('|')+')$','i')}).toArray().then(function(accounts) {
-     				console.log(JSON.stringify(accounts));
+     				//console.log(JSON.stringify(accounts));
      				if (accounts && accounts[0]) {
 						var missionscores = [];
 						var score = 1;
 						accounts.forEach(function(account) {
 							if (account) {
-								console.log("checking account "+account['account']);
+								//console.log("checking account "+account['account']);
 								score+=account['bonuspoints'].reduce(function(a,b,i){return a+b;},0);
 								missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;},0));
 							}
 						});
 						missionscores = missionscores.sort(function(a, b){return b-a;});
 						score+=2*missionscores[0]+missionscores[1];
-						console.log('Points for team '+team['team']+": "+score);
+						//console.log('Points for team '+team['team']+": "+score);
 						return Promise.resolve({'team': team['team'], 'score': score});
      				}
-     				console.log('no points for team '+team['team']);
+     				//console.log('no points for team '+team['team']);
      				return Promise.resolve({'team': team['team'], 'score': 0});
      			}));
      		});
