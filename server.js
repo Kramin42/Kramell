@@ -795,6 +795,13 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 				if (account['bonusqual'][i]==2 && milestone.search("br=Tomb.*type=rune:")>-1) {//get rune
 					promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': true, 'bonuspoints.2': 8}}));
 					announce=true; bonuswon=7; points=8;
+					
+					account['missionpoints'][9] = 1;
+					toset = {};
+        			toset['missionpoints.9'] = 1;
+        			toset['missionover.9'] = true;
+					promises.push(db.dieselrobin.update({'account': account['account']},{$set: toset}));
+					bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account']+' ('+team['team']+', '+account['playerorder'][0]+') has completed mission '+(10)+': '+challenge['missiontext'][9]));
 				}
 			}
 			if (i==2 && j==2) {//T3C
