@@ -187,7 +187,7 @@ function get_logfile_offset(announcer, url) {
 
 function get_server_logs(announcer) {
 	var delay = 60;
-    // if (fetching[announcer]) {//don't want simultaneous fetches breaking things
+// 	if (fetching[announcer]) {//don't want simultaneous fetches breaking things
 //     	console.log("preventing simultaneous fetch for "+announcer);
 //     	if (timers[announcer]) {
 //     		clearTimeout(timers[announcer]);
@@ -212,7 +212,8 @@ function get_server_logs(announcer) {
     	console.log(announcer+" not found");
     }
     server["files"].forEach(function(file) {
-        if (file["offset"]) {
+        if (!fetching[file["url"]] && file["offset"]) {
+        	fetching[file["url"]] = true;
         	//console.log("checking "+announcer+" logs");
         	if (logacc[announcer][file["url"]]===undefined) {
 				logacc[announcer][file["url"]] = "";
@@ -251,6 +252,7 @@ function get_server_logs(announcer) {
 									if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
 									db.announcers.update({name: announcer, "files.url": file["url"]}, {$set: {"files.$.offset": file["offset"]+datalength}}, function() {
  										//fetching[announcer] = false;
+ 										fetching[file["url"]] = false;
 										//console.log("finished fetch from "+file['url']);
 									});
 								}
@@ -262,6 +264,7 @@ function get_server_logs(announcer) {
                     //console.log("no new milestones for "+announcer);
 //                     fetching[announcer] = false;
                     //if (announcer=='Prequell') {console.log('Prequell fetch finished (nothing found)');}
+                    fetching[file["url"]] = false;
                 }
             });
         } else {
