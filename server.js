@@ -1445,9 +1445,15 @@ function do_command(arg, chan, nick, admin) {
 							if (account) {
 								//console.log("checking account "+account['account']);
 								score+=account['bonuspoints'].reduce(function(a,b,i){return a+b;},0);
-								potscore+=[3,4,8].reduce(function(a,b,i){return a+(account['bonusdisqual'][i] ? 0 : b);},0);
 								missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;},0));
-								potmissionscores.push([1,1,1,1,1,1,1,1,1,1,1,1,1,1,4].reduce(function(a,b,i){return a+(account['missionpoints'][i]==null ? b : account['missionpoints'][i]);},0));
+								
+								if (account['alive']) {
+									potscore+=[3,4,8].reduce(function(a,b,i){return a+(account['bonusdisqual'][i] ? 0 : b);},0);
+									potmissionscores.push([1,1,1,1,1,1,1,1,1,1,1,1,1,1,4].reduce(function(a,b,i){return a+(account['missionover'][i] ? b : account['missionpoints'][i]);},0));
+								} else {
+									potscore+=account['bonuspoints'].reduce(function(a,b,i){return a+b;},0);
+									potmissionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;},0));
+								}
 							}
 						});
 						missionscores = missionscores.sort(function(a, b){return b-a;});
