@@ -1438,21 +1438,27 @@ function do_command(arg, chan, nick, admin) {
      				//console.log(JSON.stringify(accounts));
      				if (accounts && accounts[0]) {
 						var missionscores = [];
+						var potmissionscores = [];
 						var score = 1;
+						var potscore = 1; //potential score if they play perfectly from now on
 						accounts.forEach(function(account) {
 							if (account) {
 								//console.log("checking account "+account['account']);
 								score+=account['bonuspoints'].reduce(function(a,b,i){return a+b;},0);
+								potscore+=[3,4,8].reduce(function(a,b,i){return a+(account['bonusdisqual'][i] ? 0 : b);},0);
 								missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;},0));
+								potmissionscores.push([1,1,1,1,1,1,1,1,1,1,1,1,1,1,4].reduce(function(a,b,i){return a+(account['missionpoints'][i]==null ? b : account['missionpoints'][i]);},0));
 							}
 						});
 						missionscores = missionscores.sort(function(a, b){return b-a;});
+						potmissionscores = potmissionscores.sort(function(a, b){return b-a;});
 						score+=2*missionscores[0]+missionscores[1];
+						potscore+=2*potmissionscores[0]+potmissionscores[1];
 						//console.log('Points for team '+team['team']+": "+score);
-						return Promise.resolve({'team': team['team'], 'score': score});
+						return Promise.resolve({'team': team['team'], 'score': score, 'potscore': potscore});
      				}
      				//console.log('no points for team '+team['team']);
-     				return Promise.resolve({'team': team['team'], 'score': 0});
+     				return Promise.resolve({'team': team['team'], 'score': 0, 'potscore': 100});
      			}));
      		});
      		Promise.all(scores).then(function(scorearray) {
@@ -1464,7 +1470,8 @@ function do_command(arg, chan, nick, admin) {
      			});
      			var s = [];
      			for (i=0; i<scorearray.length; i++) {
-     				s.push(scorearray[i]['team']+": "+scorearray[i]['score']);
+     				
+     				s.push(scorearray[i]['team']+": "+scorearray[i]['score']+ (scorearray[i]['score']==scorearray[i]['potscore'] ? "" : " (/"+scorearray[i]['potscore']+")"));
      			}
      			bot.say(chan, "Team scores: "+s.join(' | '));
      		}).done();
