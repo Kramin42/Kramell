@@ -107,8 +107,8 @@ These missions can be queried in [##dieselrobin](https://webchat.freenode.net/?c
 
 ### Bonus Missions
 
-There are 3 tiers of bonus missions: Tier 1 (2 points each), Tier 2 (4 points
-each), and Tier 3 (6 points each). [They are listed here](./bonus).
+There are 3 tiers of bonus missions: Tier 1 (3 points each), Tier 2 (4 points
+each), and Tier 3 (8 points each). [They are listed here](./bonus).
 
 Your team will assign one mission from each tier to each character before
 starting a mission on any character.
