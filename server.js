@@ -1443,10 +1443,12 @@ function do_command(arg, chan, nick, admin) {
 						var potscore = 1; //potential score if they play perfectly from now on
 						accounts.forEach(function(account) {
 							if (account) {
+								console.log(account['account']);
 								//console.log("checking account "+account['account']);
 								score+=account['bonuspoints'].reduce(function(a,b,i){return a+b;},0);
 								missionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;},0));
-								
+								console.log(score);
+								console.log(missionscores[missionscores.length - 1]);
 								if (account['alive']) {
 									potscore+=[3,4,8].reduce(function(a,b,i){return a+(account['bonusdisqual'][i] ? 0 : b);},0);
 									potmissionscores.push([1,1,1,1,1,1,1,1,1,1,1,1,1,1,4].reduce(function(a,b,i){return a+(account['missionover'][i] ? b : account['missionpoints'][i]);},0));
@@ -1454,6 +1456,8 @@ function do_command(arg, chan, nick, admin) {
 									potscore+=account['bonuspoints'].reduce(function(a,b,i){return a+b;},0);
 									potmissionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;},0));
 								}
+								console.log(potscore);
+								console.log(potmissionscores[potmissionscores.length - 1]);
 							}
 						});
 						missionscores = missionscores.sort(function(a, b){return b-a;});
