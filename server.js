@@ -814,7 +814,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 				} else if (milestone.search("type=orb")>-1) {
 					//account['bonusqual'][i]=[true];
 					if (milestone.match(/kills=(\d*):/)[1]==account['bonusqual'][i]) {
-						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.1': true, 'bonuspoints.1': 8}}));
+						promises.push(db.dieselrobin.update({'account': account['account']},{$set: {'bonusqual.2': true, 'bonuspoints.2': 8}}));
 						announce=true; bonuswon=8; points=8;
 					}
 				}
@@ -1456,8 +1456,8 @@ function do_command(arg, chan, nick, admin) {
 									potscore+=account['bonuspoints'].reduce(function(a,b,i){return a+b;},0);
 									potmissionscores.push(account['missionpoints'].reduce(function(a,b,i){return a+b;},0));
 								}
-								console.log(potscore);
-								console.log(potmissionscores[potmissionscores.length - 1]);
+								//console.log(potscore);
+								//console.log(potmissionscores[potmissionscores.length - 1]);
 							}
 						});
 						missionscores = missionscores.sort(function(a, b){return b-a;});
