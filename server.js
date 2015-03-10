@@ -170,7 +170,7 @@ Array.prototype.toLowerCase = function() {
 };
 
 function dictify(milestone) {
-	var a = milestone.replace(/::/g,';;colon;;');
+	var a = milestone.replace(/::/g,';;colon;;').replace(/\n/g,'');
 	a = a.split(/:/);
 	//console.log(JSON.stringify(a));
 	a = a.map(function(x) {return x.replace(/;;colon;;/g,':')});
