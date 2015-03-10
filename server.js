@@ -170,9 +170,9 @@ Array.prototype.toLowerCase = function() {
 };
 
 function dictify(milestone) {
-	milestone.replace(/::/g,';;colon;;');
-	var a = milestone.split(/:/);
-	console.log(JSON.stringify(a));
+	var a = milestone.replace(/::/g,';;colon;;');
+	a = a.split(/:/);
+	//console.log(JSON.stringify(a));
 	a = a.map(function(x) {return x.replace(/;;colon;;/g,':')});
 	var d = {};
 	a.forEach(function(x) {
