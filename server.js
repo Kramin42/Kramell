@@ -19,7 +19,8 @@ var password;
 var chei = 'Cheibriados';
 var sequell = 'Sequell';
 var irc = require('irc');
-var observe_channel = "##crawl";
+var observe_channel = '##crawl';
+car rawannounce_channel = '##crawl-announcements';
 var bot;
 
 var adminlist = ["Kramin","Kramin42"];
@@ -168,6 +169,33 @@ Array.prototype.toLowerCase = function() {
     return this;
 };
 
+function dictify(milestone) {
+	milestone.replace(/::/g,';;colon;;');
+	var a = milestone.split(':');
+	a = a.map(function(x) {return x.replace(/;;colon;;/g,':')});
+	var d = {};
+	a.forEach(function(x) {
+		x = x.split('=');
+		d[x[0]] = x[1];
+	});
+	return d;
+}
+
+function stone_format(stone) {
+	return stone['name']+' (L'+stone['xl']+' '+stone['char']+') '+stone['milestone']+' ('+stone['place']+')';
+}
+
+function log_format(stone) {
+	var loc_string = '';
+	if (stone[place].find(':')>-1) {
+		loc string = 'on '+stone[place];
+	} else if (stone[ktyp]!='winning' && stone[ktyp]!='leaving') {
+		loc string = 'in '+stone[place];
+	}
+	
+	return stone[name]+' the '+stone[title]+' (L'+stone['xl']+' '+stone['char']+')'+ (stone[god]!='' ? ' worshipper of '+stone[god] : '') +', '+(stone[vmsg]!='' ? stone[vmsg] : stone[tmsg])+loc_string+', with '+stone[sc]+' points after '+stone[turns]+' turns and '+stone[dur]+'.';
+}
+
 function get_logfile_offset(announcer, url) {
     //curl -sI http://crawl.akrasiac.org/milestones-git | grep Content-Length  | awk '{print $2}'
     var child = exec("curl -sI "+url+" | grep Content-Length  | awk '{print $2}'");
@@ -246,7 +274,7 @@ function get_server_logs(announcer) {
 						var process = function() {
 							process_milestone(milestones.shift(), announcer, file["url"]).then(function() {
 								if (milestones.length>0) {
-									console.log('iterating to milestone '+milestones.length);
+// 									console.log('iterating to milestone '+milestones.length);
 									return process();
 								} else {
 									if (logacc[announcer][file["url"]]!="") {console.log("leftovers in logacc["+announcer+"]["+file["url"]+"]: "+logacc[announcer][file["url"]]);}
@@ -303,11 +331,14 @@ function process_milestone(milestone, announcer, url) {
     try {
         var name = milestone.match(/name=(\w*):/)[1];
         var version = milestone.match(/v=(.*):vlong/)[1];
+        var stone = dictify(milestone);
     } catch(error) {
         console.log(error);
         console.log("in milestone: "+milestone)
         return Promise.resolve(1);
     }
+    
+    //CSDC
     //console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
     if (milestone.match(/v=0.16-a/) && !milestone.match(/god=(Ru|Gozag)/)) {//trunk only for csdc, Ru and Gozag not allowed
@@ -369,16 +400,14 @@ function process_milestone(milestone, announcer, url) {
     		return check_dieselrobin_points(data[0], data[1], data[2], milestone);
     	}
     }));
-//     db.dieselrobin.findOne({"accounts": name.toUpperCase()}, function(err, team) {
-//     	db.dieselrobin.findOne({"account": name.toUpperCase()}, function(err, account) {
-//     		if (team && account) {
-//     			console.log("found dieselrobin milestone: "+account['account']);
-//     			db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
-//     				check_dieselrobin_points(challenge, team, account, milestone);
-//     			});
-//     		}
-//     	});
-//     });
+    
+    //make all announcements to ##crawl-announcements
+    if (stone['type']) {//milestone
+    	bot.say(rawannounce_channel, stone_format(stone));
+    } else {// death/win
+    	bot.say(rawannounce_channel, log_format(stone));
+    }
+    
     return Promise.all(promises);
 }
 
