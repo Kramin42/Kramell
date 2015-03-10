@@ -171,7 +171,8 @@ Array.prototype.toLowerCase = function() {
 
 function dictify(milestone) {
 	milestone.replace(/::/g,';;colon;;');
-	var a = milestone.split(':');
+	var a = milestone.split(/:/);
+	console.log(JSON.stringify(a));
 	a = a.map(function(x) {return x.replace(/;;colon;;/g,':')});
 	var d = {};
 	a.forEach(function(x) {
@@ -182,7 +183,7 @@ function dictify(milestone) {
 }
 
 function stone_format(stone) {
-	return stone['name']+' (L'+stone['xl']+' '+stone['char']+') '+stone['milestone']+' ('+stone['place']+')';
+	return stone['name']+' (L'+stone['xl']+' '+stone['char']+') '+stone['milestone']+' ('+(stone['oplace'] ? stone['oplace'] : stone['place'])+')';
 }
 
 function log_format(stone) {
