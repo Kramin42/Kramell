@@ -403,7 +403,7 @@ function process_milestone(milestone, announcer, url) {
     
     try {
 		//make all announcements to ##crawl-announcements
-		console.log(JSON.stringify(stone));
+		//console.log(JSON.stringify(stone));
 		if (stone['type']) {//milestone
 			bot.say(rawannounce_channel, stone_format(stone));
 		} else {// death/win
@@ -1912,7 +1912,7 @@ function connect() {
 	db.channels.distinct('channel',function(err, chans) {
 		//bot.join(chan,null);
 		bot = new irc.Client('chat.freenode.net', botnick, {
-			channels: [control_channel,observe_channel].concat(chans),
+			channels: [control_channel,observe_channel,rawannounce_channel].concat(chans),
 			port: 8001,
 			debug: true,
 			autoRejoin: true,
