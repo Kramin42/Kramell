@@ -20,7 +20,7 @@ var chei = 'Cheibriados';
 var sequell = 'Sequell';
 var irc = require('irc');
 var observe_channel = '##crawl';
-car rawannounce_channel = '##crawl-announcements';
+var rawannounce_channel = '##crawl-announcements';
 var bot;
 
 var adminlist = ["Kramin","Kramin42"];
