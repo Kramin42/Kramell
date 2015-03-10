@@ -183,7 +183,7 @@ function dictify(milestone) {
 }
 
 function stone_format(stone) {
-	return stone['name']+' (L'+stone['xl']+' '+stone['char']+') '+stone['milestone']+' ('+(stone['oplace'] ? stone['oplace'] : stone['place'])+')';
+	return stone['name']+' (L'+stone['xl']+' '+stone['char']+') '+stone['milestone']+' ('+((stone['oplace'] && stone['milestone'].find('left')==-1) ? stone['oplace'] : stone['place'])+')';
 }
 
 function log_format(stone) {
