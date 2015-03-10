@@ -401,13 +401,18 @@ function process_milestone(milestone, announcer, url) {
     	}
     }));
     
-    //make all announcements to ##crawl-announcements
-    if (stone['type']) {//milestone
-    	bot.say(rawannounce_channel, stone_format(stone));
-    } else {// death/win
-    	bot.say(rawannounce_channel, log_format(stone));
+    try {
+		//make all announcements to ##crawl-announcements
+		console.log(JSON.stringify(stone));
+		if (stone['type']) {//milestone
+			bot.say(rawannounce_channel, stone_format(stone));
+		} else {// death/win
+			bot.say(rawannounce_channel, log_format(stone));
+		}
+    } catch(error) {
+        console.log(error);
+        console.log("in milestone: "+milestone)
     }
-    
     return Promise.all(promises);
 }
 
