@@ -183,12 +183,12 @@ function dictify(milestone) {
 }
 
 function stone_format(stone) {
-	return stone['name']+' (L'+stone['xl']+' '+stone['char']+') '+stone['milestone']+' ('+((stone['oplace'] && stone['milestone'].find('left')==-1) ? stone['oplace'] : stone['place'])+')';
+	return stone['name']+' (L'+stone['xl']+' '+stone['char']+') '+stone['milestone']+' ('+((stone['oplace'] && stone['milestone'].search('left')==-1) ? stone['oplace'] : stone['place'])+')';
 }
 
 function log_format(stone) {
 	var loc_string = '';
-	if (stone[place].find(':')>-1) {
+	if (stone[place].search(':')>-1) {
 		loc_string = 'on '+stone['place'];
 	} else if (stone[ktyp]!='winning' && stone[ktyp]!='leaving') {
 		loc_string = 'in '+stone['place'];
