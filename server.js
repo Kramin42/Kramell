@@ -189,12 +189,12 @@ function stone_format(stone) {
 function log_format(stone) {
 	var loc_string = '';
 	if (stone[place].find(':')>-1) {
-		loc_string = 'on '+stone[place];
+		loc_string = 'on '+stone['place'];
 	} else if (stone[ktyp]!='winning' && stone[ktyp]!='leaving') {
-		loc_string = 'in '+stone[place];
+		loc_string = 'in '+stone['place'];
 	}
 	
-	return stone[name]+' the '+stone[title]+' (L'+stone['xl']+' '+stone['char']+')'+ (stone[god]!='' ? ' worshipper of '+stone[god] : '') +', '+(stone[vmsg]!='' ? stone[vmsg] : stone[tmsg])+loc_string+', with '+stone[sc]+' points after '+stone[turns]+' turns and '+stone[dur]+'.';
+	return stone['name']+' the '+stone['title']+' (L'+stone['xl']+' '+stone['char']+')'+ (stone['god']!='' ? ' worshipper of '+stone['god'] : '') +', '+(stone['vmsg']!='' ? stone['vmsg'] : stone['tmsg'])+loc_string+', with '+stone['sc']+' points after '+stone['turns']+' turns and '+stone['dur']+'.';
 }
 
 function get_logfile_offset(announcer, url) {
