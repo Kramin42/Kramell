@@ -196,7 +196,7 @@ function log_format(stone) {
 	
 	var duration = stone['dur'];//need to format correctly
 	
-	return stone['name']+' the '+stone['title']+' (L'+stone['xl']+' '+stone['char']+')'+ (stone['god']!='' ? ' worshipper of '+stone['god'] : '') +', '+(stone['vmsg']!==undefined ? stone['vmsg'] : stone['tmsg'])+loc_string+', with '+stone['sc']+' points after '+stone['turn']+' turns and '+duration+'.';
+	return stone['name']+' the '+stone['title']+' (L'+stone['xl']+' '+stone['char']+')'+ (stone['god'] ? ' worshipper of '+stone['god'] : '') +', '+(stone['vmsg']!==undefined ? stone['vmsg'] : stone['tmsg'])+loc_string+', with '+stone['sc']+' points after '+stone['turn']+' turns and '+duration+'.';
 }
 
 function get_logfile_offset(announcer, url) {
