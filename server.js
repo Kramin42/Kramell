@@ -194,7 +194,8 @@ function log_format(stone) {
 		loc_string = ' in '+stone['place'];
 	}
 	
-	var duration = stone['dur'];//need to format correctly
+	var dur = stone['dur'];//need to format correctly
+	var duration = dur/3600 + ':' + (dur/60)%60 + ':' + dur%60;
 	
 	return stone['name']+' the '+stone['title']+' (L'+stone['xl']+' '+stone['char']+')'+ (stone['god'] ? ' worshipper of '+stone['god'] : '') +', '+(stone['vmsg']!==undefined ? stone['vmsg'] : stone['tmsg'])+loc_string+', with '+stone['sc']+' points after '+stone['turn']+' turns and '+duration+'.';
 }
@@ -1704,14 +1705,14 @@ function handle_message(nick, chan, message) {
         //check if from announcer
         db.announcers.count({"name":nick},function(err, count){ if (count) {
         	//do CSDC weekly combo announcement
-			db.csdc.findOne({"announced": false, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).then(function(week) {
-				//if (week) console.log("checking date for "+week["week"]+", "+getTimeStamp()+">="+week["start"]);
-				if (week && getTimeStamp() >= week["start"]) {
-					db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
-					bot.say('##csdc', irc.colors.wrap('magenta', week["week"]+" has begun!"));
-					announce_week(week, '##csdc');
-				}
-			});
+// 			db.csdc.findOne({"announced": false, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).then(function(week) {
+// 				//if (week) console.log("checking date for "+week["week"]+", "+getTimeStamp()+">="+week["start"]);
+// 				if (week && getTimeStamp() >= week["start"]) {
+// 					db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
+// 					bot.say('##csdc', irc.colors.wrap('magenta', week["week"]+" has begun!"));
+// 					announce_week(week, '##csdc');
+// 				}
+// 			});
 			
             get_server_logs(nick);
             
