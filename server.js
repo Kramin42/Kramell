@@ -169,6 +169,10 @@ Array.prototype.toLowerCase = function() {
     return this;
 };
 
+function pad2(number) {
+    return (number < 10 ? '0' : '') + number;
+}
+
 function dictify(milestone) {
 	var a = milestone.replace(/::/g,';;colon;;').replace(/\n/g,'');
 	a = a.split(/:/);
@@ -195,7 +199,7 @@ function log_format(stone) {
 	}
 	
 	var dur = parseInt(stone['dur']);//need to format correctly
-	var duration = parseInt(dur/3600) + ':' + parseInt(dur/60)%60 + ':' + dur%60;
+	var duration = pad2(parseInt(dur/3600)) + ':' + pad2(parseInt(dur/60)%60) + ':' + pad2(dur%60);
 	
 	return stone['name']+' the '+stone['title']+' (L'+stone['xl']+' '+stone['char']+')'+ (stone['god'] ? ' worshipper of '+stone['god'] : '') +', '+(stone['vmsg']!==undefined ? stone['vmsg'] : stone['tmsg'])+loc_string+', with '+stone['sc']+' points after '+stone['turn']+' turns and '+duration+'.';
 }
