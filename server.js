@@ -195,7 +195,7 @@ function log_format(stone) {
 	}
 	
 	var dur = parseInt(stone['dur']);//need to format correctly
-	var duration = dur/3600 + ':' + (dur/60)%60 + ':' + dur%60;
+	var duration = int(dur/3600) + ':' + int(dur/60)%60 + ':' + dur%60;
 	
 	return stone['name']+' the '+stone['title']+' (L'+stone['xl']+' '+stone['char']+')'+ (stone['god'] ? ' worshipper of '+stone['god'] : '') +', '+(stone['vmsg']!==undefined ? stone['vmsg'] : stone['tmsg'])+loc_string+', with '+stone['sc']+' points after '+stone['turn']+' turns and '+duration+'.';
 }
