@@ -1008,9 +1008,9 @@ function do_command(arg, chan, nick, admin) {
 			bot.say(chan, "Kramell commands:");
 			if (admin) bot.say(chan, "  $announcer [-rm] <announcer name>");
 			if (admin) bot.say(chan, "  $channel [-rm] <channel name>");
-			bot.say(chan, "  $name [-rm] <channel name> <user name>");
-			bot.say(chan, "  $filter [-rm] <channel name> <regex filter>");
-			bot.say(chan, "  $colour [-rm] <channel name> [colour (if not -rm)] <regex filter>");
+			bot.say(chan, "  $name [-rm] <user name>");
+			bot.say(chan, "  $filter [-rm] <regex filter>");
+			bot.say(chan, "  $colour [-rm] [colour (if not -rm)] <regex filter>");
         }
     }
 
@@ -1075,6 +1075,9 @@ function do_command(arg, chan, nick, admin) {
 
     if (arg[0]=="name" || arg[0]=="names"){
         //db.channels.find({},{"channel":1,"names":1,_id:0})
+        if (chan!=control_channel) {
+        	arg = arg[1]=="-rm" ? arg.splice(2,0,chan) : arg.splice(1,0,chan);
+        }
         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
                 argchan = arg[2];
@@ -1093,11 +1096,14 @@ function do_command(arg, chan, nick, admin) {
                 bot.say(chan, "Names in "+arg[1]+": "+names.join(', '));
             });
         } else {
-            bot.say(chan, "Usage: $name [-rm] <channel name> <user name>");
+            bot.say(chan, "Usage: $name [-rm] <user name>");
         }
     }
 
     if (arg[0]=="filter" || arg[0]=="filters"){
+    	if (chan!=control_channel) {
+        	arg = arg[1]=="-rm" ? arg.splice(2,0,chan) : arg.splice(1,0,chan);
+        }
         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
                 //arg[3] = arg.slice(3, arg.length).join(' ');
@@ -1117,11 +1123,14 @@ function do_command(arg, chan, nick, admin) {
                 bot.say(chan, "Filters for "+arg[1]+": "+filters.join(', '));
             });
         } else {
-            bot.say(chan, "Usage: !filter [-rm] <channel name> <regex filter>");
+            bot.say(chan, "Usage: !filter [-rm] <regex filter>");
         }
     }
   
     if (arg[0]=="colour" || arg[0]=="color" || arg[0]=="colours" || arg[0]=="colors"){
+    	if (chan!=control_channel) {
+        	arg = arg[1]=="-rm" ? arg.splice(2,0,chan) : arg.splice(1,0,chan);
+        }
         if (arg.length>4 || (arg.length==4 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
                 //arg[4] = arg.slice(4, arg.length).join(' ');
@@ -1147,7 +1156,7 @@ function do_command(arg, chan, nick, admin) {
                 bot.say(chan, "Colouring filters for "+arg[1]+": "+JSON.stringify(colourmap));
             });
         } else {
-            bot.say(chan, "Usage: !colour [-rm] <channel name> <colour> <regex filter>");
+            bot.say(chan, "Usage: !colour [-rm] <colour> <regex filter>");
         }
     }
     
