@@ -17,10 +17,11 @@ var exec = require('child_process').exec;
 var botnick = 'Kramell';
 var password;
 var chei = 'Cheibriados';
+var gretell = 'Gretell';
 var sequell = 'Sequell';
 var irc = require('irc');
 var observe_channel = '##crawl';
-var rawannounce_channel = '##crawl-announcements';
+//var rawannounce_channel = '##crawl-announcements';
 var bot;
 
 var adminlist = ["Kramin","Kramin42"];
@@ -69,6 +70,7 @@ var timers = {};
 var NAnick;
 var NAaliases;
 var cheiquerychan = control_channel;
+var gretellquerychan = control_channel;
 var sequellquerychan = control_channel;
 var logacc = {};
 var fetching = {};
@@ -1767,10 +1769,14 @@ function handle_message(nick, chan, message) {
             bot.say(chei, message);
             cheiquerychan = chan;
         }
+        if (message[0] == '@'){
+            bot.say(gretell, message);
+            gretellquerychan = chan;
+        }
 //         if (message.indexOf("!tell")==0 || message.indexOf("!messages")==0) {
 //             bot.say(chan, "Can't use this command in here, sorry");
 //         } else 
-        if ('!=&.?@^'.indexOf(message[0])>-1){
+        if ('!=&.?^'.indexOf(message[0])>-1){
             bot.say(sequell, "!RELAY -n 1 -channel "+(pm ? "msg" : chan)+" -nick "+nick+" -prefix "+chan+":"+" "+message);
         }
     }});
@@ -1812,6 +1818,11 @@ function handle_message(nick, chan, message) {
     //post chei answers
     if (chan == chei){
         bot.say(cheiquerychan, message);
+    }
+    
+    //post gretell answers
+    if (chan == gretell){
+        bot.say(gretellquerychan, message);
     }
     
     //Kramell cpo fill in (watch and rc commands)
@@ -1943,7 +1954,7 @@ function connect() {
 	db.channels.distinct('channel',function(err, chans) {
 		//bot.join(chan,null);
 		bot = new irc.Client('chat.freenode.net', botnick, {
-			channels: [control_channel,observe_channel,rawannounce_channel].concat(chans),
+			channels: [control_channel,observe_channel].concat(chans),
 			port: 8001,
 			debug: true,
 			autoRejoin: true,
