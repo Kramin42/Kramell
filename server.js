@@ -1788,7 +1788,7 @@ function handle_message(nick, chan, message) {
 //         if (message.indexOf("!tell")==0 || message.indexOf("!messages")==0) {
 //             bot.say(chan, "Can't use this command in here, sorry");
 //         } else 
-        if ('!=&.?^'.indexOf(message[0])>-1){
+        if ('!=&.?^#'.indexOf(message[0])>-1){
             bot.say(sequell, "!RELAY -n 1 -channel "+(pm ? "msg" : chan)+" -nick "+nick+" -prefix "+chan+":"+" "+message);
         }
     }});
@@ -1838,22 +1838,22 @@ function handle_message(nick, chan, message) {
     }
     
     //Kramell cpo fill in (watch and rc commands)
-    if (message[0]==='~') {
-    	//remove prefix and add username as first arg if there is none
-        var arg = message.slice(1, message.length).replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
-        
-        if (arg.length==1){
-            arg[1]=nick;
-        }
-        
-        if (arg[0]=='watch') {
-        	bot.say(chan, "https://crawl.project357.org/watch/"+arg[1]);
-        }
-        
-        if (arg[0]=='rc') {
-        	bot.say(chan, "Not working yet for CPO sorry");
-        }
-    }
+//     if (message[0]==='~') {
+//     	//remove prefix and add username as first arg if there is none
+//         var arg = message.slice(1, message.length).replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
+//         
+//         if (arg.length==1){
+//             arg[1]=nick;
+//         }
+//         
+//         if (arg[0]=='watch') {
+//         	bot.say(chan, "https://crawl.project357.org/watch/"+arg[1]);
+//         }
+//         
+//         if (arg[0]=='rc') {
+//         	bot.say(chan, "Not working yet for CPO sorry");
+//         }
+//     }
     
     //kramell csdc queries (use $)
     if ('$'.indexOf(message[0])>-1 && (chan=="##csdc" || chan=="##crawl" || chan==control_channel)) {
