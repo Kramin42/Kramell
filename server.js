@@ -1078,7 +1078,11 @@ function do_command(arg, chan, nick, admin) {
     if (arg[0]=="name" || arg[0]=="names"){
         //db.channels.find({},{"channel":1,"names":1,_id:0})
         if (chan!=control_channel) {
-        	arg = arg[1]=="-rm" ? arg.splice(2,0,chan) : arg.splice(1,0,chan);
+        	if (arg[1]=="-rm") {
+        		arg.splice(2,0,chan);
+        	} else {
+        		arg.splice(1,0,chan);
+        	}
         }
         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
@@ -1104,7 +1108,11 @@ function do_command(arg, chan, nick, admin) {
 
     if (arg[0]=="filter" || arg[0]=="filters"){
     	if (chan!=control_channel) {
-        	arg = arg[1]=="-rm" ? arg.splice(2,0,chan) : arg.splice(1,0,chan);
+        	if (arg[1]=="-rm") {
+        		arg.splice(2,0,chan);
+        	} else {
+        		arg.splice(1,0,chan);
+        	}
         }
         if (arg.length>3 || (arg.length==3 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
@@ -1131,7 +1139,11 @@ function do_command(arg, chan, nick, admin) {
   
     if (arg[0]=="colour" || arg[0]=="color" || arg[0]=="colours" || arg[0]=="colors"){
     	if (chan!=control_channel) {
-        	arg = arg[1]=="-rm" ? arg.splice(2,0,chan) : arg.splice(1,0,chan);
+        	if (arg[1]=="-rm") {
+        		arg.splice(2,0,chan);
+        	} else {
+        		arg.splice(1,0,chan);
+        	}
         }
         if (arg.length>4 || (arg.length==4 && arg[1]!="-rm")){
             if (arg[1]=="-rm"){
