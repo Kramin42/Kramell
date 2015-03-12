@@ -412,11 +412,25 @@ function process_milestone(milestone, announcer, url) {
     try {
 		//make all announcements to ##crawl-announcements
 		//console.log(JSON.stringify(stone));
+		var announcement = '';
 		if (stone['type']) {//milestone
-			bot.say(rawannounce_channel, stone_format(stone));
+			announcement = stone_format(stone);
 		} else {// death/win
-			bot.say(rawannounce_channel, log_format(stone));
+			announcement = log_format(stone);
 		}
+		//bot.say(rawannounce_channel, announcement);
+		db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
+            //get aliases
+            db.nick_aliases.distinct('aliases',{"name":name.toLowerCase()},function(err, alias){
+                alias=alias[0] ? alias[0] : name;
+                //get the actual alias in use and announce
+                if (stone['name'].search(new RegExp("^("+alias+")$", "i"))>-1){
+                    alias = stone['name'].match(new RegExp("^("+alias+")$", "i"))[1];
+                    //console.log("announcement for "+alias);
+                    route_announcement(name, alias, stone, announcement);
+                }
+        	});
+        });});
     } catch(error) {
         console.log(error);
         console.log("in milestone: "+milestone)
@@ -902,7 +916,7 @@ function csdc_enroll(name, week, callback) {
         {multi:true}, callback);
 }
 
-function csdc_announce(name, message, week) {
+function csdc_announce(name, stone, message, week) {
     //should only be one player in the week doc
     player = week['players'][0];
     points = player['points'];
@@ -914,10 +928,10 @@ function csdc_announce(name, message, week) {
     }
     
     //announce the message if they are alive and the right char, then check points after
-    announce_with_filters("##csdc", message/*, function(){check_csdc_points(name, message, week)}*/);
+    announce_with_filters("##csdc", stone, message/*, function(){check_csdc_points(name, message, week)}*/);
 }
 
-function announce_with_filters(chan, message, callback) {
+function announce_with_filters(chan, stone, message, callback) {
     //get the regexes that it must match
     db.channels.distinct('filters',{channel:chan},function(err, matches) {
         var matched = true;
@@ -943,7 +957,7 @@ function announce_with_filters(chan, message, callback) {
     });
 }
 
-function route_announcement(name, alias, message) {
+function route_announcement(name, alias, stone, message) {
     //go through the channels with the name
     db.channels.distinct('channel',{"names":{$in: [name]}}, function(err, chans) {chans.forEach(function(ch) {
         if (ch=='##csdc' && csdcrunning) {
@@ -964,7 +978,7 @@ function route_announcement(name, alias, message) {
                 //console.log(timeStamp);
                 if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
                     if (week['players'] && week['players'][0]) {
-                        csdc_announce(name, message, week);
+                        csdc_announce(name, stone, message, week);
                             //console.log("name: "+alias+", message: "+message+", weekdata: "+JSON.stringify(week));
                     }// else {
 //                         csdc_enroll(name, week, function(){
@@ -977,7 +991,7 @@ function route_announcement(name, alias, message) {
         }
         
         if (ch!="##csdc") {
-            announce_with_filters(ch, message);
+            announce_with_filters(ch, stone, message);
         }
     });});
 }
@@ -1722,18 +1736,18 @@ function handle_message(nick, chan, message) {
             
             //console.log("found announcement");
             // go through all names in all channels
-            db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
-                //get aliases
-                db.nick_aliases.distinct('aliases',{"name":name.toLowerCase()},function(err, alias){
-                    alias=alias[0] ? alias[0] : name;
-                    //get the actual alias in use and announce
-                    if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
-                        alias = message.match(new RegExp("^("+alias+") ", "i"))[1];
-                        //console.log("announcement for "+alias);
-                        route_announcement(name, alias, message);
-                    }
-                });
-            });});
+            // db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
+//                 //get aliases
+//                 db.nick_aliases.distinct('aliases',{"name":name.toLowerCase()},function(err, alias){
+//                     alias=alias[0] ? alias[0] : name;
+//                     //get the actual alias in use and announce
+//                     if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
+//                         alias = message.match(new RegExp("^("+alias+") ", "i"))[1];
+//                         //console.log("announcement for "+alias);
+//                         route_announcement(name, alias, message);
+//                     }
+//                 });
+//             });});
         }});
     }
     
