@@ -353,7 +353,7 @@ function process_milestone(milestone, announcer, url) {
     //CSDC
     //console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
-    if (milestone.match(/v=0.16-a/) && !milestone.match(/god=(Ru|Gozag)/)) {//trunk only for csdc, Ru and Gozag not allowed
+    if (milestone.match(/v=0.17-a/)) {//trunk only for csdc
         db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
             if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
             	//console.log("csdc player confirmed, "+name);
@@ -1016,6 +1016,20 @@ function do_command(arg, chan, nick, admin) {
 			bot.say(chan, "  $filter [-rm] <regex filter>");
 			bot.say(chan, "  $colour [-rm] [colour (if not -rm)] <regex filter>");
         }
+    }
+    
+    if (arg[0]=="slap") {
+		if (arg.length==1){
+			arg[1]=nick;
+		}
+		bot.action(chan, "slaps "+arg.slice(1, arg.length).join(' ')+" around a bit with a large trout");
+    }
+        
+    if (arg[0]=="dance" && chan!="##crawl") {
+		bot.say(chan, ":D|-<");
+		setTimeout(function(){bot.say(chan, ":D\\-<");}, 300);
+		setTimeout(function(){bot.say(chan, ":D/-<");}, 500);
+		setTimeout(function(){bot.say(chan, ":D\\-<");}, 700);
     }
 
     if (admin && (arg[0]=="announcer" || arg[0]=="announcers")){
@@ -1905,20 +1919,6 @@ function handle_message(nick, chan, message) {
 					announce_week(week, chan);
 				}
 			});
-        }
-        
-        if (arg[0]=="slap") {
-        	if (arg.length==1){
-            	arg[1]=nick;
-        	}
-            bot.action(chan, "slaps "+arg.slice(1, arg.length).join(' ')+" around a bit with a large trout");
-        }
-        
-        if (arg[0]=="dance" && chan!="##crawl") {
-            bot.say(chan, ":D|-<");
-            setTimeout(function(){bot.say(chan, ":D\\-<");}, 300);
-            setTimeout(function(){bot.say(chan, ":D/-<");}, 500);
-            setTimeout(function(){bot.say(chan, ":D\\-<");}, 700);
         }
         
         //if (arg[0]=="testpm") {
