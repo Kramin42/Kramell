@@ -354,7 +354,7 @@ function process_milestone(milestone, announcer, url) {
     //console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
     if (milestone.match(/v=0.17-a/)) {//trunk only for csdc
-        db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
+        db.nick_aliases.distinct('aliases',{"name":"csdc4"},function(err, aliases){
             if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
             	//console.log("csdc player confirmed, "+name);
                 //go through active weeks with the name and return only data for that player (+general data)
@@ -525,12 +525,12 @@ function check_csdc_points(name, milestone, week) {
             db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.3":1}});
         }
     }
-    // if they abandon then they lose the point, also it must be their first god to get the point
+    // if they abandon then they lose the point, ((also it must be their first god to get the point)) - not anymore
     if (milestone.search(/type=god.renounce/)>-1){
-        if (points[3]==1){
-            bot.say('##csdc', irc.colors.wrap('dark_red', name+' (L'+xl+' '+ch+') abandoned a weekly god ('+god+') and lost their point for championing'));
-            db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.3":0}});
-        }
+        //if (points[3]==1){
+        //    bot.say('##csdc', irc.colors.wrap('dark_red', name+' (L'+xl+' '+ch+') abandoned a weekly god ('+god+') and lost their point for championing'));
+        //    db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.points.3":0}});
+        //}
         db.csdc.update({"week":week["week"], "players.name":name.toLowerCase()},{$set: {"players.$.godabandon":true}});
     }
     

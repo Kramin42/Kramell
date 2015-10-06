@@ -1,0 +1,3528 @@
+{
+  "active": true,
+  "announced": true,
+  "bonusdisqual": [
+    "xl=(1[56789]|2\\d):",
+    "xl=(1[56789]|2\\d):",
+    "xl=(1[56789]|2\\d):",
+    "type=br.exit"
+  ],
+  "bonusdisqualresetqual": [
+    false,
+    false,
+    false,
+    true
+  ],
+  "bonusqual": [
+    [
+      "xl=(\\d|1[01234]):.*(br=(Lair|Orc|D|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.enter|type=abyss.enter)",
+      "xl=(\\d|1[01234]):.*(br=(Lair|Orc|D|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.enter|type=abyss.enter)",
+      "xl=(\\d|1[01234]):.*(br=(Lair|Orc|D|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.enter|type=abyss.enter)",
+      "xl=(\\d|1[01234]):.*(br=(Lair|Orc|D|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.enter|type=abyss.enter)"
+    ],
+    [
+      "xl=(\\d|1[01234]):.*(br=(Lair|Orc|D|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.enter|type=abyss.enter)",
+      "xl=(\\d|1[01234]):.*(br=(Lair|Orc|D|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.enter|type=abyss.enter)",
+      "xl=(\\d|1[01234]):.*(br=(Lair|Orc|D|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.enter|type=abyss.enter)",
+      "xl=(\\d|1[01234]):.*(br=(Lair|Orc|D|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.enter|type=abyss.enter)",
+      "xl=(\\d|1[01234]):.*(br=(Lair|Orc|D|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.enter|type=abyss.enter)",
+      "xl=(\\d|1[01234]):.*(br=(Lair|Orc|D|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.enter|type=abyss.enter)"
+    ],
+    [
+      "xl=(\\d|1[01234]):.*br=(Lair|Orc|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.end",
+      "xl=(\\d|1[01234]):.*br=(Lair|Orc|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.end",
+      "xl=(\\d|1[01234]):.*br=(Lair|Orc|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.end",
+      "xl=(\\d|1[01234]):.*br=(Lair|Orc|Vaults|Elf|Snake|Swamp|Shoals|Pan|Crypt|Zot|Spider|Slime|Depths|Tomb|Dis|Tar|Geh|Coc).*type=br.end"
+    ],
+    [
+      "type=br.enter",
+      "urune=1.*type=rune"
+    ]
+  ],
+  "bonustext": [
+    "Enter 4 branches before reaching XL 15 (1 pt).",
+    "Enter 6 branches before reaching XL 15 (2 pts).",
+    "Reach the end of 4 branches before reaching XL 15 (4 pts).",
+    "Collect your first rune without leaving that rune's branch. (6 pts)."
+  ],
+  "bonusworth": [
+    1,
+    2,
+    4,
+    6
+  ],
+  "char": "DsMo",
+  "end": NumberLong(20141206),
+  "gods": "Makhleb|Yredelemnul|Cheibriados|Dithmenos",
+  "players": [
+    {
+      "alive": true,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "jefkin",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "hilariousdeathartist",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(1),
+        NumberLong(2),
+        NumberLong(4),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "allbefore",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "dynast",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(2),
+        NumberLong(4),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        null,
+        true
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "zooty",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(2),
+        NumberLong(4),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "stickyfingers",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "cheburashka",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "leibowitz",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        null,
+        null,
+        null,
+        NumberLong(0)
+      ],
+      "tries": NumberLong(1)
+    },
+    {
+      "name": "chequers",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "wvc",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        true,
+        true,
+        true
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          null,
+          false
+        ],
+        [
+          true,
+          true,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "hypertraveller",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(1),
+        NumberInt(1),
+        NumberInt(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "mrplanck",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        null,
+        null,
+        null,
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          null,
+          false
+        ],
+        [
+          true,
+          true,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "fearitself",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        null,
+        null,
+        null,
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "blomdor",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "morganleah",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(1),
+        NumberLong(2),
+        NumberLong(4),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "moanerette",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "miek",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "ahrin",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        true,
+        true,
+        true
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": true,
+      "name": "xen",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        1,
+        2,
+        4,
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "rchandra",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "fevertrip",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "bart",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        null,
+        null,
+        null,
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "macktheknife",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "somebody",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        true,
+        true,
+        true
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "ldf",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(2),
+        NumberLong(0),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "lasty",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        null,
+        null,
+        null,
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "vidiiot",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        null,
+        true,
+        true
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "midpoint",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          null,
+          false
+        ],
+        [
+          true,
+          true,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "thrillho",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        null,
+        null,
+        null,
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "xuaxua",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "bloax",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "magicpoints",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "cerealjynx",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "tmoiy",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "strat",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "tedric",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        null,
+        null,
+        null,
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "seigurt",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "tedronai",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "csdcratboiler",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "magipi",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        null,
+        null,
+        null,
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "tabstorm",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        true,
+        true,
+        true
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "sandman25",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "aule",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberInt(1)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "puppums",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "wheals",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "mirrmurr",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "surr",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "saintroka",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "moose",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "ololoev",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "kramin",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "skarymonk",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        null,
+        true
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "drke",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        2,
+        NumberLong(4),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "sanka",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        true,
+        true,
+        true
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "fiftynine",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(1),
+        NumberLong(2),
+        NumberLong(4),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        true,
+        true,
+        true
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "teshialair",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "svalbardcaretaker",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "utis",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "asdu",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "ketsa",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        true,
+        true,
+        true
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "hackum",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "manman",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "wombat",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "krambo",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "amilir",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "twist",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "rvm",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "disco",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "matticus",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        true,
+        true,
+        true
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "robertpalmer",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "silentsnack",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "thedoctor",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "enigmoo",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "kellhus",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "sabathiel",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "rupert",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "nantukoshade",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "farquar",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "vyxor",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "mcgeekster",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        null,
+        true
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "mopl",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(2),
+        NumberLong(4),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "braveplatypus",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "spanner",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberInt(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        null,
+        null,
+        null,
+        NumberInt(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          null,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "walkerboh",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(1),
+        null,
+        NumberLong(4),
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "caleba",
+      "points": [
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "caricature",
+      "points": [
+        NumberInt(1),
+        NumberInt(1),
+        NumberInt(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberInt(1),
+        NumberInt(2),
+        null,
+        NumberInt(0)
+      ],
+      "tries": NumberInt(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "mumawsan",
+      "points": [
+        NumberInt(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "nilsbloodaxe",
+      "points": [
+        NumberInt(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "arthad",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          true,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "snack",
+      "points": [
+        NumberInt(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "tries": NumberInt(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          true,
+          true,
+          true,
+          true,
+          null,
+          false
+        ],
+        [
+          true,
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true
+        ]
+      ],
+      "godabandon": false,
+      "name": "cribozai",
+      "points": [
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(1),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(1),
+        null,
+        null,
+        NumberLong(6)
+      ],
+      "tries": NumberLong(0)
+    },
+    {
+      "name": "voterfraud",
+      "points": [
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0),
+        NumberLong(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberLong(0)
+    },
+    {
+      "alive": true,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "igxfl",
+      "points": [
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0)
+      ],
+      "tries": NumberInt(1)
+    },
+    {
+      "alive": false,
+      "bonusdisqual": [
+        
+      ],
+      "bonusqual": [
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          null,
+          null,
+          false
+        ],
+        [
+          null,
+          false
+        ]
+      ],
+      "godabandon": false,
+      "name": "lrvs",
+      "points": [
+        NumberInt(1),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0)
+      ],
+      "tries": NumberInt(0)
+    },
+    {
+      "name": "doubtofbuddha",
+      "points": [
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberInt(0)
+    },
+    {
+      "name": "sharkman1231",
+      "points": [
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0),
+        NumberInt(0)
+      ],
+      "bonusdisqual": [
+        
+      ],
+      "godabandon": false,
+      "alive": true,
+      "tries": NumberInt(0)
+    }
+  ],
+  "start": NumberLong(20141122),
+  "week": "Week 7"
+}
