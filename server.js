@@ -64,7 +64,7 @@ var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 var csdcrunning = true;
-var fetchlimit = 1024 * 500 - 1;
+var fetchlimit = 1024 * 500 - 2;
 
 var timers = {};
 var NAnick;
