@@ -1872,11 +1872,11 @@ function handle_message(nick, chan, message) {
 //     }
     
     //kramell csdc queries (use $)
-    if ('$'.indexOf(message[0])>-1 && (chan=="##csdc" || chan=="##crawl" || chan==control_channel)) {
+    if ('$'.indexOf(message[0])>-1) {
         //remove prefix and add username as first arg if there is none
         var arg = message.slice(1, message.length).replace(/ \. /g," "+nick+" ").replace(/ \.$/," "+nick).split(' ');
         
-        if (arg[0]=="help") {
+        if (arg[0]=="help" && (chan=="##csdc" || chan=="##crawl" || chan==control_channel)) {
             bot.say(chan, "csdc commands: $points <player>, $week <week num>");
         }
         
