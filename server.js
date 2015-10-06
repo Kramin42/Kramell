@@ -954,6 +954,8 @@ function announce_with_filters(chan, stone, message, callback) {
                         colour = colourmap[match];
                     }
                 }
+                //antiping, put a zero width space in the name
+                [message[0],message.slice(1)].join('\u200B');
                 bot.say(chan, irc.colors.wrap(colour, message));
                 if (callback) {callback();}
             });
