@@ -64,7 +64,7 @@ var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 var csdcrunning = true;
-var fetchlimit = 4095;
+var fetchlimit = 400000;
 
 var timers = {};
 var NAnick;
@@ -226,7 +226,7 @@ function get_logfile_offset(announcer, url) {
 }
 
 function get_server_logs(announcer) {
-	var delay = 10;
+	var delay = 30;
 // 	if (fetching[announcer]) {//don't want simultaneous fetches breaking things
 //     	console.log("preventing simultaneous fetch for "+announcer);
 //     	if (timers[announcer]) {
