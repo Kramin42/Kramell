@@ -226,6 +226,7 @@ function get_logfile_offset(announcer, url) {
 }
 
 function get_server_logs(announcer) {
+	return;
 	var delay = 20;
 // 	if (fetching[announcer]) {//don't want simultaneous fetches breaking things
 //     	console.log("preventing simultaneous fetch for "+announcer);
