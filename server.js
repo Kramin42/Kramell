@@ -64,7 +64,7 @@ var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 var csdcrunning = true;
-var fetchlimit = 400000;
+var fetchlimit = 1024 * 500 - 1;
 
 var timers = {};
 var NAnick;
@@ -262,7 +262,7 @@ function get_server_logs(announcer) {
 
             //child.stdout.on('data', function (data) {
             var upperlimit = file["offset"]+fetchlimit;
-            exec('curl -sr '+file["offset"]+'-'+upperlimit+' '+file["url"], function (error, data, stderr) {
+            exec('curl -sr '+file["offset"]+'-'+upperlimit+' '+file["url"], {maxBuffer: fetchlimit}, function (error, data, stderr) {
             	if (error) {console.log('Error: '+error);}
             	if (stderr) {console.log('STDERR: '+error);}
             	//if (announcer=='Prequell') {console.log('Prequell data: '+data);}
