@@ -995,7 +995,7 @@ function route_announcement(name, alias, stone, message) {
         }
         
         if (ch!="##csdc") {
-            //announce_with_filters(ch, stone, message);
+            announce_with_filters(ch, stone, message);
         }
     });});
 }
