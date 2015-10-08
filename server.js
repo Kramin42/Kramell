@@ -1623,26 +1623,26 @@ function do_command(arg, chan, nick, admin) {
 					//console.log(player["name"]);
 					score = player["points"].reduce(function(a,b,i){return a+b;},0);
 					if (!scores[0]){
-						scores.push([player["name"],score + (player["alive"] ? " (in prog.)" : "")]);
+						scores.push([player["name"],score,player["alive"]]);
 						return;
 					}
 					
 					inserted = false;
 					for (i=0;i<scores.length;i++){
 						if (score > scores[i][1]){
-							scores.splice(i,0,[player["name"],score + (player["alive"] ? " (in prog.)" : "")]);
+							scores.splice(i,0,[player["name"],score,player["alive"]]);
 							inserted = true;
 							break;
 						}
 					}
-					if (!inserted){scores.push([player["name"],score + (player["alive"] ? " (in prog.)" : "")]);}
+					if (!inserted){scores.push([player["name"],score,player["alive"]]);}
 				});
 				//console.log(scores);
 					
 				pstr = "Top scores for " + week["week"] + ": ";
 				for (i=0;i<10;i++){
 					if (i!=0){pstr+=" | ";}
-					pstr += scores[i][0] + ": " + scores[i][1];
+					pstr += scores[i][0] + ": " + scores[i][1] + (scores[i][2] ? " (in prog.)" : "");
 				}
 				bot.say(chan, pstr);
 			}
