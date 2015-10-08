@@ -1789,7 +1789,7 @@ function announce_week(week, chan) {
 }
 
 function handle_message(nick, chan, message) {
-	pm = false;
+	var pm = false;
 	if (chan==botnick) {chan=nick; pm=true;}
 	
     if(  message.indexOf('Hello '+botnick) > -1
