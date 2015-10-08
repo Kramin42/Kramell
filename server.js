@@ -1613,9 +1613,10 @@ function do_command(arg, chan, nick, admin) {
     //CSDC commands
     if (arg[0]=="csdc" && chan=="##csdc"){
     	regex = arg.length>1 ? new RegExp(arg.slice(1,arg.length).join(' '),"i") : /.*/;
-        //console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
+        console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
 		db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1).toArray().then(function(weeks) {
 			week = weeks[0];
+			console.log(week["name"]);
 			if (week) {
 				scores = [];
 				week["players"].foreach(function(player){
