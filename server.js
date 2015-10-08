@@ -1613,31 +1613,31 @@ function do_command(arg, chan, nick, admin) {
     //CSDC commands
     if (arg[0]=="csdc" && chan=="##csdc"){
     	regex = arg.length>1 ? new RegExp(arg.slice(1,arg.length).join(' '),"i") : /.*/;
-        console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
+        //console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
 		db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}, "active": true}).sort({"start":-1}).limit(1).toArray().then(function(weeks) {
 			week = weeks[0];
-			console.log(week["week"]);
+			//console.log(week["week"]);
 			if (week) {
 				scores = [];
 				week["players"].forEach(function(player){
-					console.log(player["name"]);
+					//console.log(player["name"]);
 					score = player["points"].reduce(function(a,b,i){return a+b;},0);
 					if (!scores[0]){
-						scores.push([player["name"],score]);
+						scores.push([player["name"],score + (player["alive"] ? " (in prog.)" : "")]);
 						return;
 					}
 					
 					inserted = false;
 					for (i=0;i<scores.length;i++){
 						if (score > scores[i][1]){
-							scores.splice(i,0,[player["name"],score]);
+							scores.splice(i,0,[player["name"],score + (player["alive"] ? " (in prog.)" : "")]);
 							inserted = true;
 							break;
 						}
 					}
-					if (!inserted){scores.push([player["name"],score]);}
+					if (!inserted){scores.push([player["name"],score + (player["alive"] ? " (in prog.)" : "")]);}
 				});
-				console.log(scores);
+				//console.log(scores);
 					
 				pstr = "Top scores for " + week["week"] + ": ";
 				for (i=0;i<10;i++){
