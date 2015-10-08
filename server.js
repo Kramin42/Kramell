@@ -1639,10 +1639,10 @@ function do_command(arg, chan, nick, admin) {
 				});
 				console.log(scores);
 					
-				pstr = "Scores for " + week["week"] + ": ";
-				for (i=0;i<scores.length;i++){
+				pstr = "Top scores for " + week["week"] + ": ";
+				for (i=0;i<10;i++){
 					if (i!=0){pstr+=" | ";}
-					pstr += scores[i][0] + ": " + scores[i][0];
+					pstr += scores[i][0] + ": " + scores[i][1];
 				}
 				bot.say(chan, pstr);
 			}
