@@ -64,7 +64,7 @@ var control_channel = "##kramell";
 var forbidden = ['##crawl','##crawl-dev','##crawl-sequell'];
 
 var csdcrunning = true;
-var fetchlimit = 1024 * 200 - 2;
+var fetchlimit = 1024 * 100 - 2;
 
 var timers = {};
 var NAnick;
@@ -1524,7 +1524,7 @@ function do_command(arg, chan, nick, admin) {
     	});
     }
     
-    if (arg[0]=='scores'  && (chan=="##dieselrobin" || admin)) {
+    if (arg[0]=='scores'  && (chan=="##dieselrobin")) {
      	db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
      		var scores = [];
      		//console.log(teams.length);
@@ -1611,6 +1611,42 @@ function do_command(arg, chan, nick, admin) {
 //     }
     
     //CSDC commands
+    if (arg[0]=="csdc" && chan=="##csdc"){
+    	regex = arg.length>1 ? new RegExp(arg.slice(1,arg.length).join(' '),"i") : /.*/;
+        //console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
+		db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1).toArray().then(function(weeks) {
+			week = weeks[0];
+			if (week) {
+				scores = [];
+				week["players"].foreach(function(player){
+					if (!scores[0]){
+						scores[0][0] = player["name"];
+						scores[0][1] = player["points"].reduce(function(a,b,i){return a+b;},0);
+						return;
+					}
+					
+					inserted = false;
+					score = player["points"].reduce(function(a,b,i){return a+b;},0);
+					for (i=0;i<scores.length;i++){
+						if (score > scores[i][1]){
+							scores.splice(i,0,[player["name"],score])
+							inserted = true;
+							break;
+						}
+					}
+					if (!inserted){scores.push([player["name"],score]);}
+					
+					pstr = "Scores for " + week["week"] + ": ";
+					for (i=0;i<scores.length;i++){
+						if (i!=0){pstr+=" | ";}
+						pstr += scores[i][0] + ": " + scores[i][0]
+					}
+					bot.say(chan, pstr);
+				});
+			}
+		});
+    }
+    
     if (admin && arg[0]=="csdcon") {
         if (arg.length>1) {
             //arg[1] = arg.slice(1, arg.length).join(' ');
