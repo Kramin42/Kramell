@@ -1616,7 +1616,7 @@ function do_command(arg, chan, nick, admin) {
         console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
 		db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).sort({"start":-1}).limit(1).toArray().then(function(weeks) {
 			week = weeks[0];
-			console.log(week["name"]);
+			console.log(week["week"]);
 			if (week) {
 				scores = [];
 				week["players"].foreach(function(player){
@@ -1630,17 +1630,18 @@ function do_command(arg, chan, nick, admin) {
 					score = player["points"].reduce(function(a,b,i){return a+b;},0);
 					for (i=0;i<scores.length;i++){
 						if (score > scores[i][1]){
-							scores.splice(i,0,[player["name"],score])
+							scores.splice(i,0,[player["name"],score]);
 							inserted = true;
 							break;
 						}
 					}
 					if (!inserted){scores.push([player["name"],score]);}
+					console.log(scores);
 					
 					pstr = "Scores for " + week["week"] + ": ";
 					for (i=0;i<scores.length;i++){
 						if (i!=0){pstr+=" | ";}
-						pstr += scores[i][0] + ": " + scores[i][0]
+						pstr += scores[i][0] + ": " + scores[i][0];
 					}
 					bot.say(chan, pstr);
 				});
