@@ -1619,7 +1619,7 @@ function do_command(arg, chan, nick, admin) {
 			console.log(week["week"]);
 			if (week) {
 				scores = [];
-				week["players"].foreach(function(player){
+				week["players"].forEach(function(player){
 					if (!scores[0]){
 						scores[0][0] = player["name"];
 						scores[0][1] = player["points"].reduce(function(a,b,i){return a+b;},0);
@@ -1636,15 +1636,15 @@ function do_command(arg, chan, nick, admin) {
 						}
 					}
 					if (!inserted){scores.push([player["name"],score]);}
-					console.log(scores);
-					
-					pstr = "Scores for " + week["week"] + ": ";
-					for (i=0;i<scores.length;i++){
-						if (i!=0){pstr+=" | ";}
-						pstr += scores[i][0] + ": " + scores[i][0];
-					}
-					bot.say(chan, pstr);
 				});
+				console.log(scores);
+					
+				pstr = "Scores for " + week["week"] + ": ";
+				for (i=0;i<scores.length;i++){
+					if (i!=0){pstr+=" | ";}
+					pstr += scores[i][0] + ": " + scores[i][0];
+				}
+				bot.say(chan, pstr);
 			}
 		});
     }
