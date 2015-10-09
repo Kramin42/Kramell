@@ -1345,7 +1345,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$teams
-    if (arg[0]=='teams' && (chan=="##dieselrobin" || chan="##crawl" || admin)) {
+    if (arg[0]=='teams' && (chan=="##dieselrobin" || chan=="##crawl" || admin)) {
     	db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
     		teamlist = '';
     		teams.forEach(function(team) {
@@ -1360,7 +1360,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$team [team name|player name]
-    if (arg[0]=='team' && (chan=="##dieselrobin" || chan="##crawl" || admin)) {
+    if (arg[0]=='team' && (chan=="##dieselrobin" || chan=="##crawl" || admin)) {
     	if (arg.length==1) {
     		arg[1] = nick;
     	}
@@ -1524,7 +1524,7 @@ function do_command(arg, chan, nick, admin) {
     	});
     }
     
-    if (arg[0]=='scores'  && (chan=="##dieselrobin" || chan="##crawl")) {
+    if (arg[0]=='scores'  && (chan=="##dieselrobin" || chan=="##crawl")) {
      	db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
      		var scores = [];
      		//console.log(teams.length);
@@ -1611,7 +1611,7 @@ function do_command(arg, chan, nick, admin) {
 //     }
     
     //CSDC commands
-    if (arg[0]=="csdc" && chan=="##csdc"){
+    if (arg[0]=="csdc"){
     	regex = arg.length>1 ? new RegExp(arg.slice(1,arg.length).join(' '),"i") : /.*/;
         //console.log(arg.length>1 ? arg.slice(1,arg.length).join(' ') : "default");
 		db.csdc.find({"week": regex, "start": {$lte: getTimeStamp()}, "active": true}).sort({"start":-1}).limit(1).toArray().then(function(weeks) {
@@ -1966,7 +1966,7 @@ function handle_message(nick, chan, message) {
         //}
     }
 
-    if (chan!=observe_channel && '$'.indexOf(message[0])>-1){
+    if ('$'.indexOf(message[0])>-1){
         //remove prefix and handle " "
         arg = message.slice(1, message.length).trim().split('\"');
         arg = arg.map(function(val,index) {return index%2==0 ? val : val.replace(/ /g, 'SPCSPCSPC');});
