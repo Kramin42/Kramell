@@ -354,7 +354,7 @@ function process_milestone(milestone, announcer, url) {
     //console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
     if (milestone.match(/v=0.17-a/)) {//trunk only for csdc
-        db.nick_aliases.distinct('aliases',{"name":"csdc4"},function(err, aliases){
+        db.nick_aliases.distinct('aliases',{"name":"csdc"},function(err, aliases){
             if (milestone.search(new RegExp("name=("+aliases[0]+"):", "i"))>-1){
             	//console.log("csdc player confirmed, "+name);
                 //go through active weeks with the name and return only data for that player (+general data)
