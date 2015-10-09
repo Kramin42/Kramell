@@ -1345,7 +1345,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$teams
-    if (arg[0]=='teams' && (chan=="##dieselrobin" || admin)) {
+    if (arg[0]=='teams' && (chan=="##dieselrobin" || chan="##crawl" || admin)) {
     	db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
     		teamlist = '';
     		teams.forEach(function(team) {
@@ -1360,7 +1360,7 @@ function do_command(arg, chan, nick, admin) {
     }
     
     //$team [team name|player name]
-    if (arg[0]=='team' && (chan=="##dieselrobin" || admin)) {
+    if (arg[0]=='team' && (chan=="##dieselrobin" || chan="##crawl" || admin)) {
     	if (arg.length==1) {
     		arg[1] = nick;
     	}
@@ -1524,7 +1524,7 @@ function do_command(arg, chan, nick, admin) {
     	});
     }
     
-    if (arg[0]=='scores'  && (chan=="##dieselrobin")) {
+    if (arg[0]=='scores'  && (chan=="##dieselrobin" || chan="##crawl")) {
      	db.dieselrobin.find({'team': {$exists: true}}).toArray().then(function(teams) {
      		var scores = [];
      		//console.log(teams.length);
