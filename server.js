@@ -2213,13 +2213,13 @@ var SampleApp = function() {
                 	console.log(week);
             		tablist += '<li role="presentation"><a href="#'+week.replace(' ', '_')+'" role="tab" data-toggle="tab">'+week+'</a></li>';
             		//console.log(week+", 2");
-            		tabcontent += '<div role="tabpanel" class="tab-pane" id="'+week.replace(' ', '_')+'">'+"<table>"+weektables[week]+"</table>"+'</div>';
+            		tabcontent += '<div role="tabpanel" class="tab-pane" id="'+week.replace(' ', '_')+'">'+'<table class="table table-hover">'+weektables[week]+"</table>"+'</div>';
             		//console.log(week+", 3");
             		overalltableheader += "<th>"+week+"</th>";
             		//console.log(week+", 4");
             	}}
                 overalltableheader += "<th>Total</th></tr>";
-                overalltable = "<table>"+ overalltableheader + overalltable +"</table>";
+                overalltable = '<table class="table table-hover">'+ overalltableheader + overalltable +"</table>";
                 tabcontent = '<div role="tabpanel" class="tab-pane active" id="overall">'+overalltable+'</div>' + tabcontent;
                 console.log("TABLIST: "+tablist);
                 console.log("TABCONTENT: "+tabcontent);
