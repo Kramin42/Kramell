@@ -2195,7 +2195,7 @@ var SampleApp = function() {
                 	overalltable += "<tr>" + "<td>"+p+"</td>";
                 	for (var w in players[p]) {if (players[p].hasOwnProperty(w)) {
                 		if (!weektables[w]) {
-                			weektables[w] = "<tr>  <th>Player</th>    <th>Points</th> <th>uniq</th> <th>br.enter</th> <th>br.end</th> <th>god</th> <th>rune</th> <th>3 runes</th> <th>win</th> <th>T1</th> <th>T2</th></tr>";
+                			weektables[w] = '<tr>  <th>Player</th>    <th data-sorted="true" data-sorted-direction="descending">Points</th> <th>uniq</th> <th>br.enter</th> <th>br.end</th> <th>god</th> <th>rune</th> <th>3 runes</th> <th>win</th> <th>T1</th> <th>T2</th></tr>';
                 		}
                 		s = "";
                 		for (var i=0; i<players[p][w].length; i++){
@@ -2213,13 +2213,13 @@ var SampleApp = function() {
                 	console.log(week);
             		tablist += '<li role="presentation"><a href="#'+week.replace(' ', '_')+'" role="tab" data-toggle="tab">'+week+'</a></li>';
             		//console.log(week+", 2");
-            		tabcontent += '<div role="tabpanel" class="tab-pane" id="'+week.replace(' ', '_')+'">'+'<table class="table table-hover table-condensed">'+weektables[week]+"</table>"+'</div>';
+            		tabcontent += '<div role="tabpanel" class="tab-pane" id="'+week.replace(' ', '_')+'">'+'<table class="table table-hover table-condensed" data-sortable>'+weektables[week]+"</table>"+'</div>';
             		//console.log(week+", 3");
             		overalltableheader += "<th>"+week+"</th>";
             		//console.log(week+", 4");
             	}}
-                overalltableheader += "<th>Total</th></tr>";
-                overalltable = '<table class="table table-hover table-condensed">'+ overalltableheader + overalltable +"</table>";
+                overalltableheader += '<th data-sorted="true" data-sorted-direction="descending">Total</th></tr>';
+                overalltable = '<table class="table table-hover table-condensed" data-sortable>'+ overalltableheader + overalltable +"</table>";
                 tabcontent = '<div role="tabpanel" class="tab-pane active" id="overall">'+overalltable+'</div>' + tabcontent;
                 console.log("TABLIST: "+tablist);
                 console.log("TABCONTENT: "+tabcontent);
