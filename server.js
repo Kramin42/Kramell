@@ -2211,7 +2211,7 @@ var SampleApp = function() {
                 }}
                 for (var week in weektables){if (weektables.hasOwnProperty(week)) {
                 	console.log(week);
-            		tablist += '<li role="presentation" class="active"><a href="#'+week.replace(' ', '_')+'" role="tab" data-toggle="tab">'+week+'</a></li>';
+            		tablist += '<li role="presentation"><a href="#'+week.replace(' ', '_')+'" role="tab" data-toggle="tab">'+week+'</a></li>';
             		//console.log(week+", 2");
             		tabcontent += '<div role="tabpanel" class="tab-pane" id="'+week.replace(' ', '_')+'">'+"<table>"+weektables[week]+"</table>"+'</div>';
             		//console.log(week+", 3");
