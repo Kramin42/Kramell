@@ -2211,9 +2211,9 @@ var SampleApp = function() {
                 }}
                 for (week in weektables){if (weektables.hasOwnProperty(week)) {
                 	console.log(week);
-            		tablist += '<li role="presentation" class="active"><a href="#'+w.replace(' ', '_')+'" role="tab" data-toggle="tab">'+w+'</a></li>';
-            		tabcontent += '<div role="tabpanel" class="tab-pane active" id="'+w.replace(' ', '_')+'">'+"<table>"+weektables[week]+"</table>"+'</div>';
-            		overalltableheader += "<th>"+w+"</th>";
+            		tablist += '<li role="presentation" class="active"><a href="#'+week.replace(' ', '_')+'" role="tab" data-toggle="tab">'+week+'</a></li>';
+            		tabcontent += '<div role="tabpanel" class="tab-pane active" id="'+week.replace(' ', '_')+'">'+"<table>"+weektables[week]+"</table>"+'</div>';
+            		overalltableheader += "<th>"+week+"</th>";
             	}}
                 overalltableheader += "<th>Total</th></tr>";
                 overalltable = "<table>"+ overalltableheader + overalltable +"</table>";
