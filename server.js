@@ -2187,7 +2187,7 @@ var SampleApp = function() {
                         }
                 });
                 overalltable = "";
-                overaltableheader = "<tr><th>Player</th>"
+                overalltableheader = "<tr><th>Player</th>"
                 weektables = {};
                 for (var p in players) {if (players.hasOwnProperty(p)) {
                 	console.log("scanning player "+p);
@@ -2209,14 +2209,14 @@ var SampleApp = function() {
                 	}}
                 	overalltable += "<td>"+totalscore+"</td>" + "</tr>";
                 }}
-                for (var week in weektables){console.log(week+", 0"); if (weektables.hasOwnProperty(week)) {
-                	console.log(week+", 1");
+                for (var week in weektables){if (weektables.hasOwnProperty(week)) {
+                	console.log(week);
             		tablist += '<li role="presentation" class="active"><a href="#'+week.replace(' ', '_')+'" role="tab" data-toggle="tab">'+week+'</a></li>';
-            		console.log(week+", 2");
+            		//console.log(week+", 2");
             		tabcontent += '<div role="tabpanel" class="tab-pane active" id="'+week.replace(' ', '_')+'">'+"<table>"+weektables[week]+"</table>"+'</div>';
-            		console.log(week+", 3");
+            		//console.log(week+", 3");
             		overalltableheader += "<th>"+week+"</th>";
-            		console.log(week+", 4");
+            		//console.log(week+", 4");
             	}}
                 overalltableheader += "<th>Total</th></tr>";
                 overalltable = "<table>"+ overalltableheader + overalltable +"</table>";
