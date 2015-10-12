@@ -2172,7 +2172,6 @@ var SampleApp = function() {
         };
         
         self.routes['/csdc/scoreboard'] = function(req, res) {
-            res.setHeader('Content-Type', 'text/html');
             db.csdc.find().toArray().then(function(weeks) {
             	console.log("building scoreboard from "+weeks.length+" weeks");
             	var tablist = "";
@@ -2211,15 +2210,18 @@ var SampleApp = function() {
                 	overalltable += "<td>"+totalscore+"</td>" + "</tr>";
                 }}
                 for (week in weektables){if (weektables.hasOwnProperty(week)) {
+                	console.log(week);
             		tablist += '<li role="presentation" class="active"><a href="#'+w.replace(' ', '_')+'" role="tab" data-toggle="tab">'+w+'</a></li>';
-            		tabcontent += '<div role="tabpanel" class="tab-pane active" id="'+w.replace(' ', '_')+'">'+weektables[week]+'</div>';
+            		tabcontent += '<div role="tabpanel" class="tab-pane active" id="'+w.replace(' ', '_')+'">'+"<table>"+weektables[week]+"</table>"+'</div>';
             		overalltableheader += "<th>"+w+"</th>";
             	}}
                 overalltableheader += "<th>Total</th></tr>";
                 overalltable = "<table>"+ overalltableheader + overalltable +"</table>";
                 tabcontent = '<div role="tabpanel" class="tab-pane active" id="overall">'+overalltable+'</div>' + tabcontent;
+                console.log(tablist);
+                console.log(tabcontent);
                 var result = self.cache_get('csdc/scoreboardtemplate.htm').replace('##TABLIST##', tablist).replace('##TABCONTENT##', tabcontent);
-                console.log(result);
+                res.setHeader('Content-Type', 'text/html');
                 res.send(result);
             });
         };
