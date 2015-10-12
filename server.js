@@ -1945,8 +1945,8 @@ function handle_message(nick, chan, message) {
             });
         }
         
-        if (arg[0]=="scoreboard" || arg[0]=="scorepage") {
-            bot.say(chan, "http://rob.pecknology.net/csdc/");
+        if (arg[0]=="scoreboard" || arg[0]=="scorepage" || arg[0]=="scoresheet") {
+            bot.say(chan, "http://kramell.mooo.com/csdc/scoreboard");
         }
         
         if (arg[0]=="info" || arg[0]=="week") {
