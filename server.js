@@ -2080,6 +2080,8 @@ var SampleApp = function() {
         self.zcache['dieselrobin/bonus.md'] = fs.readFileSync('./dieselrobin/bonus.md', 'utf8');
         self.zcache['dieselrobin/workflow.md'] = fs.readFileSync('./dieselrobin/workflow.md', 'utf8');
         self.zcache['strapdown.html'] = fs.readFileSync('./strapdown.html', 'utf8');
+        self.zcache['csdc/scoreboardtemplate.htm'] = fs.readFileSync('./csdc/scoreboardtemplate.htm', 'utf8');
+        self.zcache['csdc/scoreboard.css'] = fs.readFileSync('./csdc/scoreboard.css', 'utf8');
     };
 
 
@@ -2167,6 +2169,15 @@ var SampleApp = function() {
         self.routes['/dieselrobin/workflow'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
             res.send(self.strapdownize(self.cache_get('dieselrobin/workflow.md')));
+        };
+        
+        self.routes['/csdc/scoreboard'] = function(req, res) {
+            res.setHeader('Content-Type', 'text/html');
+            res.send(self.strapdownize(self.cache_get('csdc/scoreboardtemplate.htm')));
+        };
+        self.routes['/csdc/scoreboard.css'] = function(req, res) {
+            res.setHeader('Content-Type', 'text/html');
+            res.send(self.strapdownize(self.cache_get('csdc/scoreboard.css')));
         };
     };
 
