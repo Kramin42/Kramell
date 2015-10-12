@@ -2218,7 +2218,9 @@ var SampleApp = function() {
                 overalltableheader += "<th>Total</th></tr>";
                 overalltable = "<table>"+ overalltableheader + overalltable +"</table>";
                 tabcontent = '<div role="tabpanel" class="tab-pane active" id="overall">'+overalltable+'</div>' + tabcontent;
-                res.send(self.cache_get('csdc/scoreboardtemplate.htm').replace('##TABLIST##', tablist).replace('##TABCONTENT##', tabcontent));
+                var result = self.cache_get('csdc/scoreboardtemplate.htm').replace('##TABLIST##', tablist).replace('##TABCONTENT##', tabcontent);
+                console.log(result);
+                res.send(result);
             });
         };
         self.routes['/csdc/scoreboard.css'] = function(req, res) {
