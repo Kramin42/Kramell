@@ -2195,7 +2195,7 @@ var SampleApp = function() {
                 	overalltable += "<tr>" + "<td>"+p+"</td>";
                 	for (var w in players[p]) {if (players[p].hasOwnProperty(w)) {
                 		if (!weektables[w]) {
-                			weektables[w] = '<tr>  <th>Player</th>    <th data-sorted="true" data-sorted-direction="descending">Points</th> <th>uniq</th> <th>br.enter</th> <th>br.end</th> <th>god</th> <th>rune</th> <th>3 runes</th> <th>win</th> <th>T1</th> <th>T2</th></tr>';
+                			weektables[w] = '<tr>  <th>Player</th>    <th data-sorted="true" data-sorted-direction="descending" data-sortable-type="numeric">Points</th> <th>uniq</th> <th>br.enter</th> <th>br.end</th> <th>god</th> <th>rune</th> <th>3 runes</th> <th>win</th> <th>T1</th> <th>T2</th></tr>';
                 		}
                 		s = "";
                 		for (var i=0; i<players[p][w].length; i++){
@@ -2218,7 +2218,7 @@ var SampleApp = function() {
             		overalltableheader += "<th>"+week+"</th>";
             		//console.log(week+", 4");
             	}}
-                overalltableheader += '<th data-sorted="true" data-sorted-direction="descending">Total</th></tr>';
+                overalltableheader += '<th data-sorted="true" data-sorted-direction="descending" data-sortable-type="numeric">Total</th></tr>';
                 overalltable = '<table class="table table-hover table-condensed" data-sortable>'+ overalltableheader + overalltable +"</table>";
                 tabcontent = '<div role="tabpanel" class="tab-pane active" id="overall">'+overalltable+'</div>' + tabcontent;
                 console.log("TABLIST: "+tablist);
