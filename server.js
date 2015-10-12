@@ -2174,6 +2174,7 @@ var SampleApp = function() {
         self.routes['/csdc/scoreboard'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
             db.csdc.find().toArray().then(function(weeks) {
+            	console.log("building scoreboard from "+weeks.length+" weeks");
             	var tablist = "";
             	var tabcontent = "";
             	tablist += '<li role="presentation" class="active"><a href="#overall" aria-controls="overall" role="tab" data-toggle="tab">Overall</a></li>';
@@ -2190,6 +2191,7 @@ var SampleApp = function() {
                 overaltableheader = "<tr><th>Player</th>"
                 weektables = {};
                 for (var p in players) {if (players.hasOwnProperty(p)) {
+                	console.log("scanning player "+p);
                 	var totalscore = 0;
                 	overalltable += "<tr>" + "<td>"+p+"</td>";
                 	for (var w in players[p]) {if (players[p].hasOwnProperty(w)) {
@@ -2201,6 +2203,7 @@ var SampleApp = function() {
                 			s += "<td>"+players[p][w][i]+"</td>";
                 		}
                 		var pointsum = players[p][w].reduce(function(a,b,i){return a+b;},0);
+                		console.log(w+": "+pointsum);
                 		weektables[w] += "<tr>" + "<td>"+p+"</td>" + "<td>"+pointsum+"</td>" + s + "</tr>";
                 		overalltable += "<td>"+pointsum+"</td>";
                 		totalscore += pointsum;
