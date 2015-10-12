@@ -2173,11 +2173,11 @@ var SampleApp = function() {
         
         self.routes['/csdc/scoreboard'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
-            res.send(self.strapdownize(self.cache_get('csdc/scoreboardtemplate.htm')));
+            res.send(self.cache_get('csdc/scoreboardtemplate.htm'));
         };
         self.routes['/csdc/scoreboard.css'] = function(req, res) {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(self.strapdownize(self.cache_get('csdc/scoreboard.css')));
+            res.setHeader('Content-Type', 'text/css');
+            res.send(self.cache_get('csdc/scoreboard.css'));
         };
     };
 
