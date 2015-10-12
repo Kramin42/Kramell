@@ -2173,7 +2173,51 @@ var SampleApp = function() {
         
         self.routes['/csdc/scoreboard'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
-            res.send(self.cache_get('csdc/scoreboardtemplate.htm'));
+            db.csdc.find().toArray().then(function(weeks) {
+            	var tablist = "";
+            	var tabcontent = "";
+            	tablist += '<li role="presentation" class="active"><a href="#overall" aria-controls="overall" role="tab" data-toggle="tab">Overall</a></li>';
+            	var players = {};
+                weeks.forEach(function(week) {
+                        if (week && week["players"] && week["players"][0] && week["week"].match(/(\d+)/)) {
+                        	week["players"].forEach(function(player){
+                        		if (!players[player["name"]]) {players[player["name"]] = {};}
+                        		players[player["name"]][week["week"]] = player['points'];
+                        	});
+                        }
+                });
+                overalltable = "";
+                overaltableheader = "<tr><th>Player</th>"
+                weektables = {};
+                for (var p in players) {if (players.hasOwnProperty(p)) {
+                	var totalscore = 0;
+                	overalltable += "<tr>" + "<td>"+p+"</td>";
+                	for (var w in players[p]) {if (players[p].hasOwnProperty(w)) {
+                		if (!weektables[w]) {
+                			weektables[w] = "<tr>  <th>Player</th>    <th>Points</th> <th>uniq</th> <th>br.enter</th> <th>br.end</th> <th>god</th> <th>rune</th> <th>3 runes</th> <th>win</th> <th>T1</th> <th>T2</th></tr>";
+                		}
+                		s = "";
+                		for (var i=0; i<players[p][w].length; i++){
+                			s += "<td>"+players[p][w][i]+"</td>";
+                		}
+                		var pointsum = players[p][w].reduce(function(a,b,i){return a+b;},0);
+                		weektables[w] += "<tr>" + "<td>"+p+"</td>" + "<td>"+pointsum+"</td>" + s + "</tr>";
+                		overalltable += "<td>"+pointsum+"</td>";
+                		totalscore += pointsum;
+                	}}
+                	overalltable += "<td>"+totalscore+"</td>" + "</tr>";
+                }}
+                for (week in weektables){if (weektables.hasOwnProperty(week)) {
+            		tablist += '<li role="presentation" class="active"><a href="#'+w.replace(' ', '_')+'" role="tab" data-toggle="tab">'+w+'</a></li>';
+            		tabcontent += '<div role="tabpanel" class="tab-pane active" id="'+w.replace(' ', '_')+'">'+weektables[week]+'</div>';
+            		overalltableheader += "<th>"+w+"</th>";
+            	}}
+                overalltableheader += "<th>Total</th></tr>";
+                overalltable = "<table>"+ overalltableheader + overalltable +"</table>";
+                tabcontent = '<div role="tabpanel" class="tab-pane active" id="overall">'+overalltable+'</div>' + tabcontent;
+            });
+            
+            res.send(self.cache_get('csdc/scoreboardtemplate.htm').replace('##TABLIST##', tablist).replace('##TABCONTENT##', tabcontent));
         };
         self.routes['/csdc/scoreboard.css'] = function(req, res) {
             res.setHeader('Content-Type', 'text/css');
