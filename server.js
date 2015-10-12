@@ -2178,14 +2178,21 @@ var SampleApp = function() {
             	var tabcontent = "";
             	tablist += '<li role="presentation" class="active"><a href="#overall" aria-controls="overall" role="tab" data-toggle="tab">Overall</a></li>';
             	var players = {};
+            	weeklist = [];
                 weeks.forEach(function(week) {
                         if (week && week["players"] && week["players"][0] && week["week"].match(/(\d+)/)) {
+                        	if (arrValues.indexOf(week['week']) == -1) {
+                        		weeklist.push(week['week']);
+                        	}
                         	week["players"].forEach(function(player){
                         		if (!players[player["name"]]) {players[player["name"]] = {};}
                         		players[player["name"]][week["week"]] = player['points'];
                         	});
                         }
                 });
+                
+                //fill in missing
+                
                 overalltable = "";
                 overalltableheader = "<tr><th>Player</th>"
                 weektables = {};
@@ -2193,12 +2200,13 @@ var SampleApp = function() {
                 	console.log("scanning player "+p);
                 	var totalscore = 0;
                 	overalltable += "<tr>" + "<td>"+p+"</td>";
-                	for (var w in players[p]) {if (players[p].hasOwnProperty(w)) {
+                	weeklist.forEach(function(w) {if (players[p].hasOwnProperty(w)) {
                 		if (!weektables[w]) {
-                			weektables[w] = '<tr>  <th>Player</th>    <th data-sorted="true" data-sorted-direction="descending" data-sortable-type="numeric">Points</th> <th>uniq</th> <th>br.enter</th> <th>br.end</th> <th>god</th> <th>rune</th> <th>3 runes</th> <th>win</th> <th>T1</th> <th>T2</th></tr>';
+                			weektables[w] = '<tr>  <th>Player</th>    <th>Points</th> <th>uniq</th> <th>br.enter</th> <th>br.end</th> <th>god</th> <th>rune</th> <th>3 runes</th> <th>win</th> <th>T1</th> <th>T2</th></tr>';
                 		}
                 		s = "";
-                		for (var i=0; i<players[p][w].length; i++){
+                		for (var i=0; i<9; i++){
+                			if (!players[p][w][i]){players[p][w][i] = 0;}
                 			s += "<td>"+players[p][w][i]+"</td>";
                 		}
                 		var pointsum = players[p][w].reduce(function(a,b,i){return a+b;},0);
@@ -2206,7 +2214,9 @@ var SampleApp = function() {
                 		weektables[w] += "<tr>" + "<td>"+p+"</td>" + "<td>"+pointsum+"</td>" + s + "</tr>";
                 		overalltable += "<td>"+pointsum+"</td>";
                 		totalscore += pointsum;
-                	}}
+                	} else {
+                		overalltable += "<td>"+0+"</td>";
+                	}});
                 	overalltable += "<td>"+totalscore+"</td>" + "</tr>";
                 }}
                 for (var week in weektables){if (weektables.hasOwnProperty(week)) {
@@ -2218,7 +2228,7 @@ var SampleApp = function() {
             		overalltableheader += "<th>"+week+"</th>";
             		//console.log(week+", 4");
             	}}
-                overalltableheader += '<th data-sorted="true" data-sorted-direction="descending" data-sortable-type="numeric">Total</th></tr>';
+                overalltableheader += '<th>Total</th></tr>';
                 overalltable = '<table class="table table-hover table-condensed" data-sortable>'+ overalltableheader + overalltable +"</table>";
                 tabcontent = '<div role="tabpanel" class="tab-pane active" id="overall">'+overalltable+'</div>' + tabcontent;
                 console.log("TABLIST: "+tablist);
