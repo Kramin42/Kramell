@@ -2213,7 +2213,7 @@ var SampleApp = function() {
                 	console.log(week);
             		tablist += '<li role="presentation" class="active"><a href="#'+week.replace(' ', '_')+'" role="tab" data-toggle="tab">'+week+'</a></li>';
             		//console.log(week+", 2");
-            		tabcontent += '<div role="tabpanel" class="tab-pane active" id="'+week.replace(' ', '_')+'">'+"<table>"+weektables[week]+"</table>"+'</div>';
+            		tabcontent += '<div role="tabpanel" class="tab-pane" id="'+week.replace(' ', '_')+'">'+"<table>"+weektables[week]+"</table>"+'</div>';
             		//console.log(week+", 3");
             		overalltableheader += "<th>"+week+"</th>";
             		//console.log(week+", 4");
