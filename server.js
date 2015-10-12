@@ -2209,17 +2209,20 @@ var SampleApp = function() {
                 	}}
                 	overalltable += "<td>"+totalscore+"</td>" + "</tr>";
                 }}
-                for (week in weektables){if (weektables.hasOwnProperty(week)) {
-                	console.log(week);
+                for (var week in weektables){console.log(week+", 0"); if (weektables.hasOwnProperty(week)) {
+                	console.log(week+", 1");
             		tablist += '<li role="presentation" class="active"><a href="#'+week.replace(' ', '_')+'" role="tab" data-toggle="tab">'+week+'</a></li>';
+            		console.log(week+", 2");
             		tabcontent += '<div role="tabpanel" class="tab-pane active" id="'+week.replace(' ', '_')+'">'+"<table>"+weektables[week]+"</table>"+'</div>';
+            		console.log(week+", 3");
             		overalltableheader += "<th>"+week+"</th>";
+            		console.log(week+", 4");
             	}}
                 overalltableheader += "<th>Total</th></tr>";
                 overalltable = "<table>"+ overalltableheader + overalltable +"</table>";
                 tabcontent = '<div role="tabpanel" class="tab-pane active" id="overall">'+overalltable+'</div>' + tabcontent;
-                console.log(tablist);
-                console.log(tabcontent);
+                console.log("TABLIST: "+tablist);
+                console.log("TABCONTENT: "+tabcontent);
                 var result = self.cache_get('csdc/scoreboardtemplate.htm').replace('##TABLIST##', tablist).replace('##TABCONTENT##', tabcontent);
                 res.setHeader('Content-Type', 'text/html');
                 res.send(result);
