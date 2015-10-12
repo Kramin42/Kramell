@@ -2181,7 +2181,7 @@ var SampleApp = function() {
             	weeklist = [];
                 weeks.forEach(function(week) {
                         if (week && week["players"] && week["players"][0] && week["week"].match(/(\d+)/)) {
-                        	if (arrValues.indexOf(week['week']) == -1) {
+                        	if (weeklist.indexOf(week['week']) == -1) {
                         		weeklist.push(week['week']);
                         	}
                         	week["players"].forEach(function(player){
@@ -2190,8 +2190,6 @@ var SampleApp = function() {
                         	});
                         }
                 });
-                
-                //fill in missing
                 
                 overalltable = "";
                 overalltableheader = "<tr><th>Player</th>"
