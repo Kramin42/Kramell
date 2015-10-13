@@ -586,7 +586,7 @@ function check_csdc_points(name, milestone, week) {
         if (!player["bonusqual"][i]) {
         	player["bonusqual"][i] = [];
         }
-        if (player["bonusqual"][i].length != week["bonusqual"][i].length) {
+        if (week["bonusqual"][i] instanceof Array && player["bonusqual"][i].length != week["bonusqual"][i].length) {
         	player["bonusqual"][i][week["bonusqual"][i].length-1] = false;
         	toset = {};
         	toset["players.$.bonusqual."+i] = player["bonusqual"][i];
