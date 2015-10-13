@@ -924,7 +924,7 @@ function csdc_announce(name, stone, message, week) {
     //should only be one player in the week doc
     player = week['players'][0];
     points = player['points'];
-    //console.log("checking csdc for "+player["name"]+" <=> "+name);
+    console.log("checking csdc for "+player["name"]+" <=> "+name);
     
     //check that they have the right char and are in the game still for this week
     if (!(player["alive"] && message.search(new RegExp("\\(L\\d+ "+week["char"]+"\\)","i"))>-1)) {
@@ -979,9 +979,9 @@ function route_announcement(name, alias, stone, message) {
                     end:1
                 }
             ).forEach(function(err, week) {
-                //console.log(JSON.stringify(week));
+                console.log(JSON.stringify(week));
                 timeStamp = getTimeStamp();
-                //console.log(timeStamp);
+                console.log(timeStamp);
                 if (week && timeStamp >= week["start"] && timeStamp < week["end"]) {
                     if (week['players'] && week['players'][0]) {
                         csdc_announce(name, stone, message, week);
