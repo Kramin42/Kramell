@@ -978,7 +978,7 @@ function route_announcement(name, alias, stone, message) {
                     start:1,
                     end:1
                 }
-            ).forEach(function(err, week) {
+            ).toArray().then(function(weeks) {weeks.forEach(function(week) {
                 console.log(JSON.stringify(week));
                 timeStamp = getTimeStamp();
                 console.log(timeStamp);
@@ -993,7 +993,7 @@ function route_announcement(name, alias, stone, message) {
 //                         });
 //                     }
                 }
-            });
+            });});
         }
         
         if (ch!="##csdc") {
