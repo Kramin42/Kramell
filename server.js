@@ -27,7 +27,7 @@ var freenodeBot;
 var efnetBot;
 var bot;
 var freenodeAddress = 'chat.freenode.net';
-var efnetAddress = 'irc.servercentral.net';
+var efnetAddress = 'irc.choopa.net';
 
 var adminlist = ['Kramin', 'Kramin42'];
 
