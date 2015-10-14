@@ -2627,7 +2627,7 @@ function handle_message(bot, nick, chan, message) {
             updateNA = true;
         } else if (msgarray.length > 1) {
             var tempbot;
-            db.channels.findOne('channel': cheiquerychan).then(function(chandata){
+            db.channels.findOne({'channel': cheiquerychan}).then(function(chandata){
                 if (chandata['server'] == freenodeAddress) {
                     tempbot = freenodeBot;
                 }
@@ -2658,7 +2658,7 @@ function handle_message(bot, nick, chan, message) {
 
     //post chei answers
     if (chan == chei) {
-        db.channels.findOne('channel': cheiquerychan).then(function(chandata){
+        db.channels.findOne({'channel': cheiquerychan}).then(function(chandata){
             if (chandata['server'] == freenodeAddress) {
                 freenodeBot.say(cheiquerychan, message);
             }
