@@ -23,7 +23,10 @@ var sequell = 'Sequell';
 var irc = require('irc');
 var observe_channel = '##crawl';
 //var rawannounce_channel = '##crawl-announcements';
-var bot;
+var freenodeBot;
+var efnetBot;
+var freenodeAddress = 'chat.freenode.net';
+var efnetAddress = 'irc.servercentral.net';
 
 var adminlist = ['Kramin', 'Kramin42'];
 
@@ -72,7 +75,7 @@ var NAnick;
 var NAaliases;
 var cheiquerychan = control_channel;
 var gretellquerychan = control_channel;
-var sequellquerychan = control_channel;
+//var sequellquerychan = control_channel;
 var logacc = {};
 var fetching = {};
 
@@ -1320,7 +1323,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
 }
 
 function update_aliases(nick) {
-    bot.say(sequell, '.echo nick-alias:' + nick + ':$(join \' NAJNR\' (split \' \' (nick-aliases ' + nick + ')))');
+    freenodeBot.say(sequell, '.echo nick-alias:' + nick + ':$(join \' NAJNR\' (split \' \' (nick-aliases ' + nick + ')))');
 }
 
 function csdc_enroll(name, week, callback) {
@@ -1371,10 +1374,10 @@ function csdc_announce(name, stone, message, week) {
     }
 
     //announce the message if they are alive and the right char, then check points after
-    announce_with_filters('##csdc', stone, message /*, function(){check_csdc_points(name, message, week)}*/ );
+    announce_with_filters(freenodeBot, '##csdc', stone, message /*, function(){check_csdc_points(name, message, week)}*/ );
 }
 
-function announce_with_filters(chan, stone, message, callback) {
+function announce_with_filters(bot, chan, stone, message, callback) {
     //get the regexes that it must match
     db.channels.distinct('filters', {
         channel: chan
@@ -1410,7 +1413,7 @@ function announce_with_filters(chan, stone, message, callback) {
 
 function route_announcement(name, alias, stone, message) {
     //go through the channels with the name
-    db.channels.distinct('channel', {
+    db.channels.distinct('channel', {'server': freenodeAddress}, {
         'names': {
             $in: [name]
         }
@@ -1454,13 +1457,24 @@ function route_announcement(name, alias, stone, message) {
             }
 
             if (ch != '##csdc') {
-                announce_with_filters(ch, stone, message);
+                announce_with_filters(freenodeBot, ch, stone, message);
             }
+        });
+    });
+    
+    //efnet
+    db.channels.distinct('channel', {'server': efnetAddress}, {
+        'names': {
+            $in: [name]
+        }
+    }, function(err, chans) {
+        chans.forEach(function(ch) {
+            announce_with_filters(efnetBot, ch, stone, message);
         });
     });
 }
 
-function do_command(arg, chan, nick, admin) {
+function do_command(bot, arg, chan, nick, admin) {
     // commands
     if (arg[0] == 'help' || arg[0] == 'commands') {
         if (chan == '##csdc') {
@@ -1571,7 +1585,8 @@ function do_command(arg, chan, nick, admin) {
                             'filters': [],
                             'colourmap': {
                                 '[\\w]*': 'gray'
-                            }
+                            },
+                            'server': freenodeAddress
                         });
                         bot.join(arg[1], null);
                     }
@@ -2498,7 +2513,7 @@ function do_command(arg, chan, nick, admin) {
     }
 }
 
-function announce_week(week, chan) {
+function announce_week(bot, week, chan) {
     //console.log(JSON.stringify(week));
     //console.log("announcing "+week["week"]);
     bot.say(chan, irc.colors.wrap('magenta', 'Char: ' + week['char']));
@@ -2510,7 +2525,7 @@ function announce_week(week, chan) {
     }
 }
 
-function shield_of_the_gong(chan) {
+function shield_of_the_gong(bot, chan) {
   message = '';
   if (math.random() > 0.5) {
     message = 'GONNNNG!';
@@ -2521,7 +2536,7 @@ function shield_of_the_gong(chan) {
   bot.say(chan, message);
 }
 
-function handle_message(nick, chan, message) {
+function handle_message(bot, nick, chan, message) {
     var pm = false;
     if (chan == botnick) {
         chan = nick;
@@ -2576,18 +2591,18 @@ function handle_message(nick, chan, message) {
     }, function(err, count) {
         if (chan == control_channel || pm || count) {
             if (message[0] == '%') {
-                bot.say(chei, message);
+                freenodeBot.say(chei, message);
                 cheiquerychan = chan;
             }
             if (message[0] == '@') {
-                bot.say(gretell, message);
+                freenodeBot.say(gretell, message);
                 gretellquerychan = chan;
             }
             //         if (message.indexOf("!tell")==0 || message.indexOf("!messages")==0) {
             //             bot.say(chan, "Can't use this command in here, sorry");
             //         } else 
             if ('!=&.?^#'.indexOf(message[0]) > -1) {
-                bot.say(sequell, '!RELAY -n 1 -channel ' + (pm ? 'msg' : chan) + ' -nick ' + nick + ' -prefix ' + chan + ':' + ' ' + message);
+                freenodeBot.say(sequell, '!RELAY -n 1 -channel ' + (pm ? 'msg' : chan) + ' -nick ' + nick + ' -prefix ' + chan + ':' + ' ' + message);
             }
         }
     });
@@ -2602,21 +2617,31 @@ function handle_message(nick, chan, message) {
             for (i = 4; i < msgarray.length; i += 2) {
                 NAaliases = NAaliases + '|' + msgarray[i].replace(/ NAJNR/g, '|').replace(/NAJNR/g, '').replace('\r\n', '');
             }
-            bot.say(control_channel, 'nick mapping: ' + NAnick + ' => ' + NAaliases);
+            freenodeBot.say(control_channel, 'nick mapping: ' + NAnick + ' => ' + NAaliases);
             updateNA = true;
         } else if (message.search(/^NAJNR/) > -1) {
             for (i = 0; i < msgarray.length; i += 2) {
                 NAaliases = NAaliases + '|' + msgarray[i].replace(/ NAJNR/g, '|').replace(/NAJNR/g, '').replace('\r\n', '');
-                bot.say(control_channel, '...|' + msgarray[i].replace(/ NAJNR/g, '|').replace(/NAJNR/g, '').replace('\r\n', ''));
+                freenodeBot.say(control_channel, '...|' + msgarray[i].replace(/ NAJNR/g, '|').replace(/NAJNR/g, '').replace('\r\n', ''));
             }
             updateNA = true;
         } else if (msgarray.length > 1) {
-            msgarray[1] = msgarray.slice(1, msgarray.length).join(':');
-            if (msgarray[1].slice(0, 4) == '/me ') {
-                bot.action(msgarray[0], msgarray[1].slice(4, msgarray[1].length));
-            } else {
-                bot.say(msgarray[0], msgarray[1].replace('This command cannot be used in PM', 'This Sequell command cannot be used in here'));
-            }
+            var tempbot;
+            db.channels.findOne('channel': cheiquerychan).then(function(chandata){
+                if (chandata['server'] == freenodeAddress) {
+                    tempbot = freenodeBot;
+                }
+                else if (chandata['server'] == efnetAddress) {
+                    tempbot = efnetBot;
+                }
+                
+                msgarray[1] = msgarray.slice(1, msgarray.length).join(':');
+                if (msgarray[1].slice(0, 4) == '/me ') {
+                    tempbot.action(msgarray[0], msgarray[1].slice(4, msgarray[1].length));
+                } else {
+                    tempbot.say(msgarray[0], msgarray[1].replace('This command cannot be used in PM', 'This Sequell command cannot be used in here'));
+                }
+            });
         }
         if (updateNA) {
             //add new after clearing
@@ -2633,12 +2658,26 @@ function handle_message(nick, chan, message) {
 
     //post chei answers
     if (chan == chei) {
-        bot.say(cheiquerychan, message);
+        db.channels.findOne('channel': cheiquerychan).then(function(chandata){
+            if (chandata['server'] == freenodeAddress) {
+                freenodeBot.say(cheiquerychan, message);
+            }
+            if (chandata['server'] == efnetAddress) {
+                efnetBot.say(cheiquerychan, message);
+            }
+        });
     }
 
     //post gretell answers
     if (chan == gretell) {
-        bot.say(gretellquerychan, message);
+        db.channels.findOne('channel': gretellquerychan).then(function(chandata){
+            if (chandata['server'] == freenodeAddress) {
+                freenodeBot.say(gretellquerychan, message);
+            }
+            if (chandata['server'] == efnetAddress) {
+                efnetBot.say(gretellquerychan, message);
+            }
+        });
     }
 
     //Kramell cpo fill in (watch and rc commands)
@@ -2729,7 +2768,7 @@ function handle_message(nick, chan, message) {
                 week = weeks[0];
                 if (week) {
                     //bot.say(chan, irc.colors.wrap('magenta', "CSDC "+week["week"]);
-                    announce_week(week, chan);
+                    announce_week(bot, week, chan);
                 }
             });
         }
@@ -2753,11 +2792,11 @@ function handle_message(nick, chan, message) {
         console.log(arg);
         admin = (chan == control_channel || adminlist.indexOf(nick) > -1);
         console.log('Admin: ' + admin);
-        do_command(arg, chan, nick, admin);
+        do_command(bot, arg, chan, nick, admin);
     }
 
     if(message.search(/\bgong\b/i) > -1 && chan!="##crawl") {
-        shield_of_the_gong(chan);
+        shield_of_the_gong(bot, chan);
     }
 
 }
@@ -2787,11 +2826,19 @@ function handle_connect(message) {
     });
 }
 
+function handle_freenode_message(nick, chan, message){
+    handle_message(freenodeBot, nick, chan, message);
+}
+
+function handle_efnet_message(nick, chan, message){
+    handle_message(efnetBot, nick, chan, message);
+}
+
 function connect() {
     //connect to IRC
-    db.channels.distinct('channel', function(err, chans) {
+    db.channels.distinct('channel', {'server': freenodeAddress}, function(err, chans) {
         //bot.join(chan,null);
-        bot = new irc.Client('chat.freenode.net', botnick, {
+        freenodeBot = new irc.Client(freenodeAddress, botnick, {
             channels: [control_channel, observe_channel].concat(chans),
             port: 8001,
             debug: true,
@@ -2801,11 +2848,29 @@ function connect() {
             userName: botnick
                 //        password: password
         });
-        bot.addListener('message', handle_message);
-        bot.addListener('error', handle_error);
-        bot.addListener('quit', handle_quit);
-        bot.addListener('registered', handle_connect);
+        freenodeBot.addListener('message', handle_freenode_message);
+        freenodeBot.addListener('error', handle_error);
+        freenodeBot.addListener('quit', handle_quit);
+        freenodeBot.addListener('registered', handle_connect);
     });
+    db.channels.distinct('channel', {'server': efnetAddress}, function(err, chans) {
+        //bot.join(chan,null);
+        efnetBot = new irc.Client(efnetAddress, botnick, {
+            channels: [control_channel, observe_channel].concat(chans),
+            port: 8001,
+            debug: true,
+            autoRejoin: true,
+            autoConnect: true,
+            //        sasl: true,
+            userName: botnick
+                //        password: password
+        });
+        efnetBot.addListener('message', handle_efnet_message);
+        efnetBot.addListener('error', handle_error);
+        efnetBot.addListener('quit', handle_quit);
+        efnetBot.addListener('registered', handle_connect);
+    });
+    bot = freenodeBot;
 }
 
 connect();
