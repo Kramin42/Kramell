@@ -2756,8 +2756,7 @@ function handle_message(nick, chan, message) {
         do_command(arg, chan, nick, admin);
     }
 
-    if(  message.match(/\bgong\b/i) > -1
-    ) {
+    if(message.search(/\bgong\b/i) > -1 && chan!="##crawl") {
         shield_of_the_gong(chan);
     }
 
