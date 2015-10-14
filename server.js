@@ -1414,7 +1414,8 @@ function announce_with_filters(bot, chan, stone, message, callback) {
 
 function route_announcement(name, alias, stone, message) {
     //go through the channels with the name
-    db.channels.distinct('channel', {'server': freenodeAddress}, {
+    db.channels.distinct('channel', {
+    	'server': freenodeAddress,
         'names': {
             $in: [name]
         }
@@ -1464,7 +1465,8 @@ function route_announcement(name, alias, stone, message) {
     });
     
     //efnet
-    db.channels.distinct('channel', {'server': efnetAddress}, {
+    db.channels.distinct('channel', {
+    	'server': efnetAddress,
         'names': {
             $in: [name]
         }
