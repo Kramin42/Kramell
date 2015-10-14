@@ -1,0 +1,295 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'i', '-g', 'eslint' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 verbose cache add [ 'eslint', null ]
+5 verbose cache add name=undefined spec="eslint" args=["eslint",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'eslint',
+6 verbose parsed url   path: 'eslint',
+6 verbose parsed url   href: 'eslint' }
+7 silly lockFile e0b0b266-eslint eslint
+8 verbose lock eslint /Users/camerondykstra/.npm/e0b0b266-eslint.lock
+9 silly lockFile e0b0b266-eslint eslint
+10 silly lockFile e0b0b266-eslint eslint
+11 verbose addNamed [ 'eslint', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 62e46387-eslint eslint@
+14 verbose lock eslint@ /Users/camerondykstra/.npm/62e46387-eslint.lock
+15 silly addNameRange { name: 'eslint', range: '*', hasData: false }
+16 verbose request where is /eslint
+17 verbose request registry https://registry.npmjs.org/
+18 verbose request id 90670d5524d86a03
+19 verbose url raw /eslint
+20 verbose url resolving [ 'https://registry.npmjs.org/', './eslint' ]
+21 verbose url resolved https://registry.npmjs.org/eslint
+22 verbose request where is https://registry.npmjs.org/eslint
+23 info trying registry request attempt 1 at 17:56:36
+24 http GET https://registry.npmjs.org/eslint
+25 http 200 https://registry.npmjs.org/eslint
+26 silly registry.get cb [ 200,
+26 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+26 silly registry.get     etag: '"8S3IDVKO10U2GQV8POPT2ZYNC"',
+26 silly registry.get     'content-type': 'application/json',
+26 silly registry.get     'cache-control': 'max-age=60',
+26 silly registry.get     'content-length': '184041',
+26 silly registry.get     'accept-ranges': 'bytes',
+26 silly registry.get     date: 'Wed, 14 Oct 2015 04:56:38 GMT',
+26 silly registry.get     via: '1.1 varnish',
+26 silly registry.get     age: '0',
+26 silly registry.get     connection: 'keep-alive',
+26 silly registry.get     'x-served-by': 'cache-wlg7320-WLG',
+26 silly registry.get     'x-cache': 'HIT',
+26 silly registry.get     'x-cache-hits': '1',
+26 silly registry.get     'x-timer': 'S1444798597.304695,VS0,VE854',
+26 silly registry.get     vary: 'Accept' } ]
+27 silly addNameRange number 2 { name: 'eslint', range: '*', hasData: true }
+28 silly addNameRange versions [ 'eslint',
+28 silly addNameRange   [ '0.0.4',
+28 silly addNameRange     '0.0.5',
+28 silly addNameRange     '0.0.6',
+28 silly addNameRange     '0.0.7',
+28 silly addNameRange     '0.1.0-dev',
+28 silly addNameRange     '0.1.0',
+28 silly addNameRange     '0.1.1',
+28 silly addNameRange     '0.1.2',
+28 silly addNameRange     '0.1.3',
+28 silly addNameRange     '0.1.4',
+28 silly addNameRange     '0.2.0',
+28 silly addNameRange     '0.3.0',
+28 silly addNameRange     '0.4.0',
+28 silly addNameRange     '0.4.1',
+28 silly addNameRange     '0.4.2',
+28 silly addNameRange     '0.4.3',
+28 silly addNameRange     '0.4.4',
+28 silly addNameRange     '0.4.5',
+28 silly addNameRange     '0.5.0',
+28 silly addNameRange     '0.5.1',
+28 silly addNameRange     '0.6.0',
+28 silly addNameRange     '0.6.1',
+28 silly addNameRange     '0.6.2',
+28 silly addNameRange     '0.7.1',
+28 silly addNameRange     '0.7.2',
+28 silly addNameRange     '0.7.3',
+28 silly addNameRange     '0.7.4',
+28 silly addNameRange     '0.8.0',
+28 silly addNameRange     '0.8.1',
+28 silly addNameRange     '0.8.2',
+28 silly addNameRange     '0.9.0',
+28 silly addNameRange     '0.9.1',
+28 silly addNameRange     '0.9.2',
+28 silly addNameRange     '0.10.0-alpha',
+28 silly addNameRange     '0.10.0-alpha.1',
+28 silly addNameRange     '0.10.0-alpha.2',
+28 silly addNameRange     '0.10.0',
+28 silly addNameRange     '0.11.0-alpha.0',
+28 silly addNameRange     '0.10.1',
+28 silly addNameRange     '0.10.2',
+28 silly addNameRange     '0.11.0',
+28 silly addNameRange     '0.12.0',
+28 silly addNameRange     '0.13.0',
+28 silly addNameRange     '0.14.0',
+28 silly addNameRange     '0.14.1',
+28 silly addNameRange     '0.15.0',
+28 silly addNameRange     '0.15.1',
+28 silly addNameRange     '0.16.0',
+28 silly addNameRange     '0.16.1',
+28 silly addNameRange     '0.16.2',
+28 silly addNameRange     '0.17.0',
+28 silly addNameRange     '0.17.1',
+28 silly addNameRange     '0.18.0',
+28 silly addNameRange     '0.19.0',
+28 silly addNameRange     '0.20.0',
+28 silly addNameRange     '0.21.0',
+28 silly addNameRange     '0.21.1',
+28 silly addNameRange     '0.21.2',
+28 silly addNameRange     '0.22.0',
+28 silly addNameRange     '0.22.1',
+28 silly addNameRange     '0.23.0',
+28 silly addNameRange     '0.24.0',
+28 silly addNameRange     '0.24.1',
+28 silly addNameRange     '1.0.0-rc-1',
+28 silly addNameRange     '1.0.0-rc-2',
+28 silly addNameRange     '1.0.0-rc-3',
+28 silly addNameRange     '1.0.0',
+28 silly addNameRange     '1.1.0',
+28 silly addNameRange     '1.2.0',
+28 silly addNameRange     '1.2.1',
+28 silly addNameRange     '1.3.0',
+28 silly addNameRange     '1.3.1',
+28 silly addNameRange     '1.4.0',
+28 silly addNameRange     '1.4.1',
+28 silly addNameRange     '1.4.2',
+28 silly addNameRange     '1.4.3',
+28 silly addNameRange     '1.5.0',
+28 silly addNameRange     '1.5.1',
+28 silly addNameRange     '1.6.0' ] ]
+29 verbose addNamed [ 'eslint', '1.6.0' ]
+30 verbose addNamed [ '1.6.0', '1.6.0' ]
+31 silly lockFile df0f51cf-eslint-1-6-0 eslint@1.6.0
+32 verbose lock eslint@1.6.0 /Users/camerondykstra/.npm/df0f51cf-eslint-1-6-0.lock
+33 silly lockFile 94f8c4be-pmjs-org-eslint-eslint-1-6-0-tgz https://registry.npmjs.org/eslint/-/eslint-1.6.0.tgz
+34 verbose lock https://registry.npmjs.org/eslint/-/eslint-1.6.0.tgz /Users/camerondykstra/.npm/94f8c4be-pmjs-org-eslint-eslint-1-6-0-tgz.lock
+35 verbose addRemoteTarball [ 'https://registry.npmjs.org/eslint/-/eslint-1.6.0.tgz',
+35 verbose addRemoteTarball   '108a2d5ccb5a218cf7270f256cc2962518fa0c96' ]
+36 info retry fetch attempt 1 at 17:56:38
+37 verbose fetch to= /var/folders/r6/mjshzhrd02jglt7xnmdj6k040000gn/T/npm-43521-Zhn5S-tE/registry.npmjs.org/eslint/-/eslint-1.6.0.tgz
+38 http GET https://registry.npmjs.org/eslint/-/eslint-1.6.0.tgz
+39 http 200 https://registry.npmjs.org/eslint/-/eslint-1.6.0.tgz
+40 silly lockFile 94f8c4be-pmjs-org-eslint-eslint-1-6-0-tgz https://registry.npmjs.org/eslint/-/eslint-1.6.0.tgz
+41 silly lockFile 94f8c4be-pmjs-org-eslint-eslint-1-6-0-tgz https://registry.npmjs.org/eslint/-/eslint-1.6.0.tgz
+42 silly lockFile df0f51cf-eslint-1-6-0 eslint@1.6.0
+43 silly lockFile df0f51cf-eslint-1-6-0 eslint@1.6.0
+44 silly lockFile 62e46387-eslint eslint@
+45 silly lockFile 62e46387-eslint eslint@
+46 silly resolved [ { name: 'eslint',
+46 silly resolved     version: '1.6.0',
+46 silly resolved     author:
+46 silly resolved      { name: 'Nicholas C. Zakas',
+46 silly resolved        email: 'nicholas+npm@nczconsulting.com' },
+46 silly resolved     description: 'An AST-based pattern checker for JavaScript.',
+46 silly resolved     bin: { eslint: './bin/eslint.js' },
+46 silly resolved     main: './lib/api.js',
+46 silly resolved     scripts:
+46 silly resolved      { test: 'node Makefile.js test',
+46 silly resolved        lint: 'node Makefile.js lint',
+46 silly resolved        patch: 'node Makefile.js patch',
+46 silly resolved        minor: 'node Makefile.js minor',
+46 silly resolved        major: 'node Makefile.js major',
+46 silly resolved        docs: 'node Makefile.js docs',
+46 silly resolved        gensite: 'node Makefile.js gensite',
+46 silly resolved        browserify: 'node Makefile.js browserify',
+46 silly resolved        perf: 'node Makefile.js perf',
+46 silly resolved        profile: 'beefy tests/bench/bench.js --open -- -t brfs -t ./tests/bench/xform-rules.js -r espree',
+46 silly resolved        coveralls: 'cat ./coverage/lcov.info | coveralls',
+46 silly resolved        'check-commit': 'node Makefile.js checkGitCommit' },
+46 silly resolved     files: [ 'LICENSE', 'README.md', 'bin', 'conf', 'lib' ],
+46 silly resolved     repository: { type: 'git', url: 'https://github.com/eslint/eslint' },
+46 silly resolved     homepage: 'http://eslint.org',
+46 silly resolved     bugs: { url: 'https://github.com/eslint/eslint/issues/' },
+46 silly resolved     dependencies:
+46 silly resolved      { chalk: '^1.0.0',
+46 silly resolved        'concat-stream': '^1.4.6',
+46 silly resolved        debug: '^2.1.1',
+46 silly resolved        doctrine: '^0.7.0',
+46 silly resolved        'escape-string-regexp': '^1.0.2',
+46 silly resolved        escope: '^3.2.0',
+46 silly resolved        espree: '^2.2.4',
+46 silly resolved        estraverse: '^4.1.0',
+46 silly resolved        'estraverse-fb': '^1.3.1',
+46 silly resolved        esutils: '^2.0.2',
+46 silly resolved        'file-entry-cache': '^1.1.1',
+46 silly resolved        glob: '^5.0.14',
+46 silly resolved        globals: '^8.10.0',
+46 silly resolved        handlebars: '^4.0.0',
+46 silly resolved        inquirer: '^0.9.0',
+46 silly resolved        'is-my-json-valid': '^2.10.0',
+46 silly resolved        'is-resolvable': '^1.0.0',
+46 silly resolved        'js-yaml': '^3.2.5',
+46 silly resolved        'json-stable-stringify': '^1.0.0',
+46 silly resolved        'lodash.clonedeep': '^3.0.1',
+46 silly resolved        'lodash.merge': '^3.3.2',
+46 silly resolved        'lodash.omit': '^3.1.0',
+46 silly resolved        minimatch: '^2.0.1',
+46 silly resolved        mkdirp: '^0.5.0',
+46 silly resolved        'object-assign': '^2.0.0',
+46 silly resolved        optionator: '^0.5.0',
+46 silly resolved        'path-is-absolute': '^1.0.0',
+46 silly resolved        'path-is-inside': '^1.0.1',
+46 silly resolved        shelljs: '^0.3.0',
+46 silly resolved        'strip-json-comments': '~1.0.1',
+46 silly resolved        'text-table': '~0.2.0',
+46 silly resolved        'to-double-quotes': '^1.0.1',
+46 silly resolved        'to-single-quotes': '^1.0.3',
+46 silly resolved        'user-home': '^1.0.0',
+46 silly resolved        'xml-escape': '~1.0.0' },
+46 silly resolved     devDependencies:
+46 silly resolved      { beefy: '^1.0.0',
+46 silly resolved        brfs: '0.0.9',
+46 silly resolved        browserify: '^8.1.3',
+46 silly resolved        chai: '^1.9.1',
+46 silly resolved        cheerio: '^0.19.0',
+46 silly resolved        coveralls: '2.11.2',
+46 silly resolved        dateformat: '^1.0.8',
+46 silly resolved        ejs: '^2.3.3',
+46 silly resolved        esprima: '^2.4.1',
+46 silly resolved        'esprima-fb': '^10001.1.0-dev-harmony-fb',
+46 silly resolved        'gh-got': '^1.0.3',
+46 silly resolved        istanbul: '^0.3.5',
+46 silly resolved        jsdoc: '^3.3.0-beta1',
+46 silly resolved        jsonlint: '^1.6.2',
+46 silly resolved        leche: '^2.1.1',
+46 silly resolved        linefix: '^0.1.1',
+46 silly resolved        'load-perf': '^0.2.0',
+46 silly resolved        markdownlint: '^0.0.8',
+46 silly resolved        mocha: '^2.1.0',
+46 silly resolved        'mocha-phantomjs': '3.6.0',
+46 silly resolved        'npm-license': '^0.2.3',
+46 silly resolved        phantomjs: '1.9.7-15',
+46 silly resolved        proxyquire: '^1.0.0',
+46 silly resolved        rewire: '^2.3.4',
+46 silly resolved        semver: '^4.1.0',
+46 silly resolved        'shelljs-nodecli': '~0.1.0',
+46 silly resolved        sinon: '1.14.1',
+46 silly resolved        through: '^2.3.6' },
+46 silly resolved     keywords: [ 'ast', 'lint', 'javascript', 'ecmascript', 'espree' ],
+46 silly resolved     license: 'MIT',
+46 silly resolved     engines: { node: '>=0.10' },
+46 silly resolved     gitHead: '54600a38baded690821d6efb060c6c51ad18cefe',
+46 silly resolved     _id: 'eslint@1.6.0',
+46 silly resolved     _shasum: '108a2d5ccb5a218cf7270f256cc2962518fa0c96',
+46 silly resolved     _from: 'eslint@',
+46 silly resolved     _npmVersion: '1.4.28',
+46 silly resolved     _npmUser: { name: 'nzakas', email: 'nicholas@nczconsulting.com' },
+46 silly resolved     maintainers: [ [Object], [Object] ],
+46 silly resolved     dist:
+46 silly resolved      { shasum: '108a2d5ccb5a218cf7270f256cc2962518fa0c96',
+46 silly resolved        tarball: 'http://registry.npmjs.org/eslint/-/eslint-1.6.0.tgz' },
+46 silly resolved     directories: {},
+46 silly resolved     _resolved: 'https://registry.npmjs.org/eslint/-/eslint-1.6.0.tgz' } ]
+47 info install eslint@1.6.0 into /usr/local/lib
+48 info installOne eslint@1.6.0
+49 verbose lib/node_modules/eslint unbuild
+50 verbose tar unpack /Users/camerondykstra/.npm/eslint/1.6.0/package.tgz
+51 silly lockFile 8a7fbfa2-sr-local-lib-node-modules-eslint tar:///usr/local/lib/node_modules/eslint
+52 verbose lock tar:///usr/local/lib/node_modules/eslint /Users/camerondykstra/.npm/8a7fbfa2-sr-local-lib-node-modules-eslint.lock
+53 silly lockFile 2b63c186-tra-npm-eslint-1-6-0-package-tgz tar:///Users/camerondykstra/.npm/eslint/1.6.0/package.tgz
+54 verbose lock tar:///Users/camerondykstra/.npm/eslint/1.6.0/package.tgz /Users/camerondykstra/.npm/2b63c186-tra-npm-eslint-1-6-0-package-tgz.lock
+55 silly gunzTarPerm modes [ '755', '644' ]
+56 error Error: EACCES, mkdir '/usr/local/lib/node_modules/eslint'
+56 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/eslint']
+56 error   errno: 3,
+56 error   code: 'EACCES',
+56 error   path: '/usr/local/lib/node_modules/eslint',
+56 error   fstream_type: 'Directory',
+56 error   fstream_path: '/usr/local/lib/node_modules/eslint',
+56 error   fstream_class: 'DirWriter',
+56 error   fstream_stack:
+56 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+56 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+56 error      'Object.oncomplete (fs.js:107:15)' ] }
+57 error Please try running this command again as root/Administrator.
+58 error System Darwin 13.4.0
+59 error command "node" "/usr/local/bin/npm" "i" "-g" "eslint"
+60 error cwd /Users/camerondykstra/Kramell
+61 error node -v v0.10.33
+62 error npm -v 1.4.28
+63 error path /usr/local/lib/node_modules/eslint
+64 error fstream_path /usr/local/lib/node_modules/eslint
+65 error fstream_type Directory
+66 error fstream_class DirWriter
+67 error code EACCES
+68 error errno 3
+69 error stack Error: EACCES, mkdir '/usr/local/lib/node_modules/eslint'
+70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+70 error fstream_stack Object.oncomplete (fs.js:107:15)
+71 verbose exit [ 3, true ]
