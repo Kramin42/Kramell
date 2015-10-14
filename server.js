@@ -2592,7 +2592,7 @@ function handle_message(bot, nick, chan, message) {
     db.channels.count({
         'channel': chan
     }, function(err, count) {
-        if (chan == control_channel || pm || count) {
+        if (chan == control_channel || count) {
             if (message[0] == '%') {
                 freenodeBot.say(chei, message);
                 cheiquerychan = chan;
@@ -2631,6 +2631,7 @@ function handle_message(bot, nick, chan, message) {
         } else if (msgarray.length > 1) {
             var tempbot;
             db.channels.findOne({'channel': cheiquerychan}).then(function(chandata){
+            	console.log(chandata);
                 if (chandata['server'] == freenodeAddress) {
                     tempbot = freenodeBot;
                 }
@@ -3060,7 +3061,7 @@ var SampleApp = function() {
                 weektables = {};
                 for (var p in players) {
                     if (players.hasOwnProperty(p)) {
-                        console.log('scanning player ' + p);
+                        //console.log('scanning player ' + p);
                         var totalscore = 0;
                         overalltable += '<tr>' + '<td>' + p + '</td>';
                         weeklist.forEach(function(w) {
@@ -3078,7 +3079,7 @@ var SampleApp = function() {
                                 var pointsum = players[p][w].reduce(function(a, b, i) {
                                     return a + b;
                                 }, 0);
-                                console.log(w + ': ' + pointsum);
+                                //console.log(w + ': ' + pointsum);
                                 weektables[w] += '<tr>' + '<td>' + p + '</td>' + '<td>' + pointsum + '</td>' + s + '</tr>';
                                 overalltable += '<td>' + pointsum + '</td>';
                                 totalscore += pointsum;
@@ -3091,7 +3092,7 @@ var SampleApp = function() {
                 }
                 for (var week in weektables) {
                     if (weektables.hasOwnProperty(week)) {
-                        console.log(week);
+                        //console.log(week);
                         tablist += '<li role="presentation"><a href="#' + week.replace(' ', '_') + '" role="tab" data-toggle="tab">' + week + '</a></li>';
                         //console.log(week+", 2");
                         tabcontent += '<div role="tabpanel" class="tab-pane" id="' + week.replace(' ', '_') + '">' + '<table class="table table-hover table-condensed" data-sortable>' + weektables[week] + '</table>' + '</div>';
@@ -3103,8 +3104,8 @@ var SampleApp = function() {
                 overalltableheader += '<th>Total</th></tr>';
                 overalltable = '<table class="table table-hover table-condensed" data-sortable>' + overalltableheader + overalltable + '</table>';
                 tabcontent = '<div role="tabpanel" class="tab-pane active" id="overall">' + overalltable + '</div>' + tabcontent;
-                console.log('TABLIST: ' + tablist);
-                console.log('TABCONTENT: ' + tabcontent);
+                //console.log('TABLIST: ' + tablist);
+                //console.log('TABCONTENT: ' + tabcontent);
                 var result = self.cache_get('csdc/scoreboardtemplate.htm').replace('##TABLIST##', tablist).replace('##TABCONTENT##', tabcontent);
                 res.setHeader('Content-Type', 'text/html');
                 res.send(result);
