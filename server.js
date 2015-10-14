@@ -10,6 +10,7 @@
 var express = require('express');
 var fs      = require('fs');
 var Promise = require('bluebird');
+var math = require('mathjs');
 
 var exec = require('child_process').exec;
 
@@ -1789,6 +1790,17 @@ function announce_week(week, chan) {
                         }
 }
 
+function shield_of_the_gong(chan) {
+  message = '';
+  if math.random() > 0.5 {
+    message = 'GONNNNG!';
+  } else {
+    msgs = Array('BOUMMMMG!', 'PTOANNNG!', 'PANG!', 'BONNNG!', 'SHROANNG!');
+    message = msgs[Math.floor(Math.random()*msgs.length)];
+  }
+  bot.say(chan, message);
+}
+
 function handle_message(nick, chan, message) {
     var pm = false;
     if (chan==botnick) {chan=nick; pm=true;}
@@ -1979,6 +1991,12 @@ function handle_message(nick, chan, message) {
         console.log('Admin: '+admin);
         do_command(arg, chan, nick, admin);
     }
+
+    if(  message.match(/\bgong\b/i) > -1
+    ) {
+        shield_of_the_gong(chan);
+    }
+
 }
 
 function handle_error(error) {
