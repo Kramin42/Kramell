@@ -928,7 +928,7 @@ function csdc_announce(name, stone, message, week) {
     console.log("checking csdc for "+player["name"]+" <=> "+name+" in "+week["week"]);
     
     //check that they have the right char and are in the game still for this week
-    if (!(player["alive"] && message.search(new RegExp("\\(L\\d+ "+week["char"]+"\\)","i"))>-1)) {
+    if (!((player["alive"] || !stone['type']) && message.search(new RegExp("\\(L\\d+ "+week["char"]+"\\)","i"))>-1)) {
         return;
     }
     
