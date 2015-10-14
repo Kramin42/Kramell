@@ -2858,8 +2858,8 @@ function connect() {
     db.channels.distinct('channel', {'server': efnetAddress}, function(err, chans) {
         //bot.join(chan,null);
         efnetBot = new irc.Client(efnetAddress, botnick, {
-            channels: [control_channel, observe_channel].concat(chans),
-            port: 8001,
+            channels: chans,
+            port: 6667,
             debug: true,
             autoRejoin: true,
             autoConnect: true,
