@@ -2512,10 +2512,10 @@ function announce_week(week, chan) {
 
 function shield_of_the_gong(chan) {
   message = '';
-  if math.random() > 0.5 {
+  if (math.random() > 0.5) {
     message = 'GONNNNG!';
   } else {
-    msgs = Array('BOUMMMMG!', 'PTOANNNG!', 'PANG!', 'BONNNG!', 'SHROANNG!');
+    msgs = ['BOUMMMMG!', 'PTOANNNG!', 'PANG!', 'BONNNG!', 'SHROANNG!'];
     message = msgs[math.floor(math.random()*msgs.length)];
   }
   bot.say(chan, message);
