@@ -10,7 +10,6 @@
 var express = require('express');
 var fs = require('fs');
 var Promise = require('bluebird');
-var math = require('mathjs');
 
 var exec = require('child_process').exec;
 
@@ -2512,7 +2511,7 @@ function announce_week(week, chan) {
 
 function shield_of_the_gong(chan) {
   message = '';
-  if math.random() > 0.5 {
+  if Math.random() > 0.5 {
     message = 'GONNNNG!';
   } else {
     msgs = Array('BOUMMMMG!', 'PTOANNNG!', 'PANG!', 'BONNNG!', 'SHROANNG!');
