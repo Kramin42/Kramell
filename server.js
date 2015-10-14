@@ -2630,7 +2630,7 @@ function handle_message(bot, nick, chan, message) {
             updateNA = true;
         } else if (msgarray.length > 1) {
             var tempbot;
-            db.channels.findOne({'channel': cheiquerychan}).then(function(chandata){
+            db.channels.findOne({'channel': msgarray[0]}).then(function(chandata){
             	console.log(chandata);
                 if (chandata['server'] == freenodeAddress) {
                     tempbot = freenodeBot;
