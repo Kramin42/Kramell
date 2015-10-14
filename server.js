@@ -2670,7 +2670,7 @@ function handle_message(bot, nick, chan, message) {
 
     //post gretell answers
     if (chan == gretell) {
-        db.channels.findOne('channel': gretellquerychan).then(function(chandata){
+        db.channels.findOne({'channel': gretellquerychan}).then(function(chandata){
             if (chandata['server'] == freenodeAddress) {
                 freenodeBot.say(gretellquerychan, message);
             }
