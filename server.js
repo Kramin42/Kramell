@@ -350,6 +350,33 @@ function process_milestone(milestone, announcer, url) {
         return Promise.resolve(1);
     }
     
+    try {
+		//make all announcements to ##crawl-announcements
+		//console.log(JSON.stringify(stone));
+		var announcement = '';
+		if (stone['type']) {//milestone
+			announcement = stone_format(stone);
+		} else {// death/win
+			announcement = log_format(stone);
+		}
+		//bot.say(rawannounce_channel, announcement);
+		db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
+            //get aliases
+            db.nick_aliases.distinct('aliases',{"name":name.toLowerCase()},function(err, alias){
+                alias=alias[0] ? alias[0] : name;
+                //get the actual alias in use and announce
+                if (stone['name'].search(new RegExp("^("+alias+")$", "i"))>-1){
+                    alias = stone['name'].match(new RegExp("^("+alias+")$", "i"))[1];
+                    //console.log("announcement for "+alias);
+                    route_announcement(name, alias, stone, announcement);
+                }
+        	});
+        });});
+    } catch(error) {
+        console.log(error);
+        console.log("in milestone: "+milestone)
+    }
+    
     //CSDC
     //console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
@@ -413,32 +440,6 @@ function process_milestone(milestone, announcer, url) {
     	}
     }));
     
-    try {
-		//make all announcements to ##crawl-announcements
-		//console.log(JSON.stringify(stone));
-		var announcement = '';
-		if (stone['type']) {//milestone
-			announcement = stone_format(stone);
-		} else {// death/win
-			announcement = log_format(stone);
-		}
-		//bot.say(rawannounce_channel, announcement);
-		db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
-            //get aliases
-            db.nick_aliases.distinct('aliases',{"name":name.toLowerCase()},function(err, alias){
-                alias=alias[0] ? alias[0] : name;
-                //get the actual alias in use and announce
-                if (stone['name'].search(new RegExp("^("+alias+")$", "i"))>-1){
-                    alias = stone['name'].match(new RegExp("^("+alias+")$", "i"))[1];
-                    //console.log("announcement for "+alias);
-                    route_announcement(name, alias, stone, announcement);
-                }
-        	});
-        });});
-    } catch(error) {
-        console.log(error);
-        console.log("in milestone: "+milestone)
-    }
     return Promise.all(promises);
 }
 
