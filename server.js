@@ -25,6 +25,7 @@ var observe_channel = '##crawl';
 //var rawannounce_channel = '##crawl-announcements';
 var freenodeBot;
 var efnetBot;
+var bot;
 var freenodeAddress = 'chat.freenode.net';
 var efnetAddress = 'irc.servercentral.net';
 
@@ -2812,7 +2813,7 @@ function handle_quit(nick, reason, channels, message) {
 function handle_connect(message) {
     console.log(message);
     console.log('Logging in with nick: ' + botnick + ', pass: ' + password);
-    bot.say('NickServ', 'identify ' + password);
+    freenodeBot.say('NickServ', 'identify ' + password);
     db.announcers.distinct('name', function(err, announcers) {
         announcers.forEach(function(announcer) {
             timers[announcer] = setTimeout(
@@ -2852,6 +2853,7 @@ function connect() {
         freenodeBot.addListener('error', handle_error);
         freenodeBot.addListener('quit', handle_quit);
         freenodeBot.addListener('registered', handle_connect);
+        bot = freenodeBot;
     });
     db.channels.distinct('channel', {'server': efnetAddress}, function(err, chans) {
         //bot.join(chan,null);
@@ -2870,7 +2872,6 @@ function connect() {
         efnetBot.addListener('quit', handle_quit);
         efnetBot.addListener('registered', handle_connect);
     });
-    bot = freenodeBot;
 }
 
 connect();
