@@ -2514,6 +2514,13 @@ function do_command(bot, arg, chan, nick, admin) {
             connect();
         });
     }
+    
+    if (arg[0] == 'echo' && nick=='Kramin' && chan=='##kramell') {
+    	if (arg[1] == '#awbwrising') {
+    		bot = efnetBot;
+    	}
+    	bot.say(arg[1], ' '.join(arg.slice(2)));
+    }
 }
 
 function announce_week(bot, week, chan) {
