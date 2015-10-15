@@ -2705,7 +2705,7 @@ function handle_message(bot, nick, chan, message) {
     //kramell csdc queries (use $)
     if ('$'.indexOf(message[0]) > -1) {
         //remove prefix and add username as first arg if there is none
-        var arg = message.slice(1, message.length).replace(/ \. /g, ' ' + nick + ' ').replace(/ \.$/, ' ' + nick).split(' ');
+        var arg = message.trim().slice(1, message.length).replace(/ \. /g, ' ' + nick + ' ').replace(/ \.$/, ' ' + nick).split(' ');
 
         if (arg[0] == 'help' && (chan == '##csdc' || chan == '##crawl' || chan == control_channel)) {
             bot.say(chan, 'csdc commands: $points <player>, $week <week num>');
@@ -2716,9 +2716,10 @@ function handle_message(bot, nick, chan, message) {
                 arg[1] = nick;
             }
             //build pstr backwards
-            var pstr = 'Points for ' + arg[1] + ': ';
+            var pstr = '';
             var s = [];
             var first = true;
+            var pname = arg[1];
             db.csdc.find({}, {
                 'players': {
                     $elemMatch: {
@@ -2732,6 +2733,7 @@ function handle_message(bot, nick, chan, message) {
                         s[week['week'].match(/(\d+)/)[1]] = week['week'] + (week['players'][0]['alive'] ? ' (in prog.)' : '') + ': ' + week['players'][0]['points'].reduce(function(a, b, i) {
                             return a + b;
                         }, 0);
+                        pname = week['players'][0]['name'];
                     }
                 });
                 for (i = 0; i < s.length; i++) {
@@ -2743,6 +2745,7 @@ function handle_message(bot, nick, chan, message) {
                         first = false;
                     }
                 }
+                pstr = 'Points for ' + pname + ': ' + pstr;
                 bot.say(chan, pstr);
             });
         }
