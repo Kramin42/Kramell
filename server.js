@@ -2521,7 +2521,7 @@ function do_command(bot, arg, chan, nick, admin) {
     	}
     	var s = arg.slice(2).join(' ');
     	if (s.slice(0, 4) == '/op ') {
-    		bot.send('mode',s.slice(4),'+O');
+    		bot.send('MODE',arg[1],'+o',s.slice(4));
     	} else {
     		bot.say(arg[1], s);
     	}
