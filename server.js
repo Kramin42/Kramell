@@ -2515,7 +2515,7 @@ function do_command(bot, arg, chan, nick, admin) {
         });
     }
     
-    if (arg[0] == 'echo' && nick=='Kramin' && chan=='##kramell') {
+    if (arg[0] == 'echo' && nick=='Kramin') {
     	if (arg[1] == '#awbwrising') {
     		bot = efnetBot;
     	}
