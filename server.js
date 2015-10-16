@@ -2519,7 +2519,12 @@ function do_command(bot, arg, chan, nick, admin) {
     	if (arg[1] == '#awbwrising') {
     		bot = efnetBot;
     	}
-    	bot.say(arg[1], arg.slice(2).join(' '));
+    	var s = arg.slice(2).join(' ');
+    	if (s.slice(0, 4) == '/op ') {
+    		bot.send('mode',s.slice(4),'+O');
+    	} else {
+    		bot.say(arg[1], s);
+    	}
     }
 }
 
