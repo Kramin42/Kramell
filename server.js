@@ -418,7 +418,7 @@ function process_milestone(milestone, announcer, url) {
     //CSDC
     //console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
-    if (milestone.match(/v=0.17-a/)) { //trunk only for csdc
+    if (milestone.match(/v=0.\d\d-a/)) { //trunk only for csdc
         db.nick_aliases.distinct('aliases', {
             'name': 'csdc'
         }, function(err, aliases) {
@@ -444,12 +444,12 @@ function process_milestone(milestone, announcer, url) {
                     end: 1
                 }).toArray().then(function(weeks) {
                     weeks.forEach(function(week) {
-                        console.log("got week and player data for "+name+": "+JSON.stringify(week));
+                        //console.log("got week and player data for "+name+": "+JSON.stringify(week));
                         //console.log(JSON.stringify(week));
                         timeStamp = getTimeStamp();
-                        console.log(timeStamp);
+                        //console.log(timeStamp);
                         if (week && timeStamp >= week['start'] && timeStamp < week['end']) {
-                            console.log("data valid and within dates for "+name);
+                            //console.log("data valid and within dates for "+name);
                             if (week['players'] && week['players'][0]) {
                                 if (week['players'][0]['alive'] && milestone.search(new RegExp('char=' + week['char'], 'i')) > -1) {
                                     //csdc_announce(name, milestone, week);
