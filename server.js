@@ -444,12 +444,12 @@ function process_milestone(milestone, announcer, url) {
                     end: 1
                 }).toArray().then(function(weeks) {
                     weeks.forEach(function(week) {
-                        //console.log("got week and player data for "+name+": "+JSON.stringify(week));
+                        console.log("got week and player data for "+name+": "+JSON.stringify(week));
                         //console.log(JSON.stringify(week));
                         timeStamp = getTimeStamp();
-                        //console.log(timeStamp);
+                        console.log(timeStamp);
                         if (week && timeStamp >= week['start'] && timeStamp < week['end']) {
-                            //console.log("data valid and within dates for "+name);
+                            console.log("data valid and within dates for "+name);
                             if (week['players'] && week['players'][0]) {
                                 if (week['players'][0]['alive'] && milestone.search(new RegExp('char=' + week['char'], 'i')) > -1) {
                                     //csdc_announce(name, milestone, week);
