@@ -3067,6 +3067,7 @@ var SampleApp = function() {
                 tablist += '<li role="presentation" class="active"><a href="#overall" aria-controls="overall" role="tab" data-toggle="tab">Overall</a></li>';
                 var players = {};
                 weeklist = [];
+                weeks.sort(function(a, b){return parseInt(a['week'].match(/\d+/)[0])-parseInt(b['week'].match(/\d+/)[0])});
                 weeks.forEach(function(week) {
                     if (week && week['players'] && week['players'][0] && week['week'].match(/(\d+)/)) {
                         if (weeklist.indexOf(week['week']) == -1) {
@@ -3080,6 +3081,8 @@ var SampleApp = function() {
                         });
                     }
                 });
+                
+                weeklist.sort();
 
                 overalltable = '';
                 overalltableheader = '<tr><th>Player</th>';
