@@ -418,7 +418,7 @@ function process_milestone(milestone, announcer, url) {
     //CSDC
     //console.log("milestone for "+name+" ("+version+")");
     //console.log(message);
-    if (milestone.match(/v=0.\d\d-a/)) { //trunk only for csdc
+    if (milestone.match(/v=(0.17-a|0.18-a|0.17-b|0.17)/)) {
         db.nick_aliases.distinct('aliases', {
             'name': 'csdc'
         }, function(err, aliases) {
