@@ -77,6 +77,7 @@ var NAaliases;
 var cheiquerychan = control_channel;
 var gretellquerychan = control_channel;
 //var sequellquerychan = control_channel;
+var thinktankchan = "NONE"
 var logacc = {};
 var fetching = {};
 
@@ -2539,6 +2540,7 @@ function do_command(bot, arg, chan, nick, admin) {
     
     if (arg[0] == 'thinktank' && chan!='##crawl') {
     	bot.send('NAMES', chan);
+    	thinktankchan = chan;
     }
 }
 
@@ -2877,6 +2879,7 @@ function getKeys(obj){
 
 function handle_names(chan, nicks) {
 	console.log(chan+": "+getKeys(nicks));
+	if (chan == thinktankchan) {
 	db.channels.findOne({'channel': chan}).then(function(chandata){
         if (chandata['server'] == freenodeAddress) {
             freenodeBot.say(chan, getKeys(nicks).join(', '));
@@ -2885,6 +2888,8 @@ function handle_names(chan, nicks) {
             efnetBot.say(chan, getKeys(nicks).join(', '));
         }
     });
+    thinktankchan = "NONE"
+    }
 }
 
 function connect() {
