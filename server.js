@@ -2867,14 +2867,22 @@ function handle_efnet_message(nick, chan, message){
     handle_message(efnetBot, nick, chan, message);
 }
 
+function getKeys(obj){
+   var keys = [];
+   for(var key in obj){
+      keys.push(key);
+   }
+   return keys;
+}
+
 function handle_names(chan, nicks) {
 	console.log(chan+": "+nicks.keys());
 	db.channels.findOne({'channel': chan}).then(function(chandata){
         if (chandata['server'] == freenodeAddress) {
-            freenodeBot.say(chan, Object.keys(nicks).join(', '));
+            freenodeBot.say(chan, getKeys(nicks).join(', '));
         }
         if (chandata['server'] == efnetAddress) {
-            efnetBot.say(chan, Object.keys(nicks).join(', '));
+            efnetBot.say(chan, getKeys(nicks).join(', '));
         }
     });
 }
