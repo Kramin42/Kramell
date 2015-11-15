@@ -803,6 +803,8 @@ function check_csdc_points(name, milestone, week) {
                             $set: toset
                         });
                         break;
+                    } else if (!player['bonusqual'][i][j]) {//must do them in order
+                    	break;
                     }
                 }
                 if (player['bonusqual'][i].every(Boolean)) {
