@@ -2876,7 +2876,7 @@ function getKeys(obj){
 }
 
 function handle_names(chan, nicks) {
-	console.log(chan+": "+nicks.keys());
+	console.log(chan+": "+getKeys(nicks));
 	db.channels.findOne({'channel': chan}).then(function(chandata){
         if (chandata['server'] == freenodeAddress) {
             freenodeBot.say(chan, getKeys(nicks).join(', '));
