@@ -2536,6 +2536,10 @@ function do_command(bot, arg, chan, nick, admin) {
     		bot.say(arg[1], s);
     	}
     }
+    
+    if (arg[0] == 'thinktank' && chan!='##crawl') {
+    	bot.send('NAMES', chan);
+    }
 }
 
 function announce_week(bot, week, chan) {
@@ -2863,6 +2867,17 @@ function handle_efnet_message(nick, chan, message){
     handle_message(efnetBot, nick, chan, message);
 }
 
+function handle_names(chan, nicks) {
+	db.channels.findOne({'channel': chan}).then(function(chandata){
+        if (chandata['server'] == freenodeAddress) {
+            freenodeBot.say(chan, nicks.join(', '));
+        }
+        if (chandata['server'] == efnetAddress) {
+            efnetBot.say(chan, nicks.join(', '));
+        }
+    });
+}
+
 function connect() {
     //connect to IRC
     db.channels.distinct('channel', {'server': freenodeAddress}, function(err, chans) {
@@ -2881,6 +2896,7 @@ function connect() {
         freenodeBot.addListener('error', handle_error);
         freenodeBot.addListener('quit', handle_quit);
         freenodeBot.addListener('registered', handle_connect);
+        freenodeBot.addListener('names', handle_names);
         bot = freenodeBot;
     });
     db.channels.distinct('channel', {'server': efnetAddress}, function(err, chans) {
@@ -2899,6 +2915,7 @@ function connect() {
         efnetBot.addListener('error', handle_error);
         efnetBot.addListener('quit', handle_quit);
         efnetBot.addListener('registered', handle_connect);
+        efnetBot.addListener('names', handle_names);
     });
 }
 
