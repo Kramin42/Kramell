@@ -2868,13 +2868,13 @@ function handle_efnet_message(nick, chan, message){
 }
 
 function handle_names(chan, nicks) {
-	console.log(chan+": "+nicks);
+	console.log(chan+": "+nicks.keys());
 	db.channels.findOne({'channel': chan}).then(function(chandata){
         if (chandata['server'] == freenodeAddress) {
-            freenodeBot.say(chan, nicks.keys().join(', '));
+            freenodeBot.say(chan, Object.keys(nicks).join(', '));
         }
         if (chandata['server'] == efnetAddress) {
-            efnetBot.say(chan, nicks.keys().join(', '));
+            efnetBot.say(chan, Object.keys(nicks).join(', '));
         }
     });
 }
