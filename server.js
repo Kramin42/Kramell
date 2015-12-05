@@ -243,7 +243,7 @@ function get_logfile_offset(announcer, url) {
 }
 
 function get_server_logs(announcer) {
-    var delay = 30;
+    var delay = 60;
     //  if (fetching[announcer]) {//don't want simultaneous fetches breaking things
     //      console.log("preventing simultaneous fetch for "+announcer);
     //      if (timers[announcer]) {
@@ -271,7 +271,7 @@ function get_server_logs(announcer) {
             console.log(announcer + ' not found');
         }
         server['files'].forEach(function(file) {
-        	get_logfile_offset(announcer, file['url']); return;
+        	//get_logfile_offset(announcer, file['url']); return;
             if (!fetching[file['url']] && file['offset']) {
                 fetching[file['url']] = true;
                 //console.log("checking "+announcer+" logs");
