@@ -68,7 +68,7 @@ var dieselrobin = db.collection('dieselrobin');
 var control_channel = '##kramell';
 var forbidden = ['##crawl', '##crawl-dev', '##crawl-sequell'];
 
-var csdcrunning = true;
+var csdcrunning = false;
 var fetchlimit = 1024 * 100 - 2;
 
 var timers = {};
