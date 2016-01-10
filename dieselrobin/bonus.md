@@ -10,7 +10,7 @@ Reach the end of Elf before entering Lair (while in mission 3, you must enter Or
 
 ### Mission B:
 
-Reach Lair 8 at XL12 or lower.
+Reach Lair 8 at XL11 or lower.
 
 ### Mission C
 
@@ -21,11 +21,11 @@ You must survive mission 1 for this to count.
 
 ### Mission A
 
-Polymorph and then kill The Royal Jelly.
+Get the Slimy rune as your first rune.
 
 ### Mission B
 
-Get all the pan runes without killing any of the special panlords (they follow you across levels in trunk).
+Get the abyssal rune on abyss:5 as your third rune.
 
 ### Mission C
 
@@ -47,6 +47,7 @@ requirements for mission 10.
 
 Pacifist Zot. After entering Zot you may not kill any enemies until you pick up the orb.
 WARNING: Monsters killed by neutral monsters you have pacified or frenzied or summoned with lugonu still count as kills.
+(If the bot fails to recognise that you completed this one, ask Kramin to review the tv)
 
 ## Tier 100 (100 points)
 

@@ -1083,7 +1083,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
                 }
             }
             if (i == 0 && j == 1) { //T1B
-                if (milestone.search('xl=(\d|1[012]):.*br=Lair.*type=br.end') > -1) {
+                if (milestone.search('xl=(\d|1[01]):.*br=Lair.*type=br.end') > -1) {
                     //account['bonusqual'][i]=true;
                     promises.push(db.dieselrobin.update({
                         'account': account['account']
@@ -1140,7 +1140,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
             }
 
             if (i == 1 && j == 0) { //T2A
-                if (milestone.search('type=uniq.*shaped Royal Jelly') > -1) {
+                if (milestone.search('urune=1:.*place=Slime:.*type=rune') > -1) {
                     //account['bonusqual'][i]=[true];
                     promises.push(db.dieselrobin.update({
                         'account': account['account']
@@ -1156,42 +1156,19 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
                 }
             }
             if (i == 1 && j == 1) { //T2B
-                if (milestone.search('type=uniq.*(Cerebov|Lom Lobon|Mnoleg|Gloorx vloq)') > -1) {
-                    account['bonusdisqual'][i] = true;
+                if (milestone.search('urune=3:.*br=Abyss:lvl=5:.*type=rune') > -1) {
+                    //account['bonusqual'][i]=[true];
                     promises.push(db.dieselrobin.update({
                         'account': account['account']
                     }, {
                         $set: {
-                            'bonusdisqual.1': true
+                            'bonusqual.1': [true],
+                            'bonuspoints.1': 4
                         }
                     }));
-                } else if (milestone.search('place=Pan.*type=rune') > -1) {
-                    if (account['bonusqual'][i]) {
-                        account['bonusqual'][i]++;
-                    } else {
-                        account['bonusqual'][i] = 1;
-                    }
-                    if (account['bonusqual'][i] >= 5) {
-                        promises.push(db.dieselrobin.update({
-                            'account': account['account']
-                        }, {
-                            $set: {
-                                'bonusqual.1': true,
-                                'bonuspoints.1': 4
-                            }
-                        }));
-                        announce = true;
-                        bonuswon = 4;
-                        points = 4;
-                    } else {
-                        promises.push(db.dieselrobin.update({
-                            'account': account['account']
-                        }, {
-                            $set: {
-                                'bonusqual.1': account['bonusqual'][i]
-                            }
-                        }));
-                    }
+                    announce = true;
+                    bonuswon = 4;
+                    points = 4;
                 }
             }
             if (i == 1 && j == 2) { //T2C
