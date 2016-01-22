@@ -12,7 +12,7 @@ See the [Workflow](./workflow) for concise instructions on how to get registered
 
 If at any point you need help, feel free to ask in ##dieselrobin.
 
-*Game Version:* Trunk (0.16-a)
+*Game Version:* Trunk (0.18-a)
 
 **Servers**
 
