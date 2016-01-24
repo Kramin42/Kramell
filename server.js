@@ -1812,7 +1812,7 @@ function do_command(bot, arg, chan, nick, admin) {
     }
 
     //$mission <num|"list">
-    if (arg[0] == 'mission' && (chan == '##dieselrobin' || admin)) {
+    if (arg[0] == 'mission' && (chan == '##dieselrobin' || chan==nick || admin)) {
         if (arg.length > 1) {
             if (arg[1] == 'list') {
                 //db.dieselrobin.findOne({"challenge": "dieselrobin"}, function(err, challenge) {
@@ -1913,7 +1913,7 @@ function do_command(bot, arg, chan, nick, admin) {
     }
 
     //$nominate <combo> [player]
-    if ((arg[0] == 'nominated') && (chan == '##dieselrobin' || admin)) {
+    if ((arg[0] == 'nominated') && (chan == '##dieselrobin' || chan==nick || admin)) {
         db.dieselrobin.find({
             'team': {
                 $exists: true
@@ -1942,7 +1942,7 @@ function do_command(bot, arg, chan, nick, admin) {
     }
 
     //$teams
-    if (arg[0] == 'teams' && (chan == '##dieselrobin' || chan == '##crawl' || admin)) {
+    if (arg[0] == 'teams' && (chan == '##dieselrobin' || chan==nick || chan == '##crawl' || admin)) {
         db.dieselrobin.find({
             'team': {
                 $exists: true
@@ -1961,7 +1961,7 @@ function do_command(bot, arg, chan, nick, admin) {
     }
 
     //$team [team name|player name]
-    if (arg[0] == 'team' && (chan == '##dieselrobin' || chan == '##crawl' || admin)) {
+    if (arg[0] == 'team' && (chan == '##dieselrobin' || chan==nick || chan == '##crawl' || admin)) {
         if (arg.length == 1) {
             arg[1] = nick;
         }
@@ -2112,7 +2112,7 @@ function do_command(bot, arg, chan, nick, admin) {
     }
 
     //$bonus <player/team name>
-    if (arg[0] == 'bonus' && (chan == '##dieselrobin' || admin)) {
+    if (arg[0] == 'bonus' && (chan == '##dieselrobin' || chan==nick || admin)) {
         if (arg.length == 1) {
             arg[1] = nick;
         }
@@ -2146,7 +2146,7 @@ function do_command(bot, arg, chan, nick, admin) {
         }
     }
 
-    if ((arg[0] == 'r' || arg[0] == 'remind') && (chan == '##dieselrobin' || admin)) {
+    if ((arg[0] == 'r' || arg[0] == 'remind') && (chan == '##dieselrobin' || chan==nick || admin)) {
         if (arg.length == 1) {
             arg[1] = nick;
         }
@@ -2177,7 +2177,7 @@ function do_command(bot, arg, chan, nick, admin) {
         });
     }
 
-    if (arg[0] == 'scores' && (chan == '##dieselrobin' || chan == '##crawl')) {
+    if (arg[0] == 'scores' && (chan == '##dieselrobin' || chan==nick || chan == '##crawl')) {
         db.dieselrobin.find({
             'team': {
                 $exists: true
@@ -2272,30 +2272,30 @@ function do_command(bot, arg, chan, nick, admin) {
         });
     }
 
-    //shuffle dieselrobin chars
-	if (admin && arg[0]=="shufflechars" && (chan=="##dieselrobin" || admin)) {
-		 db.dieselrobin.distinct('nominated', function(err, chars) {
-			 db.dieselrobin.distinct('team', {$or: [{nominated: {$exists: false}}, {nominated: {$size: 0}}, {nominated: {$size: 1}}, {nominated: {$size: 2}}]}, function(err, unnomteams) {
-				 console.log(JSON.stringify(unnomteams));
-				 if (unnomteams.length>0) {
-					 bot.say(chan, 'Some teams have not finished nominating: '+unnomteams.join(', '));
-				 } else {
-					 charcount = chars.length;
-					 chars = shuffle(chars);
-					 db.dieselrobin.distinct('team', function(err, teams){
-						 teams.forEach(function (team) {
-							 toset = {};
-							 for (i=0; i<3; i++) {
-								 toset["assigned."+i] = chars.pop();
-							 }
-							 db.dieselrobin.update({'team': team}, {$set: toset});
-						 });
-						 bot.say(chan, charcount+" chars assigned to "+teams.length+" teams, randomly");
-					 });
-				 }
-			 });
-		 });
-	}
+    //shuffle dieselrobin chars (disabled)
+	// if (admin && arg[0]=="shufflechars" && (chan=="##dieselrobin" || admin)) {
+// 		 db.dieselrobin.distinct('nominated', function(err, chars) {
+// 			 db.dieselrobin.distinct('team', {$or: [{nominated: {$exists: false}}, {nominated: {$size: 0}}, {nominated: {$size: 1}}, {nominated: {$size: 2}}]}, function(err, unnomteams) {
+// 				 console.log(JSON.stringify(unnomteams));
+// 				 if (unnomteams.length>0) {
+// 					 bot.say(chan, 'Some teams have not finished nominating: '+unnomteams.join(', '));
+// 				 } else {
+// 					 charcount = chars.length;
+// 					 chars = shuffle(chars);
+// 					 db.dieselrobin.distinct('team', function(err, teams){
+// 						 teams.forEach(function (team) {
+// 							 toset = {};
+// 							 for (i=0; i<3; i++) {
+// 								 toset["assigned."+i] = chars.pop();
+// 							 }
+// 							 db.dieselrobin.update({'team': team}, {$set: toset});
+// 						 });
+// 						 bot.say(chan, charcount+" chars assigned to "+teams.length+" teams, randomly");
+// 					 });
+// 				 }
+// 			 });
+// 		 });
+// 	}
 
     //CSDC commands
     if (arg[0] == 'csdc') {
