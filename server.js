@@ -1140,7 +1140,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
             }
 
             if (i == 1 && j == 0) { //T2A
-                if (milestone.search('urune=1:.*place=Slime:.*type=rune') > -1) {
+                if (milestone.search('urune=1:.*br=Slime:.*type=rune') > -1) {
                     //account['bonusqual'][i]=[true];
                     promises.push(db.dieselrobin.update({
                         'account': account['account']
