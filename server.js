@@ -196,8 +196,9 @@ function dictify(milestone) {
     return d;
 }
 
+diffmap={'1': 'standard', '2': 'challenge', '3': 'nightmare'};
 function stone_format(stone) {
-    return stone['name'] + ' (L' + stone['xl'] + ' ' + stone['char'] + ') ' + stone['milestone'] + ' (' + ((stone['oplace'] && stone['milestone'].search('left') == -1) ? stone['oplace'] : stone['place']) + ') ['+stone['v']+']';
+    return stone['name'] + ' (L' + stone['xl'] + ' ' + stone['char'] + ') ' + stone['milestone'] + ' (' + ((stone['oplace'] && stone['milestone'].search('left') == -1) ? stone['oplace'] : stone['place']) + ') ['+stone['v']+(stone['difficulty'] ? ', '+diffmap[stone['difficulty']] : '')+']';
 }
 
 function log_format(stone) {
@@ -213,7 +214,7 @@ function log_format(stone) {
     var dur = parseInt(stone['dur']); //need to format correctly
     var duration = pad2(parseInt(dur / 3600)) + ':' + pad2(parseInt(dur / 60) % 60) + ':' + pad2(dur % 60);
 
-    return stone['name'] + ' the ' + stone['title'] + ' (L' + stone['xl'] + ' ' + stone['char'] + ')' + (stone['god'] ? ' worshipper of ' + stone['god'] : '') + ', ' + (stone['vmsg'] !== undefined ? stone['vmsg'] : stone['tmsg']) + loc_string + ', with ' + stone['sc'] + ' points after ' + stone['turn'] + ' turns and ' + duration + '. ['+stone['v']+']';
+    return stone['name'] + ' the ' + stone['title'] + ' (L' + stone['xl'] + ' ' + stone['char'] + ')' + (stone['god'] ? ' worshipper of ' + stone['god'] : '') + ', ' + (stone['vmsg'] !== undefined ? stone['vmsg'] : stone['tmsg']) + loc_string + ', with ' + stone['sc'] + ' points after ' + stone['turn'] + ' turns and ' + duration + '. ['+stone['v']+(stone['difficulty'] ? ', '+diffmap[stone['difficulty']] : '')+']';
 }
 
 function get_logfile_offset(announcer, url) {
