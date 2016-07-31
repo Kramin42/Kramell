@@ -10,7 +10,7 @@ Reach the end of Elf before entering Lair (while in mission 3, you must enter Or
 
 ### Mission B:
 
-Reach Lair 8 at XL11 or lower.
+Reach Lair 6 at XL11 or lower.
 
 ### Mission C
 
@@ -21,7 +21,7 @@ You must survive mission 1 for this to count.
 
 ### Mission A
 
-Get the Slimy rune as your first rune.
+Get the Slimy rune as your first rune. Means entering Slime for mission 4.
 
 ### Mission B
 
@@ -29,7 +29,7 @@ Get the abyssal rune on abyss:5 as your third rune.
 
 ### Mission C
 
-Complete mission 7 without using any potions or scrolls.
+Complete mission 7 without using any potions or scrolls. (Only mission 7, you may use potions/scrolls for earlier parts).
 
 ## Tier 3 (8 points)
 
@@ -47,7 +47,7 @@ requirements for mission 10.
 
 Pacifist Zot. After entering Zot you may not kill any enemies until you pick up the orb.
 WARNING: Monsters killed by neutral monsters you have pacified or frenzied or summoned with lugonu still count as kills.
-(If the bot fails to recognise that you completed this one, ask Kramin to review the tv)
+(If the bot fails to recognise that you completed this one, ask Kramin to review the recording)
 
 ## Tier 100 (100 points)
 
