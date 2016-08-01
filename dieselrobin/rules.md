@@ -6,13 +6,13 @@
 
 Teams of players are assigned race/class combinations (multiple combos per team)
 and team members take turns completing "Missions" with each character (e.g., D
-to Lair, Lair:1-8). The competition will be run on the freenode IRC channel [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin).
+to Lair, Lair:1-6). The competition will be run on the freenode IRC channel [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin).
 
 See the [Workflow](./workflow) for concise instructions on how to get registered and organise your team.
 
 If at any point you need help, feel free to ask in ##dieselrobin.
 
-*Game Version:* Trunk (0.18-a)
+*Game Version:* Trunk (0.19-a)
 
 **Servers**
 
@@ -20,13 +20,13 @@ If at any point you need help, feel free to ask in ##dieselrobin.
 * CDO (console only)
 * [CSZO](http://crawl.s-z.org)
 * [CBRO](http://crawl.berotato.org)
-* [CLAN](http://crawl.lantea.net:8080)
+* [CUE](http://www.underhound.eu:8080/)
 * [CPO](https://crawl.project357.org)
 * [CXC](http://crawl.XTAHUA.com)
 
 **Time Frame**
 
-The competition will start at 0 AM UTC on the 22th of Jan and will end 16 days later (two weeks including weekends on both ends). Any games still in progress will be scored as if they
+The competition will start at 0 AM UTC on the 12th of August and will end 16 days later (two weeks including weekends on both ends). Any games still in progress will be scored as if they
 died of old age at that point. The start and end times will be posted in
 `??dieselrobin`
 
