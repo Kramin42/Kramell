@@ -16,7 +16,7 @@ Then you can procede as above.
 
 ### Combo nomination
 
-Everyone must nominate a combo before the start of the tourney (0 AM the 12th of August UTC), these combos will be shuffled and distributed to the teams.
+Everyone must nominate a combo before the start of the tourney (0 AM the 13th of August UTC), these combos will be shuffled and distributed to the teams.
 
 Nominate a combo in [##dieselrobin](https://webchat.freenode.net/?channels=##dieselrobin) with:
 

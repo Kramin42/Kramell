@@ -26,7 +26,7 @@ If at any point you need help, feel free to ask in ##dieselrobin.
 
 **Time Frame**
 
-The competition will start at 0 AM UTC on the 12th of August and will end 16 days later (two weeks including weekends on both ends). Any games still in progress will be scored as if they
+The competition will start at 0 AM UTC on the 13th of August and will end 16 days later (two weeks including weekends on both ends). Any games still in progress will be scored as if they
 died of old age at that point. The start and end times will be posted in
 `??dieselrobin`
 
