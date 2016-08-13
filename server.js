@@ -2117,6 +2117,7 @@ function do_command(bot, arg, chan, nick, admin) {
         if (arg.length == 1) {
             arg[1] = nick;
         }
+        console.log(arg);
         if (arg.length > 1) {
             db.dieselrobin.findOne({
                 $or: [{
@@ -2274,29 +2275,29 @@ function do_command(bot, arg, chan, nick, admin) {
     }
 
     //shuffle dieselrobin chars (disabled)
-	if (admin && arg[0]=="shufflechars" && (chan=="##dieselrobin" || admin)) {
-		 db.dieselrobin.distinct('nominated', function(err, chars) {
-			 db.dieselrobin.distinct('team', {$or: [{nominated: {$exists: false}}, {nominated: {$size: 0}}, {nominated: {$size: 1}}, {nominated: {$size: 2}}]}, function(err, unnomteams) {
-				 console.log(JSON.stringify(unnomteams));
-				 if (unnomteams.length>0) {
-					 bot.say(chan, 'Some teams have not finished nominating: '+unnomteams.join(', '));
-				 } else {
-					 charcount = chars.length;
-					 chars = shuffle(chars);
-					 db.dieselrobin.distinct('team', function(err, teams){
-						 teams.forEach(function (team) {
-							 toset = {};
-							 for (i=0; i<3; i++) {
-								 toset["assigned."+i] = chars.pop();
-							 }
-							 db.dieselrobin.update({'team': team}, {$set: toset});
-						 });
-						 bot.say(chan, charcount+" chars assigned to "+teams.length+" teams, randomly");
-					 });
-				 }
-			 });
-		 });
-	}
+	// if (admin && arg[0]=="shufflechars" && (chan=="##dieselrobin" || admin)) {
+// 		 db.dieselrobin.distinct('nominated', function(err, chars) {
+// 			 db.dieselrobin.distinct('team', {$or: [{nominated: {$exists: false}}, {nominated: {$size: 0}}, {nominated: {$size: 1}}, {nominated: {$size: 2}}]}, function(err, unnomteams) {
+// 				 console.log(JSON.stringify(unnomteams));
+// 				 if (unnomteams.length>0) {
+// 					 bot.say(chan, 'Some teams have not finished nominating: '+unnomteams.join(', '));
+// 				 } else {
+// 					 charcount = chars.length;
+// 					 chars = shuffle(chars);
+// 					 db.dieselrobin.distinct('team', function(err, teams){
+// 						 teams.forEach(function (team) {
+// 							 toset = {};
+// 							 for (i=0; i<3; i++) {
+// 								 toset["assigned."+i] = chars.pop();
+// 							 }
+// 							 db.dieselrobin.update({'team': team}, {$set: toset});
+// 						 });
+// 						 bot.say(chan, charcount+" chars assigned to "+teams.length+" teams, randomly");
+// 					 });
+// 				 }
+// 			 });
+// 		 });
+// 	}
 
     //CSDC commands
     if (arg[0] == 'csdc') {
