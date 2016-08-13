@@ -2128,6 +2128,7 @@ function do_command(bot, arg, chan, nick, admin) {
                     'accounts': new RegExp('^' + arg[1] + '$', 'i')
                 }]
             }).then(function(team) {
+            	console.log(team);
                 if (team) {
                     var s = '';
                     var ABC = ['A', 'B', 'C'];
