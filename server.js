@@ -1141,7 +1141,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
             }
 
             if (i == 1 && j == 0) { //T2A
-                if (milestone.search('urune=1:.*br=Slime:.*type=rune') > -1) {
+                if (milestone.search('br=Slime:.*urune=1:.*type=rune') > -1) {
                     //account['bonusqual'][i]=[true];
                     promises.push(db.dieselrobin.update({
                         'account': account['account']
@@ -2128,8 +2128,8 @@ function do_command(bot, arg, chan, nick, admin) {
                     'accounts': new RegExp('^' + arg[1] + '$', 'i')
                 }]
             }).then(function(team) {
-            	console.log(team);
                 if (team) {
+                	console.log(team);
                     var s = '';
                     var ABC = ['A', 'B', 'C'];
                     for (i = 0; i < team['accounts'].length; i++) {
