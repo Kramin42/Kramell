@@ -1157,7 +1157,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
                 }
             }
             if (i == 1 && j == 1) { //T2B
-                if (milestone.search('urune=(1|2|3):.*br=Abyss:lvl=5:.*type=rune') > -1) {
+                if (milestone.search('br=Abyss:lvl=5:.*urune=(1|2|3):.*type=rune') > -1) {
                     //account['bonusqual'][i]=[true];
                     promises.push(db.dieselrobin.update({
                         'account': account['account']
