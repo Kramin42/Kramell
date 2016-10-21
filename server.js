@@ -284,11 +284,10 @@ function get_server_logs(announcer) {
                 //child.stdout.on('data', function (data) {
                 var upperlimit = file['offset'] + fetchlimit;
                 exec('curl -sr ' + file['offset'] + '-' + upperlimit + ' ' + file['url'], function(error, data, stderr) {
-                    if (error) {
+                    if (error || stderr) {
                         console.log('Error: ' + error);
-                    }
-                    if (stderr) {
-                        console.log('STDERR: ' + error);
+                        console.log('data: ' + data);
+                        console.log('STDERR: ' + stderr);
                     }
                     //if (announcer=='Prequell') {console.log('Prequell data: '+data);}
                     if (data.search('416 Requested Range Not Satisfiable') == -1) {
