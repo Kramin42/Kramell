@@ -1552,8 +1552,9 @@ function do_command(bot, arg, chan, nick, admin) {
                             'url': arg[2]
                         }
                     }
+                }, function() {
+                	get_logfile_offset(arg[1], arg[2]);
                 });
-                get_logfile_offset(arg[1], arg[2]);
             }
         } else {
             bot.say(chan, 'Usage: $logfile [-rm] <announcer name> <url>');
