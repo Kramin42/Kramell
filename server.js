@@ -272,7 +272,7 @@ function get_server_logs(announcer) {
             console.log(announcer + ' not found');
         }
         server['files'].forEach(function(file) {
-        	//get_logfile_offset(announcer, file['url']); return;
+        	get_logfile_offset(announcer, file['url']); return;
             if (!fetching[file['url']] && file['offset']) {
                 fetching[file['url']] = true;
                 //console.log("checking "+announcer+" logs");
@@ -1553,7 +1553,7 @@ function do_command(bot, arg, chan, nick, admin) {
                         }
                     }
                 }, function() {
-                	get_logfile_offset(arg[1], arg[2]);
+                	get_logfile_offset(arg[1], arg[2]);`
                 });
             }
         } else {
