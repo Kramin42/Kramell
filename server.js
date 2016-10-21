@@ -283,9 +283,13 @@ function get_server_logs(announcer) {
 
                 //child.stdout.on('data', function (data) {
                 var upperlimit = file['offset'] + fetchlimit;
-                exec('curl -sr ' + file['offset'] + '-' + upperlimit + ' ' + file['url'], function(error, data, stderr) {
+                var execstring = 'curl -sr ' + file['offset'] + '-' + upperlimit + ' ' + file['url'];
+                exec(execstring, function(error, data, stderr) {
                     if (error || stderr) {
                         console.log('Error: ' + error);
+                        console.log('error.code: '+error.code);
+                        console.log('error.signal: '+error.signal);
+                        console.log('from command: ' + execstring);
                         console.log('data: ' + data);
                         console.log('STDERR: ' + stderr);
                     }
