@@ -198,7 +198,7 @@ function dictify(milestone) {
 
 diffmap={'1': 'standard', '2': 'challenge', '3': 'nightmare'};
 function stone_format(stone) {
-    return stone['name'] + ' (L' + stone['xl'] + ' ' + stone['char'] + ') ' + stone['milestone'] + ' (' + ((stone['oplace'] && stone['milestone'].search('left') == -1) ? stone['oplace'] : stone['place']) + ') ['+stone['v']+(stone['difficulty'] ? ', '+diffmap[stone['difficulty']] : '')+']';
+    return stone['name'] + ' (L' + stone['xl'] + ' ' + stone['char'] + ') ' + stone['milestone'] + ' (' + ((stone['oplace'] && stone['milestone'].search('left') == -1) ? stone['oplace'] : stone['place']) + ') ['+stone['src']+' '+stone['v']+(stone['difficulty'] ? ', '+diffmap[stone['difficulty']] : '')+']';
 }
 
 function log_format(stone) {
@@ -214,7 +214,7 @@ function log_format(stone) {
     var dur = parseInt(stone['dur']); //need to format correctly
     var duration = pad2(parseInt(dur / 3600)) + ':' + pad2(parseInt(dur / 60) % 60) + ':' + pad2(dur % 60);
 
-    return stone['name'] + ' the ' + stone['title'] + ' (L' + stone['xl'] + ' ' + stone['char'] + ')' + (stone['god'] ? ' worshipper of ' + stone['god'] : '') + ', ' + (stone['vmsg'] !== undefined ? stone['vmsg'] : stone['tmsg']) + loc_string + ', with ' + stone['sc'] + ' points after ' + stone['turn'] + ' turns and ' + duration + '. ['+stone['v']+(stone['difficulty'] ? ', '+diffmap[stone['difficulty']] : '')+']';
+    return stone['name'] + ' the ' + stone['title'] + ' (L' + stone['xl'] + ' ' + stone['char'] + ')' + (stone['god'] ? ' worshipper of ' + stone['god'] : '') + ', ' + (stone['vmsg'] !== undefined ? stone['vmsg'] : stone['tmsg']) + loc_string + ', with ' + stone['sc'] + ' points after ' + stone['turn'] + ' turns and ' + duration + '. ['+stone['src']+' '+stone['v']+(stone['difficulty'] ? ', '+diffmap[stone['difficulty']] : '')+']';
 }
 
 function get_logfile_offset(announcer, url) {
@@ -384,6 +384,7 @@ function process_milestone(milestone, announcer, url) {
         var name = milestone.match(/name=(\w*):/)[1];
         var version = milestone.match(/v=(.*):vlong/)[1];
         var stone = dictify(milestone);
+        stone['src'] = announcer;
     } catch (error) {
         console.log(error);
         console.log('in milestone: ' + milestone);
