@@ -1482,12 +1482,12 @@ function do_command(bot, arg, chan, nick, admin) {
             bot.say(chan, 'DieselRobin commands: $signup [-rm] <team name> | $teams | $nominate <char> | $nominated | $assign <char> <account name> <bonus choice (e.g. ACB)> | $mission <mission num/code> | $team [team, player, or account name] | $bonus [team, player, or account name] | $remind [player name] | $scores');
 
         } else {
-            bot.say(chan, 'Kramell commands:');
+            if (chan!=crawl_channel) bot.say(chan, 'Kramell commands:');
             if (admin) bot.say(chan, '  $announcer [-rm] <announcer name>');
             if (admin) bot.say(chan, '  $channel [-rm] <channel name>');
             bot.say(chan, '  $name [-rm] <user name>');
-            bot.say(chan, '  $filter [-rm] <regex filter>');
-            bot.say(chan, '  $colour [-rm] [colour (if not -rm)] <regex filter>');
+            if (admin || chan!=crawl_channel) bot.say(chan, '  $filter [-rm] <regex filter>');
+            if (admin || chan!=crawl_channel) bot.say(chan, '  $colour [-rm] [colour (if not -rm)] <regex filter>');
         }
     }
 
