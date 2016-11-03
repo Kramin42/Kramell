@@ -2567,41 +2567,41 @@ function handle_message(bot, nick, chan, message) {
     }
 
     // get announcements
-    if (chan == observe_channel || chan == control_channel) { //remove control_channel when all working
-        //check if from announcer
-        db.announcers.count({
-            'name': nick
-        }, function(err, count) {
-            if (count) {
-                //do CSDC weekly combo announcement
-                //          db.csdc.findOne({"announced": false, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).then(function(week) {
-                //              //if (week) console.log("checking date for "+week["week"]+", "+getTimeStamp()+">="+week["start"]);
-                //              if (week && getTimeStamp() >= week["start"]) {
-                //                  db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
-                //                  bot.say('##csdc', irc.colors.wrap('magenta', week["week"]+" has begun!"));
-                //                  announce_week(week, '##csdc');
-                //              }
-                //          });
-
-                get_server_logs(nick);
-
-                //console.log("found announcement");
-                // go through all names in all channels
-                // db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
-                //                 //get aliases
-                //                 db.nick_aliases.distinct('aliases',{"name":name.toLowerCase()},function(err, alias){
-                //                     alias=alias[0] ? alias[0] : name;
-                //                     //get the actual alias in use and announce
-                //                     if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
-                //                         alias = message.match(new RegExp("^("+alias+") ", "i"))[1];
-                //                         //console.log("announcement for "+alias);
-                //                         route_announcement(name, alias, message);
-                //                     }
-                //                 });
-                //             });});
-            }
-        });
-    }
+//     if (chan == observe_channel || chan == control_channel) { //remove control_channel when all working
+//         //check if from announcer
+//         db.announcers.count({
+//             'name': nick
+//         }, function(err, count) {
+//             if (count) {
+//                 //do CSDC weekly combo announcement
+//                 //          db.csdc.findOne({"announced": false, "active": true}, {"week": 1, "start": 1, "char": 1, "gods": 1, "bonustext": 1}).then(function(week) {
+//                 //              //if (week) console.log("checking date for "+week["week"]+", "+getTimeStamp()+">="+week["start"]);
+//                 //              if (week && getTimeStamp() >= week["start"]) {
+//                 //                  db.csdc.update({"week": week["week"]},{$set: {"announced": true}});
+//                 //                  bot.say('##csdc', irc.colors.wrap('magenta', week["week"]+" has begun!"));
+//                 //                  announce_week(week, '##csdc');
+//                 //              }
+//                 //          });
+// 
+//                 get_server_logs(nick);
+// 
+//                 //console.log("found announcement");
+//                 // go through all names in all channels
+//                 // db.channels.distinct('names',function(err, names) {names.forEach(function(name) {
+//                 //                 //get aliases
+//                 //                 db.nick_aliases.distinct('aliases',{"name":name.toLowerCase()},function(err, alias){
+//                 //                     alias=alias[0] ? alias[0] : name;
+//                 //                     //get the actual alias in use and announce
+//                 //                     if (message.search(new RegExp("^("+alias+") ", "i"))>-1){
+//                 //                         alias = message.match(new RegExp("^("+alias+") ", "i"))[1];
+//                 //                         //console.log("announcement for "+alias);
+//                 //                         route_announcement(name, alias, message);
+//                 //                     }
+//                 //                 });
+//                 //             });});
+//             }
+//         });
+//     }
 
     // redirect sequell/chei queries
     // if in a post channel
