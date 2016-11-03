@@ -372,7 +372,7 @@ function process_milestone(milestone, announcer, url) {
         //milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
         if (milestone.match(/\n/)) {
             console.log('broken milestone: ' + milestone);
-            bot.say(control_channel, 'Kramin: broken milestone: ' + milestone);
+            //bot.say(control_channel, 'Kramin: broken milestone: ' + milestone);
         } else {
             //console.log("appending to logacc["+announcer+"]["+url+"]: "+milestone);
             logacc[announcer][url] += milestone;
