@@ -21,7 +21,7 @@ var chei = 'Cheibriados';
 var gretell = 'Gretell';
 var sequell = 'Sequell';
 var irc = require('irc');
-var observe_channel = '##crawl';
+var crawl_channel = '##crawl-announcements';
 //var rawannounce_channel = '##crawl-announcements';
 var freenodeBot;
 var efnetBot;
@@ -1646,7 +1646,7 @@ function do_command(bot, arg, chan, nick, admin) {
         }
     }
 
-    if (arg[0] == 'filter' || arg[0] == 'filters') {
+    if ((arg[0] == 'filter' || arg[0] == 'filters') && (chan!=crawl_channel || admin)) {
         if (chan != control_channel) {
             if (arg[1] == '-rm') {
                 arg.splice(2, 0, chan);
@@ -1691,7 +1691,7 @@ function do_command(bot, arg, chan, nick, admin) {
         }
     }
 
-    if (arg[0] == 'colour' || arg[0] == 'color' || arg[0] == 'colours' || arg[0] == 'colors') {
+    if ((arg[0] == 'colour' || arg[0] == 'color' || arg[0] == 'colours' || arg[0] == 'colors')  && (chan!=crawl_channel || admin)) {
         if (chan != control_channel) {
             if (arg[1] == '-rm') {
                 arg.splice(2, 0, chan);
@@ -2608,7 +2608,7 @@ function handle_message(bot, nick, chan, message) {
     db.channels.count({
         'channel': chan
     }, function(err, count) {
-        if (chan == control_channel || count) {
+        if (chan == control_channel || count && chan != crawl_channel) {
             if (message[0] == '%') {
                 freenodeBot.say(chei, message);
                 cheiquerychan = chan;
@@ -2723,7 +2723,7 @@ function handle_message(bot, nick, chan, message) {
         //remove prefix and add username as first arg if there is none
         var arg = message.trim().slice(1, message.length).replace(/ \. /g, ' ' + nick + ' ').replace(/ \.$/, ' ' + nick).split(' ');
 
-        if (arg[0] == 'help' && (chan == '##csdc' || chan == '##crawl' || chan == control_channel)) {
+        if (arg[0] == 'help' && (chan == '##csdc' || chan == control_channel)) {
             bot.say(chan, 'csdc commands: $points <player>, $week <week num>');
         }
 
@@ -2818,7 +2818,7 @@ function handle_message(bot, nick, chan, message) {
         do_command(bot, arg, chan, nick, admin);
     }
 
-    if(message.search(/\bgong\b/i) > -1 && chan!="##crawl") {
+    if(message.search(/\bgong\b/i) > -1 && chan!=crawl_channel) {
         shield_of_the_gong(bot, chan);
     }
 
@@ -2885,7 +2885,7 @@ function connect() {
     db.channels.distinct('channel', {'server': freenodeAddress}, function(err, chans) {
         //bot.join(chan,null);
         freenodeBot = new irc.Client(freenodeAddress, botnick, {
-            channels: [control_channel, observe_channel].concat(chans),
+            channels: [control_channel, crawl_channel].concat(chans),
             port: 8001,
             debug: true,
             autoRejoin: true,
