@@ -71,6 +71,8 @@ var forbidden = ['##crawl', '##crawl-dev', '##crawl-sequell'];
 var csdcrunning = false;
 var fetchlimit = 1024 * 100 - 2;
 
+offensive_regex = ".*hitler.*|.*nigg(er|a).*|.*penis.*|.*cumgolem.*|.*fatandgay.*|.*imgay.*|.*thegay|.*faggo.*|dick.*|.*buttsex.*|.*cuck.*funt.*|.*cunt.*|lolilover|.*holocaust.*|.*retard.*|.*basketballamerican.*";
+
 var timers = {};
 var NAnick;
 var NAaliases;
@@ -1385,6 +1387,8 @@ function announce_with_filters(bot, chan, stone, message, callback) {
                 matched = false;
             }
         });
+        // filter offensive names for crawl main channel
+        matched = matched && (chan!=crawl_channel || message.search(offensive_regex) == -1);
         if (matched) {
             //there should only be one colourmap per channel, could just use findOne() and colourmap = doc["colourmap"] here
             db.channels.distinct('colourmap', {
