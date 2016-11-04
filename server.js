@@ -21,7 +21,7 @@ var chei = 'Cheibriados';
 var gretell = 'Gretell';
 var sequell = 'Sequell';
 var irc = require('irc');
-var crawl_channel = '##crawl-announcements';
+var crawl_channel = '##crawl';
 //var rawannounce_channel = '##crawl-announcements';
 var freenodeBot;
 var efnetBot;
