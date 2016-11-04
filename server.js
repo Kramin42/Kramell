@@ -1403,7 +1403,8 @@ function announce_with_filters(bot, chan, stone, message, callback) {
                 }
                 //antiping, put a zero width space in the name
                 message = [message[0], message.slice(1)].join('\u200B');
-                bot.say(chan, irc.colors.wrap(colour, message));
+                if (chan==crawl_channel) bot.say(chan, message);
+                else bot.say(chan, irc.colors.wrap(colour, message));
                 if (callback) {
                     callback();
                 }
