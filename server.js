@@ -71,7 +71,7 @@ var forbidden = ['##crawl', '##crawl-dev', '##crawl-sequell'];
 var csdcrunning = false;
 var fetchlimit = 1024 * 100 - 2;
 
-offensive_regex = ".*hitler.*|.*nigg(er|a).*|.*penis.*|.*cumgolem.*|.*fatandgay.*|.*imgay.*|.*thegay|.*faggo.*|.*dick.*|.*buttsex.*|.*cuck.*funt.*|.*cunt.*|lolilover|.*holocaust.*|.*retard.*|.*basketballamerican.*|(Rr)aped.*|.*Shit.*|Titty.*";
+offensive_regex = ".*[Hh]itler.*|.*[Nn]igg(er|a).*|.*[Pp]enis.*|.*[Cc]umgolem.*|.*[Ff]at[Aa]nd[Gg]ay.*|.*[Ii]m[Gg]ay.*|.*[Tt]he[Gg]ay|.*[Ff]aggo.*|.*[Dd]ick.*|.*[Bb]utt[Ss]ex.*|.*[Cc]uck.*[Ff]unt.*|.*[Cc]unt.*|lolilover|.*[Hh]olocaust.*|.*[Rr]etard.*|.*[Bb]asketball[Aa]merican.*|[Rr]aped.*|.*[Ss]hit.*|[Tt]itty.*";
 
 var timers = {};
 var NAnick;
