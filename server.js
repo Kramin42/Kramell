@@ -274,7 +274,7 @@ function get_server_logs(announcer) {
             console.log(announcer + ' not found');
         }
         server['files'].forEach(function(file) {
-        	//get_logfile_offset(announcer, file['url']); return;
+        	get_logfile_offset(announcer, file['url']); return;
             if (!fetching[file['url']] && file['offset']) {
                 fetching[file['url']] = true;
                 //console.log("checking "+announcer+" logs");
@@ -1383,9 +1383,13 @@ function announce_with_filters(bot, chan, stone, message, callback) {
     }, function(err, matches) {
         var matched = true;
         matches.forEach(function(match) {
-            if (message.search(match) == -1) {
-                matched = false;
-            }
+        	try {
+				if (message.search(match) == -1) {
+					matched = false;
+				}
+			} catch (e) {
+				console.log(e);
+			}
         });
         // filter offensive names for crawl main channel
         matched = matched && (chan!=crawl_channel || message.search(offensive_regex) == -1);
@@ -1397,9 +1401,13 @@ function announce_with_filters(bot, chan, stone, message, callback) {
                 var colour = 'gray';
                 var colourmap = colourmaps[0];
                 for (match in colourmap) {
-                    if (message.search(match) > -1) {
-                        colour = colourmap[match];
-                    }
+                	try {
+						if (message.search(match) > -1) {
+							colour = colourmap[match];
+						}
+					} catch (e) {
+						console.log(e);
+					}
                 }
                 //antiping, put a zero width space in the name
                 message = [message[0], message.slice(1)].join('\u200B');
