@@ -275,6 +275,7 @@ function get_server_logs(announcer) {
         }
         server['files'].forEach(function(file) {
         	//get_logfile_offset(announcer, file['url']); return;
+            
             if (!fetching[file['url']] && file['offset']) {
                 fetching[file['url']] = true;
                 //console.log("checking "+announcer+" logs");
