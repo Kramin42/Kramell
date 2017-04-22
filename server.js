@@ -2897,7 +2897,7 @@ function connect() {
         console.log('Logging in to freenode with nick: ' + botnick + ', pass: ' + password);
         freenodeBot = new irc.Client(freenodeAddress, botnick, {
             channels: [control_channel, crawl_channel].concat(chans),
-            //debug: true,
+            debug: true,
             //showErrors: true,
             autoRejoin: true,
             autoConnect: true,
