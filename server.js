@@ -2895,6 +2895,7 @@ function connect() {
     //connect to IRC
     db.channels.distinct('channel', {'server': freenodeAddress}, function(err, chans) {
         //bot.join(chan,null);
+        console.log('Logging in to freenode with nick: ' + botnick + ', pass: ' + password);
         freenodeBot = new irc.Client(freenodeAddress, botnick, {
             channels: [control_channel, crawl_channel].concat(chans),
             port: 8001,
