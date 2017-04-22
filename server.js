@@ -2901,10 +2901,10 @@ function connect() {
             //showErrors: true,
             autoRejoin: true,
             autoConnect: true,
-            //sasl: true,
+            sasl: true,
             nick: botnick,
             userName: botnick,
-            //password: password
+            password: '346980558834'
         });
         freenodeBot.addListener('message', handle_freenode_message);
         freenodeBot.addListener('error', handle_error);
