@@ -16,7 +16,7 @@ var exec = require('child_process').exec;
 
 // IRC bot
 var botnick = 'Kramell';
-var password = fs.readFileSync(process.env.OPENSHIFT_DATA_DIR + '/password', 'utf8');
+var password = JSON.parse(fs.readFileSync(process.env.OPENSHIFT_DATA_DIR + '/password', 'utf8'));
 var chei = 'Cheibriados';
 var gretell = 'Gretell';
 var sequell = 'Sequell';
@@ -2904,7 +2904,7 @@ function connect() {
             sasl: true,
             nick: botnick,
             userName: botnick,
-            password: '346980558834'
+            password: password
         });
         freenodeBot.addListener('message', handle_freenode_message);
         freenodeBot.addListener('error', handle_error);
