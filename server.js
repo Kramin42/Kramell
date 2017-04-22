@@ -16,7 +16,7 @@ var exec = require('child_process').exec;
 
 // IRC bot
 var botnick = 'Kramell';
-var password;
+var password = fs.readFileSync(process.env.OPENSHIFT_DATA_DIR + '/password', 'utf8');
 var chei = 'Cheibriados';
 var gretell = 'Gretell';
 var sequell = 'Sequell';
@@ -2843,7 +2843,7 @@ function handle_quit(nick, reason, channels, message) {
 
 function handle_connect(message) {
     console.log(message);
-    //console.log('Logging in with nick: ' + botnick + ', pass: ' + password);
+    console.log('Logging in with nick: ' + botnick + ', pass: ' + password);
     freenodeBot.say('NickServ', 'identify ' + password);
     db.announcers.distinct('name', function(err, announcers) {
         announcers.forEach(function(announcer) {
@@ -2890,7 +2890,6 @@ function handle_names(chan, nicks) {
 }
 
 function connect() {
-	password = fs.readFileSync(process.env.OPENSHIFT_DATA_DIR + '/password', 'utf8');
 	console.log('read pass: ' + password);
     //connect to IRC
     db.channels.distinct('channel', {'server': freenodeAddress}, function(err, chans) {
@@ -2929,7 +2928,7 @@ function connect() {
         efnetBot.addListener('message', handle_efnet_message);
         efnetBot.addListener('error', handle_error);
         efnetBot.addListener('quit', handle_quit);
-        efnetBot.addListener('registered', handle_connect);
+        //efnetBot.addListener('registered', handle_connect);
         efnetBot.addListener('names', handle_names);
     });
 }
