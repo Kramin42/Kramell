@@ -2902,7 +2902,7 @@ function connect() {
             //showErrors: true,
             autoRejoin: true,
             autoConnect: true,
-            sasl: true,
+            //sasl: true,
             nick: botnick,
             userName: botnick,
             password: password
