@@ -31,7 +31,7 @@ var efnetAddress = 'irc.choopa.net';
 
 var adminlist = ['Kramin', 'Kramin42'];
 
-password = fs.readFileSync(process.env.OPENSHIFT_DATA_DIR + '/password');
+password = fs.readFileSync(process.env.OPENSHIFT_DATA_DIR + '/password', {encoding: 'utf8'});
 
 //mongoDB stuff
 var ip_addr = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
