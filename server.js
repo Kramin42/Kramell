@@ -2904,7 +2904,7 @@ function connect() {
             //sasl: true,
             nick: botnick,
             userName: botnick,
-            password: password
+            //password: password
         });
         freenodeBot.addListener('message', handle_freenode_message);
         freenodeBot.addListener('error', handle_error);
