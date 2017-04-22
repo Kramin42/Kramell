@@ -2844,7 +2844,7 @@ function handle_quit(nick, reason, channels, message) {
 function handle_connect(message) {
     console.log(message);
     //console.log('Logging in with nick: ' + botnick + ', pass: ' + password);
-    //freenodeBot.say('NickServ', 'identify ' + password);
+    freenodeBot.say('NickServ', 'identify ' + password);
     db.announcers.distinct('name', function(err, announcers) {
         announcers.forEach(function(announcer) {
             timers[announcer] = setTimeout(
