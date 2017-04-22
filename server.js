@@ -2848,8 +2848,8 @@ function handle_quit(nick, reason, channels, message) {
 
 function handle_connect(message) {
     console.log(message);
-    console.log('Logging in with nick: ' + botnick + ', pass: ' + password);
-    freenodeBot.say('NickServ', 'identify ' + password);
+    //console.log('Logging in with nick: ' + botnick + ', pass: ' + password);
+    //freenodeBot.say('NickServ', 'identify ' + password);
     db.announcers.distinct('name', function(err, announcers) {
         announcers.forEach(function(announcer) {
             timers[announcer] = setTimeout(
@@ -2904,9 +2904,9 @@ function connect() {
             debug: true,
             autoRejoin: true,
             autoConnect: true,
-            //        sasl: true,
-            userName: botnick
-                //        password: password
+            sasl: true,
+            userName: botnick,
+            password: password
         });
         freenodeBot.addListener('message', handle_freenode_message);
         freenodeBot.addListener('error', handle_error);
