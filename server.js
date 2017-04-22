@@ -2843,8 +2843,8 @@ function handle_quit(nick, reason, channels, message) {
 
 function handle_connect(message) {
     console.log(message);
-    //console.log('Logging in with nick: ' + botnick + ', pass: ' + password);
-    //freenodeBot.say('NickServ', 'identify ' + password);
+    console.log('Logging in with nick: ' + botnick + ', pass: ' + password);
+    freenodeBot.say('NickServ', 'identify ' + password);
     db.announcers.distinct('name', function(err, announcers) {
         announcers.forEach(function(announcer) {
             timers[announcer] = setTimeout(
@@ -2890,21 +2890,21 @@ function handle_names(chan, nicks) {
 }
 
 function connect() {
-	password = fs.readFileSync(process.env.OPENSHIFT_DATA_DIR + '/password', {encoding: 'utf8'});
-	console.log('read pass: ' + password);
+	password = fs.readFileSync(process.env.OPENSHIFT_DATA_DIR + '/password', {encoding: ''});
+	//console.log('read pass: ' + password);
     //connect to IRC
     db.channels.distinct('channel', {'server': freenodeAddress}, function(err, chans) {
         //bot.join(chan,null);
-        console.log('Logging in to freenode with nick: ' + botnick + ', pass: ' + password);
+        //console.log('Logging in to freenode with nick: ' + botnick + ', pass: ' + password);
         freenodeBot = new irc.Client(freenodeAddress, botnick, {
             channels: [control_channel, crawl_channel].concat(chans),
             debug: true,
             autoRejoin: true,
             autoConnect: true,
-            sasl: true,
+            //sasl: true,
             nick: botnick,
             userName: botnick,
-            password: password
+            //password: password
         });
         freenodeBot.addListener('message', handle_freenode_message);
         freenodeBot.addListener('error', handle_error);
