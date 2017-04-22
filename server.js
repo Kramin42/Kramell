@@ -2898,10 +2898,10 @@ function connect() {
         console.log('Logging in to freenode with nick: ' + botnick + ', pass: ' + password);
         freenodeBot = new irc.Client(freenodeAddress, botnick, {
             channels: [control_channel, crawl_channel].concat(chans),
-            debug: true,
-            showErrors: true,
-            autoRejoin: true,
-            autoConnect: true,
+            //debug: true,
+            //showErrors: true,
+            //autoRejoin: true,
+            //autoConnect: true,
             sasl: true,
             nick: botnick,
             userName: botnick,
@@ -2920,8 +2920,8 @@ function connect() {
             channels: chans,
             port: 6667,
             debug: true,
-            autoRejoin: true,
-            autoConnect: true,
+            //autoRejoin: true,
+            //autoConnect: true,
             //        sasl: true,
             userName: botnick
                 //        password: password
