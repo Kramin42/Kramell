@@ -14,13 +14,8 @@
     "url": "https://www.openshift.com/"
   },
   "homepage": "https://www.openshift.com/",
-  "repository": {
-    "type": "git",
-    "url": "https://gitub.com/openshift/origin-server"
-  },
-  "engines": {
-    "node": ">= 6.10",
-    "npm": ">= 1.0.0"
+  "scripts": {
+    "start": "node server.js"
   },
   "dependencies": {
     "bluebird": "^2.3.11",
