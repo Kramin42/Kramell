@@ -44,7 +44,7 @@ if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
         process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
         process.env.OPENSHIFT_APP_NAME;
 }
-\\console.log('connection_string: ' + connection_string);
+//console.log('connection_string: ' + connection_string);
 //var mongojs = require('mongojs');
 // var db = mongojs(connection_string, ['announcers','channels','csdc','nick_aliases','dieselrobin']);
 // var announcers = db.collection('announcers');
@@ -218,7 +218,7 @@ function get_logfile_offset(announcer, url) {
     //curl -sI http://crawl.akrasiac.org/milestones-git | grep Content-Length  | awk '{print $2}'
     var child = exec('curl -sI ' + url + ' | grep Content-Length  | awk \'{print $2}\'');
     child.stdout.on('data', function(data) {
-        \\console.log('setting offset for ' + url + ' to ' + data);
+        //console.log('setting offset for ' + url + ' to ' + data);
         db.announcers.update({
             name: announcer,
             'files.url': url
@@ -230,12 +230,12 @@ function get_logfile_offset(announcer, url) {
     });
 
     child.stderr.on('data', function(data) {
-        \\console.log('stderr: ' + data);
+        //console.log('stderr: ' + data);
     });
 
     child.on('close', function(code) {
         if (code > 0) {
-            \\console.log('offset fetch for ' + url + ' exited with code ' + code);
+            //console.log('offset fetch for ' + url + ' exited with code ' + code);
         }
     });
 }
@@ -266,7 +266,7 @@ function get_server_logs(announcer) {
         'name': announcer
     }).then(function(server) {
         if (!server || !server['files']) {
-            \\console.log(announcer + ' not found');
+            //console.log(announcer + ' not found');
         }
         server['files'].forEach(function(file) {
         	//get_logfile_offset(announcer, file['url']); return;
@@ -284,19 +284,19 @@ function get_server_logs(announcer) {
                 var execstring = 'curl -1sSr ' + file['offset'] + '-' + upperlimit + ' ' + file['url'];
                 exec(execstring, function(error, data, stderr) {
                     if (error || stderr) {
-                        \\console.log('Error: ' + error);
-                        \\console.log('error.code: '+error.code);
-                        \\console.log('error.signal: '+error.signal);
-                        \\console.log('from command: ' + execstring);
-                        \\console.log('data: ' + data);
-                        \\console.log('STDERR: ' + stderr);
+                        //console.log('Error: ' + error);
+                        //console.log('error.code: '+error.code);
+                        //console.log('error.signal: '+error.signal);
+                        //console.log('from command: ' + execstring);
+                        //console.log('data: ' + data);
+                        //console.log('STDERR: ' + stderr);
                     }
                     //if (announcer=='Prequell') {console.log('Prequell data: '+data);}
                     if (data.search('416 Requested Range Not Satisfiable') == -1) {
                         var datalength = byteCount(data);
                         var data = logacc[announcer][file['url']] + data;
                         logacc[announcer][file['url']] = '';
-                        \\console.log(announcer + ' data size: ' + datalength + ' bytes');
+                        //console.log(announcer + ' data size: ' + datalength + ' bytes');
                         //console.log(data);
                         if (datalength >= fetchlimit - 1) {
                             delay = 10;
@@ -318,7 +318,7 @@ function get_server_logs(announcer) {
                                     return process();
                                 } else {
                                     if (logacc[announcer][file['url']] != '') {
-                                        \\console.log('leftovers in logacc[' + announcer + '][' + file['url'] + ']: ' + logacc[announcer][file['url']]);
+                                        //console.log('leftovers in logacc[' + announcer + '][' + file['url'] + ']: ' + logacc[announcer][file['url']]);
                                     }
                                     db.announcers.update({
                                         name: announcer,
@@ -345,7 +345,7 @@ function get_server_logs(announcer) {
                     }
                 });
             } else {
-                \\console.log(announcer + ' log not found ' + JSON.stringify(file));
+                //console.log(announcer + ' log not found ' + JSON.stringify(file));
             }
         });
     });
@@ -354,7 +354,7 @@ function get_server_logs(announcer) {
     }
     timers[announcer] = setTimeout(
         function() {
-            \\console.log('checking ' + announcer + ' logs on timer');
+            //console.log('checking ' + announcer + ' logs on timer');
             get_server_logs(announcer);
         },
         delay * 1000
@@ -369,7 +369,7 @@ function process_milestone(milestone, announcer, url) {
     if (!milestone.match(/^v=.*:vlong=.*(time=\d+S:type=.*:milestone=.*|tmsg=.*)\n$/)) {
         //milestone = milestone.replace(/<<<:/g,"").replace(/:>>>/g,"");
         if (milestone.match(/\n/)) {
-            \\console.log('broken milestone: ' + milestone);
+            //console.log('broken milestone: ' + milestone);
             //bot.say(control_channel, 'Kramin: broken milestone: ' + milestone);
         } else {
             //console.log("appending to logacc["+announcer+"]["+url+"]: "+milestone);
@@ -384,8 +384,8 @@ function process_milestone(milestone, announcer, url) {
         var stone = dictify(milestone);
         stone['src'] = announcer;
     } catch (error) {
-        \\console.log(error);
-        \\console.log('in milestone: ' + milestone);
+        //console.log(error);
+        //console.log('in milestone: ' + milestone);
         return Promise.resolve(1);
     }
 
@@ -416,8 +416,8 @@ function process_milestone(milestone, announcer, url) {
             });
         });
     } catch (error) {
-        \\console.log(error);
-        \\console.log('in milestone: ' + milestone);
+        //console.log(error);
+        //console.log('in milestone: ' + milestone);
     }
 
     //CSDC
@@ -467,7 +467,7 @@ function process_milestone(milestone, announcer, url) {
                                 csdc_enroll(name, week, function() {
                                     //week["players"] = [{"name": name, "points": [0, 0, 0, 0, 0, 0, 0],"bonusdisqual":[], "runes": 0, "alive": true, "tries": 0}];
                                     //csdc_announce(name, message, week);
-                                    \\console.log('enrolled ' + name + ' into csdc ' + week['week']);
+                                    //console.log('enrolled ' + name + ' into csdc ' + week['week']);
                                 });
                             }
                             //console.log(milestone);
@@ -491,7 +491,7 @@ function process_milestone(milestone, announcer, url) {
     });
     promises.push(Promise.all([challenge, team, account]).then(function(data) {
         if (data[0] && data[1] && data[2] && data[2]['alive']) {
-            \\console.log('found dieselrobin milestone: ' + data[2]['account']);
+            //console.log('found dieselrobin milestone: ' + data[2]['account']);
             return check_dieselrobin_points(data[0], data[1], data[2], milestone);
         }
     }));
@@ -500,7 +500,7 @@ function process_milestone(milestone, announcer, url) {
 }
 
 function check_csdc_points(name, milestone, week) {
-    \\console.log(milestone);
+    //console.log(milestone);
     player = week['players'][0];
     points = player['points'];
     xl = parseInt(milestone.match(/xl=(\d+):/i)[1]);
@@ -872,7 +872,7 @@ function get_available_dieselrobin_missions(challenge, account) {
 
 function check_dieselrobin_points(challenge, team, account, milestone) {
     var promises = [];
-    \\console.log(milestone);
+    //console.log(milestone);
     if (!account['missionover']) {
         account['missionover'] = [];
         promises.push(db.dieselrobin.update({
@@ -884,7 +884,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
         }));
     }
     var availablemissions = get_available_dieselrobin_missions(challenge, account);
-    \\console.log('available missions: ' + availablemissions);
+    //console.log('available missions: ' + availablemissions);
     var gameover = false;
     if (milestone.search(/ktyp=/i) > -1 && !(milestone.search(/ktyp=winning/i) > -1)) { //YASD
         if (availablemissions[0] == 0) { //still on first mission
@@ -987,7 +987,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
         //check quals
         for (j = 0; j < challenge['missionqual'][mission].length; j++) {
             if (!account['missionqual'][mission][j] && milestone.search(challenge['missionqual'][mission][j]) > -1) {
-                \\console.log('qualified for: ' + mission + ' (' + j + ')');
+                //console.log('qualified for: ' + mission + ' (' + j + ')');
                 account['missionqual'][mission][j] = true;
                 toset = {};
                 toset['missionqual.' + mission + '.' + j] = true;
@@ -1016,7 +1016,7 @@ function check_dieselrobin_points(challenge, team, account, milestone) {
             bot.say('##dieselrobin', irc.colors.wrap('dark_green', account['account'] + ' (' + team['team'] + ', ' + account['playerorder'][0] + ') has completed mission ' + (mission + 1) + ': ' + challenge['missiontext'][mission]));
 
             var newmissions = get_available_dieselrobin_missions(challenge, account);
-            \\console.log('new available missions: ' + newmissions);
+            //console.log('new available missions: ' + newmissions);
             if (newmissions.length > 0) {
                 account['playerorder'].push(account['playerorder'].shift()); //rotate
                 promises.push(db.dieselrobin.update({
@@ -1361,7 +1361,7 @@ function csdc_announce(name, stone, message, week) {
     //should only be one player in the week doc
     player = week['players'][0];
     points = player['points'];
-    \\console.log('checking csdc for ' + player['name'] + ' <=> ' + name + ' in ' + week['week']);
+    //console.log('checking csdc for ' + player['name'] + ' <=> ' + name + ' in ' + week['week']);
 
     //check that they have the right char and are in the game still for this week
     if (!((player['alive'] || !stone['type']) && message.search(new RegExp('\\(L\\d+ ' + week['char'] + '\\)', 'i')) > -1)) {
@@ -1384,7 +1384,7 @@ function announce_with_filters(bot, chan, stone, message, callback) {
 					matched = false;
 				}
 			} catch (e) {
-				\\console.log(e);
+				//console.log(e);
 			}
         });
         // filter offensive names for crawl main channel
@@ -1402,7 +1402,7 @@ function announce_with_filters(bot, chan, stone, message, callback) {
 							colour = colourmap[match];
 						}
 					} catch (e) {
-						\\console.log(e);
+						//console.log(e);
 					}
                 }
                 //antiping, put a zero width space in the name
@@ -2131,7 +2131,7 @@ function do_command(bot, arg, chan, nick, admin) {
         if (arg.length == 1) {
             arg[1] = nick;
         }
-        \\console.log(arg);
+        //console.log(arg);
         if (arg.length > 1) {
             db.dieselrobin.findOne({
                 $or: [{
@@ -2143,7 +2143,7 @@ function do_command(bot, arg, chan, nick, admin) {
                 }]
             }).then(function(team) {
                 if (team) {
-                	\\console.log(team);
+                	//console.log(team);
                     var s = '';
                     var ABC = ['A', 'B', 'C'];
                     for (i = 0; i < team['accounts'].length; i++) {
@@ -2269,7 +2269,7 @@ function do_command(bot, arg, chan, nick, admin) {
                 }));
             });
             Promise.all(scores).then(function(scorearray) {
-                \\console.log(JSON.stringify(scorearray));
+                //console.log(JSON.stringify(scorearray));
                 scorearray = scorearray.sort(function(a, b) {
                     if (a['score'] < b['score']) {
                         return 1;
@@ -2821,9 +2821,9 @@ function handle_message(bot, nick, chan, message) {
             return val.replace(/SPCSPCSPC/g, ' ');
         });
         //arg = [].concat.apply([], arg);
-        \\console.log(arg);
+        //console.log(arg);
         admin = (chan == control_channel || adminlist.indexOf(nick) > -1);
-        \\console.log('Admin: ' + admin);
+        //console.log('Admin: ' + admin);
         do_command(bot, arg, chan, nick, admin);
     }
 
@@ -2849,7 +2849,7 @@ function handle_connect(message) {
         announcers.forEach(function(announcer) {
             timers[announcer] = setTimeout(
                 function() {
-                    \\console.log('checking ' + announcer + ' logs (1 min timer)');
+                    //console.log('checking ' + announcer + ' logs (1 min timer)');
                     get_server_logs(announcer);
                 },
                 60 * 1000
@@ -2875,7 +2875,7 @@ function getKeys(obj){
 }
 
 function handle_names(chan, nicks) {
-	\\console.log(chan+": "+getKeys(nicks));
+	//console.log(chan+": "+getKeys(nicks));
 	if (chan == thinktankchan) {
 	db.channels.findOne({'channel': chan}).then(function(chandata){
         if (chandata['server'] == freenodeAddress) {
@@ -3016,11 +3016,11 @@ var SampleApp = function() {
      */
     self.terminator = function(sig) {
         if (typeof sig === 'string') {
-            \\console.log('%s: Received %s - terminating sample app ...',
+            //console.log('%s: Received %s - terminating sample app ...',
                 Date(Date.now()), sig);
             process.exit(1);
         }
-        \\console.log('%s: Node server stopped.', Date(Date.now()));
+        //console.log('%s: Node server stopped.', Date(Date.now()));
     };
 
 
@@ -3093,7 +3093,7 @@ var SampleApp = function() {
 
         self.routes['/csdc/scoreboard'] = function(req, res) {
             db.csdc.find().toArray().then(function(weeks) {
-                \\console.log('building scoreboard from ' + weeks.length + ' weeks');
+                //console.log('building scoreboard from ' + weeks.length + ' weeks');
                 var tablist = '';
                 var tabcontent = '';
                 tablist += '<li role="presentation" class="active"><a href="#overall" aria-controls="overall" role="tab" data-toggle="tab">Overall</a></li>';
@@ -3212,7 +3212,7 @@ var SampleApp = function() {
     self.start = function() {
         //  Start the app on the specific interface (and port).
         self.app.listen(self.port, self.ipaddress, function() {
-            \\console.log('%s: Node server started on %s:%d ...',
+            //console.log('%s: Node server started on %s:%d ...',
                 Date(), self.ipaddress, self.port);
         });
     };
