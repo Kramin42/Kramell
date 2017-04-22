@@ -3016,7 +3016,7 @@ var SampleApp = function() {
      */
     self.terminator = function(sig) {
         if (typeof sig === 'string') {
-            //console.log('%s: Received %s - terminating sample app ...',
+            console.log('%s: Received %s - terminating sample app ...',
                 Date(Date.now()), sig);
             process.exit(1);
         }
