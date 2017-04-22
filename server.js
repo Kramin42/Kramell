@@ -2890,7 +2890,7 @@ function handle_names(chan, nicks) {
 }
 
 function connect() {
-	password = fs.readFileSync(process.env.OPENSHIFT_DATA_DIR + '/password', {encoding: 'utf-8'});
+	password = fs.readFileSync(process.env.OPENSHIFT_DATA_DIR + '/password', 'utf8');
 	console.log('read pass: ' + password);
     //connect to IRC
     db.channels.distinct('channel', {'server': freenodeAddress}, function(err, chans) {
